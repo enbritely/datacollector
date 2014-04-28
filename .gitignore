@@ -1,0 +1,17 @@
+# python
+*.pyc
+virt_env
+
+# java
+target
+bin
+
+# eclipse
+.project
+.settings
+
+# IDEA
+.idea
+
+# Vagrant
+.vagrant
