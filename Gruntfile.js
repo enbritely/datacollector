@@ -3,8 +3,11 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     concat: {
         dist: {
+            options: {
+                separator: ';'
+            },
             // the files to concatenate
-            src: ['src/**/*.js'],
+            src: ['src/*.js', 'lib/*.js'],
             // the location of the resulting JS file
             dest: 'dist/<%= pkg.version %>/<%= pkg.title %>.js'
         }
