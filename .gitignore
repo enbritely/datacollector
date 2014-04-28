@@ -15,3 +15,8 @@ bin
 
 # Vagrant
 .vagrant
+
+#node.js
+node_modules
+
+dist
