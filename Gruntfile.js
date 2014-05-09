@@ -24,9 +24,24 @@ module.exports = function(grunt) {
           'dist/<%= pkg.name %>-min.js': [distFile]
         }
       }
+    },
+    jshint: {
+      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js', 'config/**/*.js', 'config/**/*.json', '.jshintrc'],
+      options: {
+        reporter: require('jshint-stylish'),
+        force: true,
+        jshintrc: true
+      }
+
+    },
+    watch: {
+      files: ['<%= jshint.files %>'],
+      tasks: ['jshint','concat']
     }
   });
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.registerTask('default', ['concat', 'uglify']);
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.registerTask('default', ['concat', 'jshint', 'uglify']);
 };

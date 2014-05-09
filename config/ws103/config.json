@@ -1,5 +1,5 @@
 var config = {
-    "wsid": "ddf1",
+    "wsid": "ws104",
     "verbose": 0,
     "test": 0,
     "baseUri": "localhost:8089",
@@ -62,4 +62,4 @@ var config = {
             ]
         }
     ]
-}
+};
