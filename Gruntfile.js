@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+  var distFile = 'dist/<%= pkg.name %>.js';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
@@ -8,12 +9,24 @@ module.exports = function(grunt) {
       },
       dist: {
         // the files to concatenate
-        src: ['src/**/*.js'],
+        src: ['config/' + grunt.option('config') + '/config.json', 'src/*.js'],
         // the location of the resulting JS file
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: distFile
+      }
+    },
+    uglify: {
+      options: {
+        mangle: false,
+        preserveComments: false
+      },
+      my_target: {
+        files: {
+          'dist/<%= pkg.name %>-min.js': [distFile]
+        }
       }
     }
   });
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.registerTask('default', ['concat']);
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.registerTask('default', ['concat', 'uglify']);
 };
