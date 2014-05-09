@@ -3,6 +3,7 @@
     <title>Data collector config</title>
     <link rel="stylesheet" href="public/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/bootstrap-theme.min.css">
+    <script src="public/js/jquery-2.1.1.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>
 
 </head>
@@ -11,8 +12,21 @@
         <div class="row">
             <h1>Data collector config</h1>
         </div>
-        <div></div>
-    </div>
+        <div id="main_form row">
+            <form role="form" class="col-md-4">
+                <div class="form-group">
+                    <label for="iwsid">wsid</label>
+                    <input type="text" class="form-control" id="iwsid" placeholder="ws103">
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> verbose
+                  </label>
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+      </div>
+  </div>
 
 </body>
 </html>
