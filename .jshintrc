@@ -1,8 +1,4 @@
 {
-    // Settings
-    "passfail"      : false,
-    "maxerr"        : 50,
-
     // Predefined globals whom JSHint will ignore.
     "browser"       : true,
     "jquery"        : true,
