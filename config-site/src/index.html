@@ -23,10 +23,47 @@
                       <input type="checkbox"> verbose
                   </label>
               </div>
-              <button type="submit" class="btn btn-default">Submit</button>
-          </form>
-      </div>
-  </div>
+              <div class="checkbox">
+                <label>
+                    <input type="checkbox"> test
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="ibaseuri">baseuri</label>
+                <input type="text" class="form-control" id="ibaseuri" placeholder="http://mlweb.dmlab.hu/api">
+            </div>
+              <div class="form-group">
+                <label for="iapipath">endpoint path</label>
+                <input type="text" class="form-control" id="iapipath" placeholder="/api/ddf1/add">
+            </div>
+             <div class="form-group">
+                <label for="iscv">script version</label>
+                <input type="text" class="form-control" id="iscv" placeholder="1.0">
+            </div>
+
+              <div class="form-group">
+                <label for="ismod">session modulo</label>
+                <input type="text" class="form-control" id="ismod" placeholder="1">
+            </div>
+
+            <div class="row">
+                <button class="btn btn-default">Add message</button>
+            </div>
+            <br>
+            <div class="row">
+                <button class="btn btn-default">Add attribute</button>
+            </div>
+            <br>
+            <div class="row">
+                <button class="btn btn-default">Add event</button>
+            </div>
+            <br>
+            <div class="row">
+                <button type="submit" class="btn btn-danger">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 </body>
 </html>
