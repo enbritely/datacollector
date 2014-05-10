@@ -1,0 +1,594 @@
+/* warning page */
+
+body#warning_page {
+	min-width:0;
+}
+
+
+.alpha60 {
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.6);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+}
+
+#warning_content {
+	position:absolute;
+	top:0;
+	left:0;
+	text-align:center;
+}
+
+	#warning_content h1,#warning_content h2 {
+		color:#f00;
+		text-shadow: 3px 7px 16px #000;
+		font-weight:bold;
+		line-height:1em;
+	}
+
+	#warning_content h1 {
+		font-size:6em;
+	}
+	#warning_content h2 {
+		font-size:3em;
+	}
+
+
+.bg_green {
+	background: #59ed00; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU5ZWQwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzZjg1MDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #59ed00 0%, #3f8500 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#59ed00), color-stop(100%,#3f8500)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #59ed00 0%,#3f8500 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #59ed00 0%,#3f8500 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #59ed00 0%,#3f8500 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #59ed00 0%,#3f8500 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#59ed00', endColorstr='#3f8500',GradientType=0 ); /* IE6-8 */
+}
+
+.bg_red {
+	background: #fe0000; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZlMDAwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNhZTAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #fe0000 0%, #ae0000 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fe0000), color-stop(100%,#ae0000)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #fe0000 0%,#ae0000 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #fe0000 0%,#ae0000 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #fe0000 0%,#ae0000 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #fe0000 0%,#ae0000 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fe0000', endColorstr='#ae0000',GradientType=0 ); /* IE6-8 */
+}
+
+.warning_button {
+	-moz-box-shadow: 3px 3px 4px #333;
+	-webkit-box-shadow: 3px 3px 4px #333;
+	box-shadow: 3px 3px 4px #333;
+	-webkit-border-radius: 0.3em;
+	-moz-border-radius: 0.3em;
+	border-radius: 0.3em;
+}
+
+a.warning_button:hover {
+	cursor:pointer;
+	text-decoration:none;
+	-moz-box-shadow: 3px 3px 4px #666;
+	-webkit-box-shadow: 3px 3px 4px #666;
+	box-shadow: 3px 3px 4px #666;
+
+}
+
+.warning_button.enter.text-black {
+	color:#000;
+}
+.warning_button.exit.text-white {
+	color:#fff;
+}
+
+div#warning-landscape {
+	background:#3b3b3b url(/images/warning_bg_1.jpg);
+	background-size: cover;
+	background-repeat:no-repeat;
+	height:100%;
+	width:100%;
+	padding:0;
+	margin:0;
+}
+
+	div#warning-landscape #warning_content {
+    	-moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.77);
+    	-webkit-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.77);
+    	box-shadow: 0 8px 8px rgba(0, 0, 0, 0.77);
+    	padding:0 15px;
+		text-align:center;
+	}
+
+
+@media all and (orientation:landscape) {
+
+	div#warning-landscape {
+		display:block;
+	}
+	div#warning-portrait {
+		display:none;
+
+	}
+
+	#adult_content h1 {
+		margin-top:20px;
+		line-height:1em;
+		font-size: 4em;
+		letter-spacing:8px;
+	}
+
+	#adult_content h2 {
+		line-height:1em;
+		font-size:3em;
+	}
+
+	.warning_button {
+		position:absolute;
+	}
+
+		.warning_button.enter {
+			right:32em;
+			bottom:1em;
+		}
+		.warning_button.exit {
+			right:5em;
+			bottom:1em;
+		}
+
+}
+
+
+@media screen and (max-width: 3000px) {
+	div#warning-landscape {
+		background:#3b3b3b url(/images/warning_bg_1.jpg);
+		background-size: cover;
+		background-repeat:no-repeat;
+		height:100%;
+		width:100%;
+		padding:0;
+		margin:0;
+
+	}
+
+	div#warning-landscape #warning_content {
+		position:absolute;
+		top:0;
+		right:0;
+		width: 20%;
+		padding-bottom:1.5em;
+	}
+
+	#adult_content h1 {
+		margin-top:20px;
+		line-height:1em;
+		font-size: 11em;
+		letter-spacing:8px;
+	}
+
+	#adult_content h2 {
+		line-height:1em;
+		font-size:6em;
+	}
+
+	#warning_content p {
+		color:#fff;
+		font-size:1.50em;
+		line-height:1em;
+		margin-top:24px;
+	}
+
+	.warning_button {
+		display:block;
+		width:23em;
+		height:10em;
+		text-align:center;
+	}
+
+		.warning_button span.arrow {
+			font-size:5em;
+			position:relative;
+			top:0.85em;
+		}
+
+		.warning_button span.top-text {
+			font-size:2.9em;
+			position: relative;
+			top: 0.6em;
+		}
+
+		.warning_button span.bottom-text {
+			font-size:4em;
+			position: relative;
+			top: 0.9em;
+			left:0.4em;
+		}
+
+		.warning_button.enter {
+			position:absolute;
+			bottom:1.25em;
+			right:28em;
+		}
+
+		.warning_button.exit {
+			position:absolute;
+			bottom:1.25em;
+			right:1em;
+		}
+
+}
+
+
+@media screen and (max-width: 1600px) {
+	div#warning-landscape {
+		background:#3b3b3b url(/images/warning_bg_1_1200.jpg);
+		background-size: cover;
+	}
+
+	#warning_content p {
+		color:#fff;
+		font-size:1.4em;
+		line-height:1em;
+		margin-top:24px;
+	}
+
+}
+
+@media screen and (max-width:1300px) {
+
+	#adult_content h1 {
+		margin-top:20px;
+		line-height:1em;
+		font-size: 9em;
+		letter-spacing:8px;
+	}
+
+	#adult_content h2 {
+		line-height:1em;
+		font-size:4.5em;
+	}
+
+	#warning_content p {
+		color:#fff;
+		font-size:1em;
+		line-height:1em;
+		margin-top:24px;
+	}
+
+	.warning_button {
+		display:block;
+		width:22em;
+		height:9.5em;
+		text-align:center;
+	}
+}
+
+@media screen and (max-width:1024px) {
+
+	#adult_content h1 {
+		margin-top:20px;
+		line-height:1em;
+		font-size: 7em;
+		letter-spacing:8px;
+	}
+
+	#adult_content h2 {
+		line-height:1em;
+		font-size:4em;
+	}
+
+	div#warning-landscape #warning_content {
+		width:38%;
+		height:100%;
+	}
+
+	#warning_content p {
+		color:#fff;
+		font-size:1.95em;
+		line-height:1em;
+		margin-top:24px;
+	}
+
+	.warning_button {
+		display:block;
+		width:18em;
+		height:8.5em;
+		text-align:center;
+	}
+
+		.warning_button span.arrow {
+			top:0.75em;
+		}
+
+		.warning_button span.top-text {
+			font-size:2.2em;
+			top: 0.5em;
+		}
+
+		.warning_button span.bottom-text {
+			font-size:3em;
+			left:0.6em;
+		}
+
+		.warning_button.enter {
+			right:22em;
+			bottom:1.25em;
+		}
+
+		.warning_button.exit {
+			right:1em;
+			bottom:1.25em;
+		}
+
+}
+
+
+
+@media screen and (max-width:860px) {
+
+	#warning_content p {
+		font-size:0.76em;
+		margin-top:1em;
+	}
+
+	#adult_content h1 {
+		font-size: 5em;
+	}
+
+	#adult_content h2 {
+		font-size:3em;
+	}
+
+
+	.warning_button {
+		width:15em;
+		height:6.5em;
+	}
+
+		.warning_button span.arrow {
+			top:0.55em;
+		}
+
+		.warning_button span.top-text {
+			font-size:1.45em;
+			top: 0.3em;
+		}
+
+		.warning_button span.bottom-text {
+			font-size:2.2em;
+			left:0.9em;
+			top:0.7em;
+		}
+
+		.warning_button.exit {
+			left:18em;
+			bottom:1.25em;
+		}
+}
+
+@media screen and (max-device-width:854px) {
+
+	#warning_content p {
+		font-size:1.1em;
+		margin-top:0.5em;
+	}
+
+	#adult_content h1 {
+		font-size: 4.5em;
+	}
+
+	#adult_content h2 {
+		font-size:2.75em;
+	}
+}
+
+@media all and (orientation:portrait) {
+
+	div#warning-landscape {
+		display:none;
+	}
+	div#warning-portrait {
+		display:block;
+		height:100%;
+	}
+
+	div#warning-portrait #warning_header {
+		background:#3b3b3b url(/images/warning_bg_1_portrait_640.jpg) center center;
+		background-size: contain;
+		background-repeat:no-repeat;
+		height:100%;
+		width:100%;
+		padding:0;
+		margin:0;
+		text-align:center;
+	}
+
+	div#warning-portrait #warning_header h1 {
+		line-height:1em;
+		text-align:center;
+		font-size:11em;
+		color:#d00;
+	}
+
+	div#warning-portrait #warning_header h2 {
+		font-size:5em;
+		text-align:center;
+	}
+
+	div#warning-portrait #warning_links {
+		height: 8em;
+		position: absolute;
+		top: 67em;
+		left: 18em;
+	}
+
+	div#warning-portrait #warning_content {
+		position:absolute;
+		top:44em;
+		left:0;
+		text-align:center;
+		height:30%;
+		font-size:1.3em;
+	}
+
+	div#warning-portrait #warning_links {
+		height: 8em;
+		position: absolute;
+		top: 48em;
+		right: 1em;
+	}
+
+		div#warning-portrait .warning_button.enter {
+			right:7.8em;
+		}
+
+		div#warning-portrait .warning_button.exit {
+			right:1em;
+			top:8em;
+		}
+
+	div#warning-portrait #warning_content p {
+		text-align:center;
+		color:#fff;
+		font-size:1.35em;
+		line-height:1em;
+		margin-top:8px;
+	}
+
+
+	div#warning-portrait #warning_links {
+		height: 8em;
+		position: absolute;
+		top: 48em;
+		left: 54em;
+	}
+
+		.warning_button.exit {
+			left:1em;
+			top:8em;
+		}
+
+	div#warning-portrait #warning_content {
+		padding:0.5em 0.2em;
+		position: absolute;
+		bottom: 0;
+		font-size:1.5em;
+	}
+
+
+}
+
+@media only screen and (max-device-width: 480px)  {
+    /* iPhone CSS rules */
+
+	div#warning-portrait #warning_header {
+		background:#3b3b3b url(/images/warning_bg_1_portrait_640.jpg) center center;
+		background-size: contain;
+		background-repeat:no-repeat;
+		height:100%;
+		width:100%;
+		padding:0;
+		margin:0;
+		text-align:center;
+	}
+
+	div#warning-portrait #warning_links {
+		height: 8em;
+		position: absolute;
+		top: 48em;
+		left: 52em;
+	}
+
+		div#warning-portrait .warning_button.exit {
+			left:1em;
+			top:8em;
+		}
+
+	div#warning-portrait #warning_content {
+		padding:0.5em 0.2em;
+		position: absolute;
+		bottom: 0;
+		font-size:1.6em;
+	}
+
+}
+
+
+@media only screen
+		and (min-device-width : 320px)
+		and (max-device-width : 480px)
+		and (orientation : portrait) {
+		/* iPhone 2G-4S in portrait */
+
+
+	div#warning-portrait #warning_header {
+		background:#3b3b3b url(/images/warning_bg_1_portrait_640.jpg) center center;
+		background-size: cover;
+		background-repeat:no-repeat;
+		height:100%;
+		width:100%;
+		padding:0;
+		margin:0;
+		text-align:center;
+	}
+		div#warning-portrait #warning_header h1 {
+			font-size:8em;
+			text-align:right;
+		}
+		div#warning-portrait #warning_header h2 {
+			font-size:4em;
+			text-align:right;
+		}
+
+	div#warning-portrait #warning_links {
+		height: 8em;
+		position: absolute;
+		top: 43em;
+		left: 56em;
+	}
+
+		div#warning-portrait .warning_button.enter {
+			left:4em;
+			bottom:5em;
+		}
+		div#warning-portrait .warning_button.exit {
+			left:4em;
+			bottom:6em;
+		}
+
+
+}
+
+@media only screen
+		and (min-device-width : 320px)
+		and (max-device-width : 480px)
+		and (orientation : landscape) {
+		/* iPhone 2G-4S in landscape */
+
+	div#warning-landscape #warning_content {
+		position:absolute;
+		top:0;
+		right:0;
+		width: 30%;
+		padding-bottom:0.4em;
+	}
+
+	div#warning-landscape #warning_content h1 {
+		font-size:3.5em;
+	}
+
+	div#warning-landscape #warning_content h2 {
+		font-size:2.2em;
+	}
+
+	#warning_content p {
+		font-size:1.05em;
+		margin-top:0.5em;
+	}
+
+
+}
+
