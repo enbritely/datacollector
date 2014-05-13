@@ -63,12 +63,11 @@ var Message = function(event, node) {
             } else {
 				var event_timestamp = dict.ts0;
 				if (message_config.base.baseUri !== "") {
-					var post_url = message_config.base.baseUri + message_config.base.path;
-					post_url = post_url + '?wsid='+message_config.base.wsid+'&ts='+event_timestamp;
-					if (message_config.base.verbose === 1) {
-						post_url = post_url + '&verbose=true';
-						console.log(post_url);
-					}
+                    var baseUri = message_config.base.baseUri;
+                    var path = message_config.base.path;
+                    var urlparams = message_config.urlparams;
+					var post_url = util.buildQuery(baseUri, path, urlparams);
+                    console.log(post_url);
 					$.support.cors = true;
 					$.ajax({
 						url: post_url,

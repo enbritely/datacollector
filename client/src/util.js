@@ -32,6 +32,22 @@ var util = (function(){
                 node = parent;
             }
             return path;
+        },
+        buildQuery: function(baseUri, path, params) {
+            var query = baseUri;
+            query += path;
+            if(params) {
+                var first = true;
+                for (var key in params) {
+                    if(first) {
+                        first = false;
+                        query += '?' + key + '=' + params[key];
+                    } else {
+                        query += '&' + key + '=' + params[key];
+                    }
+                }
+            }
+            return query;
         }
 
     }

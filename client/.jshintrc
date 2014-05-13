@@ -1,6 +1,7 @@
 {
     // Predefined globals whom JSHint will ignore.
     "browser"       : true,
+    "mocha"         : true,
     "jquery"        : true,
 
      // Development.

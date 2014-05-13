@@ -1,8 +1,9 @@
+var wsid = "ddf1";
 module.exports = {
     "base": {
-        "wsid": "ddf1",
+        "wsid": wsid,
         "verbose": 0,
-        "test": 1,
+        "test": 0,
         "baseUri": "http://localhost:8089",
         "path": "/api/ddf1/add",
         "scriptVersion": 1,
@@ -48,15 +49,15 @@ module.exports = {
     "attribute_collection": {
         "pageview": {
 			"attributes" : ["sid","ord","ts0","t0","type","msgID", "avh","avw","cd","ce","ip","lang","meta","plat","tzo","ua","vend"],
-			"urlparams" : ""
+			"urlparams" : {"sts": true, "wsid": wsid}
 		},
         "event": {
 			"attributes" : ["sid","ord","ts0","t0","type","msgID", "eid", "px", "py", "ds", "dt"],
-			"urlparams" : ""
+			"urlparams" : {"wsid": wsid}
 		},
         "mousemove": {
 			"attributes" : ["move"],
-			"urlparams" : ""
+			"urlparams" : {"wsid": wsid}
 		}
     },
     "attribute_description": {

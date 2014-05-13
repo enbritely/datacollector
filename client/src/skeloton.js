@@ -40,6 +40,7 @@ if (typeof(meta) === 'undefined') {
 					'meta':meta,
 					'msgID':msgID,
                     'attribute_config':attribute_config,
+                    'urlparams': config.attribute_collection[msgID].urlparams,
                     'send': cev.send
                 },
                 function(event){
@@ -62,6 +63,7 @@ if (typeof(meta) === 'undefined') {
 					'meta':meta,
 					'msgID':msgID,
                     'attribute_config':attribute_config,
+                    'urlparams': config.attribute_collection[msgID].urlparams,
                     'send': cev.send
                 },
                 function(event){
