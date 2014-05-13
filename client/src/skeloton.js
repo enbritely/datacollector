@@ -18,6 +18,10 @@ if (typeof(meta) === 'undefined') {
 
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
+    var util  = require('./util')
+    if(util.hash(SESSIONID) % config.base.sessionMod !== 0) {
+        return;
+    }
     var Message  = require('./message')
 
     // Attach events

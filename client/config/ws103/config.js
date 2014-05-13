@@ -7,7 +7,7 @@ module.exports = {
         "baseUri": "http://localhost:8089",
         "path": "/api/ddf1/add",
         "scriptVersion": 1,
-        "sessionMod": 1
+        "sessionMod": 11
     },
     "events": [
     {
