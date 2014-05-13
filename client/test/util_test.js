@@ -32,7 +32,7 @@ describe("util", function() {
    describe(".hash", function() {
        it("should build a nonnull hash", function(){
            var hash = util.hash('6p3valv1cqjitup47uqu4noif1');
-           assert(hash.length != 0);
+           assert(hash.length !== 0);
            assert(hash > 0);
        });
    });

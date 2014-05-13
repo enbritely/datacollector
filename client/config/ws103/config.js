@@ -3,11 +3,11 @@ module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 0,
+        "test": 1,
         "baseUri": "http://localhost:8089",
         "path": "/api/ddf1/add",
         "scriptVersion": 1,
-        "sessionMod": 11
+        "sessionMod": 1
     },
     "events": [
     {
