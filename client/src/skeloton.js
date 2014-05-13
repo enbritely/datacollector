@@ -34,51 +34,30 @@ if (typeof(meta) === 'undefined') {
             attribute_config[collected_attrs[k]] = config.attribute_description[collected_attrs[k]]
         }
         var cev = config.events[i];
-        if (cev.tags !== "") {
-            $(cev.source).on(
-                cev.event,  // event to listen
-                cev.tags,   // tags to listen events on
-                {           // add attribute config and base config params
-                    'base':config.base,
-					'sid':SESSIONID,
-					'meta':meta,
-					'msgID':msgID,
-                    'attribute_config':attribute_config,
-                    'urlparams': config.attribute_collection[msgID].urlparams,
-                    'send': cev.send
-                },
-                function(event){
-                    if ($(event.target).is(this)) {
-                        var msg = new Message(event, $(this));
-                        msg.build();
-                        if (event.data.send === 1) {
-                            msg.send();
-                        }
-                    }
-                }
-            );
-        }
-        else {
-            $(cev.source).on(
-                cev.event,  // event to listen
-                {           // add attribute config and base config params
-                    'base':config.base,
-					'sid':SESSIONID,
-					'meta':meta,
-					'msgID':msgID,
-                    'attribute_config':attribute_config,
-                    'urlparams': config.attribute_collection[msgID].urlparams,
-                    'send': cev.send
-                },
-                function(event){
-                    var msg = new Message(event, this);
+        var data = {
+            'base':config.base,
+            'sid':SESSIONID,
+            'meta':meta,
+            'msgID':msgID,
+            'attribute_config':attribute_config,
+            'urlparams': config.attribute_collection[msgID].urlparams,
+            'send': cev.send
+        };
+        var tags  = cev.tags ? cev.tags : null;
+        $(cev.source).on(
+            cev.event,
+            tags,
+            data,
+            function(event){
+                if ($(event.target).is(this)) {
+                    var msg = new Message(event, $(this));
                     msg.build();
                     if (event.data.send === 1) {
                         msg.send();
                     }
                 }
-               );
-        }
+            }
+            );
     }
 
     // include fingerprint.js
