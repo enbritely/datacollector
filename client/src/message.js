@@ -60,23 +60,23 @@ var Message = function(event, node) {
             var JSON_str = JSON.stringify(dict);
             if(message_config.base.test) {
                 console.log(JSON_str);
-            } else {				
+            } else {
 				var event_timestamp = dict.ts0;
 				if (message_config.base.baseUri !== "") {
 					var post_url = message_config.base.baseUri + message_config.base.path;
 					post_url = post_url + '?wsid='+message_config.base.wsid+'&ts='+event_timestamp;
-					if (message_config.base.verbose === 1) {		
+					if (message_config.base.verbose === 1) {
 						post_url = post_url + '&verbose=true';
 						console.log(post_url);
-					}					
-					$.support.cors = true;				
+					}
+					$.support.cors = true;
 					$.ajax({
 						url: post_url,
 						data: {payload: JSON_str},
 						type: 'POST',
 						dataType: 'json'
-					}).done(function(data){});				
-				}				
+					}).done(function(data){});
+				}
             }
         }
     }

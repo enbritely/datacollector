@@ -88,7 +88,7 @@ module.exports = {
             "validate": {
                 "max": 2048
             }
-        },	
+        },
 		"msgID": {
             "func": "msgID",
             "default": "",
@@ -96,7 +96,7 @@ module.exports = {
             "validate": {
                 "max": 128
             }
-        },			
+        },
 		"avh": {
             "func": "avh",
             "default": -1,
@@ -134,7 +134,7 @@ module.exports = {
             "func": "dw",
             "default": -1,
             "type": "int"
-        },		
+        },
 		"ds": {
             "func": "ds",
             "default": 0,
@@ -193,7 +193,7 @@ module.exports = {
             "validate": {
                 "max": 32
             }
-        },	
+        },
 		"ord": {
             "func": "ord",
             "default": -1,
@@ -273,7 +273,7 @@ module.exports = {
             "func": "wh",
             "default": 0,
             "type": "int"
-        },		
+        },
 		"ww": {
             "func": "ww",
             "default": 0,
