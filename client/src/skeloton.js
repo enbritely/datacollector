@@ -19,7 +19,7 @@ if (typeof(meta) === 'undefined') {
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
     var util  = require('./util')
-    if(util.hash(SESSIONID) % config.base.sessionMod !== 0) {
+    if(config.base.sessionMod && util.hash(SESSIONID) % config.base.sessionMod !== 0) {
         return;
     }
     var Message  = require('./message')
@@ -59,7 +59,4 @@ if (typeof(meta) === 'undefined') {
             }
             );
     }
-
-    // include fingerprint.js
-    // include elemenetpath.js
 })(_SESSIONID,_meta);

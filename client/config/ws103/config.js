@@ -41,7 +41,7 @@ module.exports = {
     {
         "event": "mousemove",
         "source": document,
-        "tags": "",
+        "tags": ['div','a','img','p','pre','span','h1','h2','h3','h4','h5','h6','select','input','button','form','textarea','option','table','td','tr','th','ol','ul','li' ],
         "msgID": "mousemove",
         "send": 0
     }
