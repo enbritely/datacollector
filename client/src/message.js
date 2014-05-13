@@ -56,9 +56,13 @@ var Message = function(event, node) {
                 console.log('TODO');
             }
         },
-        send: function(){
+        send: function(debug){
             var JSON_str = JSON.stringify(dict);
-            console.log(JSON_str);
+            if(debug){
+                console.log(JSON_str);
+            } else {
+                // XDR
+            }
         }
     }
 };
