@@ -2,41 +2,13 @@ module.exports = {
     "base": {
         "wsid": "ddf1",
         "verbose": 0,
-        "test": 0,
-        "baseUri": "localhost:8089",
+        "test": 1,
+        "baseUri": "http://localhost:8089",
         "path": "/api/ddf1/add",
         "scriptVersion": 1,
         "sessionMod": 1
     },
     "events": [
-    {
-        "event": "copy",
-        "source": window,
-        "tags": "",
-        "msgID": "timeinstant",
-        "send": 1
-    },
-    {
-        "event": "blur",
-        "source": window,
-        "tags": "",
-        "msgID": "timeinstant",
-        "send": 1
-    },
-    {
-        "event": "focus",
-        "source": window,
-        "tags": "",
-        "msgID": "timeinstant",
-        "send": 1
-    },
-    {
-        "event": "resize",
-        "source": window,
-        "tags": "",
-        "msgID": "resize",
-        "send": 1
-    },
     {
         "event": "mouseover",
         "source": document,
@@ -59,17 +31,10 @@ module.exports = {
         "send": 1
     },
     {
-        "event": "scroll",
-        "source": window,
-        "tags": "",
-        "msgID": "scroll",
-        "send": 1
-    },
-    {
         "event": "unload",
         "source": window,
         "tags": "",
-        "msgID": "timeinstant",
+        "msgID": "pageview",
         "send": 1
     },
     {
@@ -81,107 +46,201 @@ module.exports = {
     }
     ],
     "attribute_collection": {
-        "error":        ["ord","t0","ts0","type","dump"],
-        "timeinstant":  ["ord","t0","ts0","type"],
-        "resize":       ["ord","t0","ts0","type", "h", "w"],
-        "pageview":     ["ord","t0","ts0","type", "ua", "fp", "bpin"],
-        "event":        ["ord","t0","ts0","type", "eid", "tn", "px", "py", "mov", "mosumds"],
-        "scroll":       ["ord","t0","ts0","type", "st", "sl"],
-        "mousemove":    ["move"]
-        
+        "pageview": {
+			"attributes" : ["sid","ord","ts0","t0","type","msgID", "avh","avw","cd","ce","ip","lang","meta","plat","tzo","ua","vend"],
+			"urlparams" : ""
+		},
+        "event": {
+			"attributes" : ["sid","ord","ts0","t0","type","msgID", "eid", "px", "py", "ds", "dt"],
+			"urlparams" : ""
+		},
+        "mousemove": {
+			"attributes" : ["move"],
+			"urlparams" : ""
+		}
     },
     "attribute_description": {
-        "fp": {
-            "func": "fp",
-            "default": null,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-        "bpin": {
-            "func": "bpin",
-            "default": null,
+		"meta": {
+            "func": "meta",
+            "default": "",
             "type": "string",
             "validate": {
-                "max": 1024
+                "max": 100000
             }
         },
-        "mov": {
-            "func": "mov",
-            "default": null,
-            "type": "float",
-            "zero": 4,
-            "validate": {
-                "max": 1024
-            }
-        },
-        "move": {
-            "func": "move",
-            "default": null,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-        "mosumds": {
-            "func": "mosumds",
-            "default": null,
-            "type": "float",
-            "zero": 4,
-            "validate": {
-                "max": 1024
-            }
-        },
-        "ua": {
-            "func": "ua",
-            "default": null,
+		"wsid": {
+            "func": "wsid",
+            "default": "",
             "type": "string",
             "validate": {
-                "max": 1024
+                "max": 5
             }
         },
-        "ts0": {
-            "func": "ts0",
-            "default": 0,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-        "t0": {
-            "func": "t0",
-            "default": 0,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-        "h": {
-            "func": "h",
+		"scrv": {
+            "func": "scrv",
             "default": -1,
-            "type": "int",
+            "type": "int"
+        },
+		"sid": {
+            "func": "sid",
+            "default": "",
+            "type": "string",
             "validate": {
-                "max": 50000
+                "max": 2048
+            }
+        },	
+		"msgID": {
+            "func": "msgID",
+            "default": "",
+            "type": "string",
+            "validate": {
+                "max": 128
+            }
+        },			
+		"avh": {
+            "func": "avh",
+            "default": -1,
+            "type": "int"
+        },
+		"avw": {
+            "func": "avw",
+            "default": -1,
+            "type": "int"
+        },
+		"base_uri": {
+            "func": "base_uri",
+            "default": "",
+            "type": "string",
+            "validate": {
+                "max": 2048
             }
         },
-        "dump": {
-            "func": "dump",
+		"cd": {
+            "func": "cd",
+            "default": -1,
+            "type": "int"
+        },
+		"ce": {
+            "func": "ce",
+            "default": -1,
+            "type": "int"
+        },
+		"dh": {
+            "func": "dh",
+            "default": -1,
+            "type": "int"
+        },
+		"dw": {
+            "func": "dw",
+            "default": -1,
+            "type": "int"
+        },		
+		"ds": {
+            "func": "ds",
+            "default": 0,
+            "type": "float",
+			"zero":4
+        },
+		"dt": {
+            "func": "dt",
+            "default": 0,
+            "type": "float",
+			"zero":4
+        },
+		"eid": {
+            "func": "eid",
             "default": "NA",
             "type": "string",
             "validate": {
-                "max": 50000
+                "max": 2048
             }
         },
-        "w": {
-            "func": "w",
-            "default": -1,
-            "type": "int",
+		"fp": {
+            "func": "fp",
+            "default": "-1",
+            "type": "int"
+        },
+		"href": {
+            "func": "href",
+            "default": "NA",
+            "type": "string",
             "validate": {
-                "max": 50000
+                "max": 2048
             }
         },
-        "type": {
+		"ih": {
+            "func": "ih",
+            "default": -1,
+            "type": "int"
+        },
+		"ip": {
+            "func": "placehip",
+            "default": "NA",
+            "type": "string",
+            "validate": {
+                "max": 6
+            }
+        },
+		"iw": {
+            "func": "iw",
+            "default": -1,
+            "type": "int"
+        },
+		"lang": {
+            "func": "lang",
+            "default": "NA",
+            "type": "string",
+            "validate": {
+                "max": 32
+            }
+        },	
+		"ord": {
+            "func": "ord",
+            "default": -1,
+            "type": "int"
+        },
+		"plat": {
+            "func": "plat",
+            "default": "NA",
+            "type": "string",
+            "validate": {
+                "max": 1024
+            }
+        },
+		"px": {
+            "func": "px",
+            "default": -1,
+            "type": "int"
+        },
+		"py": {
+            "func": "py",
+            "default": -1,
+            "type": "int"
+        },
+		"st": {
+            "func": "st",
+            "default": -1,
+            "type": "int"
+        },
+		"t0": {
+            "func": "t0",
+            "default": 0,
+            "type": "int"
+        },
+		"title": {
+            "func": "title",
+            "default": "NA",
+            "type": "string",
+            "validate": {
+                "max": 1024
+            }
+        },
+		"ts0": {
+            "func": "ts0",
+            "default": 0,
+            "type": "int"
+        },
+		"type": {
             "func": "type",
             "default": "NA",
             "type": "string",
@@ -189,61 +248,44 @@ module.exports = {
                 "max": 1024
             }
         },
-        "tn": {
-            "func": "tn",
+		"tzo":{
+            "func": "tzo",
             "default": 0,
+            "type": "int"
+        },
+		"ua": {
+            "func": "ua",
+            "default": null,
             "type": "string",
             "validate": {
                 "max": 1024
             }
         },
-        "eid": {
-            "func": "eid",
-            "default": 0,
+		"vend": {
+            "func": "vend",
+            "default": null,
             "type": "string",
             "validate": {
                 "max": 1024
             }
         },
-        "px": {
-            "func": "px",
+		"wh": {
+            "func": "wh",
             "default": 0,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
+            "type": "int"
+        },		
+		"ww": {
+            "func": "ww",
+            "default": 0,
+            "type": "int"
         },
-        "py": {
-            "func": "py",
-            "default": 0,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-        "ord": {
-            "func": "ord",
-            "default": 0,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-        "st": {
-            "func": "st",
-            "default": 0,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-        "sl": {
-            "func": "sl",
-            "default": 0,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        }
+		"move": {
+			"func": "move",
+			"default": null,
+			"type": "int",
+			"validate": {
+				"max": 1024
+			}
+		}
     }
 };

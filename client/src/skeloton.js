@@ -1,7 +1,6 @@
 /* dmPop client-dc v5.0*/
 
 var _SESSIONID;
-var SESSIONID;
 if (typeof(SESSIONID) === 'undefined') {
     _SESSIONID = 'na_SESSIONID';
 } else {
@@ -9,9 +8,8 @@ if (typeof(SESSIONID) === 'undefined') {
 }
 
 var _meta;
-var meta;
 if (typeof(meta) === 'undefined') {
-    _meta = 'na_SESSIONID';
+    _meta = 'na_meta';
 } else {
     _meta = meta;
 }
@@ -30,7 +28,7 @@ if (typeof(meta) === 'undefined') {
     for (var i = 0; i < config.events.length; i++) {
         var msgID = config.events[i].msgID
         console.log("Listen to:", msgID);
-        var collected_attrs = config.attribute_collection[msgID];
+        var collected_attrs = config.attribute_collection[msgID].attributes;
         var attribute_config = {};
         for (var k=0; k<collected_attrs.length; k++){
             attribute_config[collected_attrs[k]] = config.attribute_description[collected_attrs[k]]
@@ -40,8 +38,11 @@ if (typeof(meta) === 'undefined') {
             $(cev.source).on(
                 cev.event,  // event to listen
                 cev.tags,   // tags to listen events on
-                {               // add attribute config and base config params
+                {           // add attribute config and base config params
                     'base':config.base,
+					'sid':SESSIONID,
+					'meta':meta,
+					'msgID':msgID,
                     'attribute_config':attribute_config,
                     'send': cev.send
                 },
@@ -54,13 +55,16 @@ if (typeof(meta) === 'undefined') {
                         }
                     }
                 }
-                );
+            );
         }
         else {
             $(cev.source).on(
                 cev.event,  // event to listen
-                {                            // add attribute config and base config params
+                {           // add attribute config and base config params
                     'base':config.base,
+					'sid':SESSIONID,
+					'meta':meta,
+					'msgID':msgID,
                     'attribute_config':attribute_config,
                     'send': cev.send
                 },
@@ -71,7 +75,7 @@ if (typeof(meta) === 'undefined') {
                         msg.send();
                     }
                 }
-                );
+               );
         }
     }
 

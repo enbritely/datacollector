@@ -43,7 +43,7 @@ var Message = function(event, node) {
             dict[key] = util.isUndefined(value) ? def : Math.round(value * Math.pow(10, r)) / Math.pow(10, r);
         },
         addString:  function(key, value, def, trunc){
-            dict[key] = util.isUndefined(value) ? def : value.substr(0,trunc);
+            dict[key] = util.isUndefined(value) ? def : value.substr(0, trunc);
         },
         addTimestamp: function(key, value, def) {
             if (!util.isUndefined(value)) {
@@ -56,12 +56,27 @@ var Message = function(event, node) {
                 console.log('TODO');
             }
         },
-        send: function(debug){
+        send: function(){
             var JSON_str = JSON.stringify(dict);
-            if(debug){
+            if(message_config.base.test) {
                 console.log(JSON_str);
-            } else {
-                // XDR
+            } else {				
+				var event_timestamp = dict.ts0;
+				if (message_config.base.baseUri !== "") {
+					var post_url = message_config.base.baseUri + message_config.base.path;
+					post_url = post_url + '?wsid='+message_config.base.wsid+'&ts='+event_timestamp;
+					if (message_config.base.verbose === 1) {		
+						post_url = post_url + '&verbose=true';
+						console.log(post_url);
+					}					
+					$.support.cors = true;				
+					$.ajax({
+						url: post_url,
+						data: {payload: JSON_str},
+						type: 'POST',
+						dataType: 'json'
+					}).done(function(data){});				
+				}				
             }
         }
     }
