@@ -48,6 +48,10 @@
         "console": true,
         "module": true,
         "document": true,
-        "require": true
+        "require": true,
+        "SESSIONID": true,
+        "meta": true,
+        "pageYOffset": true,
+        "pageXOffset": true
     }
 }

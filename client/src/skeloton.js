@@ -16,10 +16,6 @@ if (typeof(meta) === 'undefined') {
 
 (function(SESSIONID, meta) {
 
-    // include jQuery
-    // include xdr.js
-    // include JSON.js
-
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
     var Message  = require('./message')
