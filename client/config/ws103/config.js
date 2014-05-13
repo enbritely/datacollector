@@ -48,11 +48,11 @@ module.exports = {
     ],
     "attribute_collection": {
         "pageview": {
-			"attributes" : ["sid","ord","ts0","t0","type","msgID", "avh","avw","cd","ce","ip","lang","meta","plat","tzo","ua","vend"],
+			"attributes" : ["wsid", "sid","ord","ts0","type","msgID", "avh","avw","cd","ce","ip","lang","meta","plat","tzo","ua","vend","base_uri","fp", "scrv", "title", "wh", "ww"],
 			"urlparams" : {"sts": true, "wsid": wsid}
 		},
         "event": {
-			"attributes" : ["sid","ord","ts0","t0","type","msgID", "eid", "px", "py", "ds", "dt"],
+			"attributes" : ["wsid", "sid","ord","ts0","type","msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st"],
 			"urlparams" : {"wsid": wsid}
 		},
         "mousemove": {

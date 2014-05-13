@@ -37,11 +37,11 @@ var fns = (function(){
             prev_timestamp = event_timestamp;
             return 0;
         },
-		sid:		 function(event, node){ return event.data.sid; }, 
-		meta:		 function(event, node){ return event.data.meta; }, 
-		wsid:		 function(event, node){ return event.data.base.wsid; }, 
-		scrv:		 function(event, node){ return event.data.base.scriptVersion; }, 
-		msgID:		 function(event, node){ return event.data.msgID; }, 
+		sid:		 function(event, node){ return event.data.sid; },
+		meta:		 function(event, node){ return event.data.meta; },
+		wsid:		 function(event, node){ return event.data.base.wsid; },
+		scrv:		 function(event, node){ return event.data.base.scriptVersion; },
+		msgID:		 function(event, node){ return event.data.msgID; },
         mov:         function(event, node){ return v_current; },
         mosumds:     function(event, node){ return sum_ds; },
         mosumdt:     function(event, node){ return sum_dt; },
@@ -117,7 +117,7 @@ var fns = (function(){
 		dw:         function(event, node){ return $(document).width(); },
 		wh:         function(event, node){ return $(window).height(); },
 		ww:         function(event, node){ return $(window).width(); },
-		placehip:	function(event, node) { return "<ip>";}, 
+		placehip:	function(event, node) { return "<ip>";},
 		placehts:	function(event, node) { return "<sts>";}
 	}
 })();
