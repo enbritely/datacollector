@@ -1,5 +1,7 @@
 // Utility functions
 var util = (function(){
+    var $ = require('./jq');
+    console.log('sdfsdfsdfsdsd');
     return {
         hasKey: function(dict, key){
             return dict.hasOwnProperty(key);

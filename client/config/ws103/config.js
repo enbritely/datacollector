@@ -1,12 +1,12 @@
-var wsid = "ddf1";
+var wsid = "ws103";
 module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 1,
-        "baseUri": "http://localhost:8089",
-        "path": "/api/ddf1/add",
-        "scriptVersion": 1,
+        "test": 0,
+        "baseUri": "http://mlweb.dmlab.hu:8083",
+        "path": "/",
+        "scriptVersion": 200,
         "sessionMod": 1
     },
     "events": [
@@ -52,7 +52,7 @@ module.exports = {
 			"urlparams" : {"sts": true, "wsid": wsid}
 		},
         "event": {
-			"attributes" : ["wsid", "sid","ord","ts0","type","msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st"],
+			"attributes" : ["wsid", "sid","ord","ts0","type","msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st","scrv"],
 			"urlparams" : {"wsid": wsid}
 		},
         "mousemove": {

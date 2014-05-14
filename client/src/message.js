@@ -2,6 +2,7 @@
 var Message = function(event, node) {
     var util = require('./util');
     var fns = require('./fns');
+    var $ = require('./jq');
     var dict = {};
     var message_config = event.data;
     var ev = event;

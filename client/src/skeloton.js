@@ -16,6 +16,8 @@ if (typeof(meta) === 'undefined') {
 
 (function(SESSIONID, meta) {
 
+    var $ = require('./jq');
+
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
     var util  = require('./util')

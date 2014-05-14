@@ -1,5 +1,6 @@
 // Data functions
 var fns = (function(){
+    var $ = require('./jq');
     var n_ord = 0;
     var t0 = new Date().getTime();
     var Fingerprint = require('../lib/fingerprint.js');
