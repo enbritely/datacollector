@@ -3,7 +3,7 @@ module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 0,
+        "test": 1,
         "baseUri": "http://mlweb.dmlab.hu:8083",
         "path": "/",
         "scriptVersion": 200,
@@ -48,20 +48,20 @@ module.exports = {
     ],
     "attribute_collection": {
         "pageview": {
-			"attributes" : ["wsid", "sid","ord","ts0","type","msgID", "avh","avw","cd","ce","ip","lang","meta","plat","tzo","ua","vend","base_uri","fp", "scrv", "title", "wh", "ww"],
-			"urlparams" : {"sts": true, "wsid": wsid}
-		},
+            "attributes" : ["wsid", "sid","ord","ts0","type","msgID", "avh","avw","cd","ce","ip","lang","meta","plat","tzo","ua","vend","base_uri","fp", "scrv", "title", "wh", "ww", "pls"],
+            "urlparams" : {"sts": true, "wsid": wsid}
+        },
         "event": {
-			"attributes" : ["wsid", "sid","ord","ts0","type","msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st","scrv"],
-			"urlparams" : {"wsid": wsid}
-		},
+            "attributes" : ["wsid", "sid","ord","ts0","type","msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st","scrv"],
+            "urlparams" : {"wsid": wsid}
+        },
         "mousemove": {
-			"attributes" : ["move"],
-			"urlparams" : {"wsid": wsid}
-		}
+            "attributes" : ["move"],
+            "urlparams" : {"wsid": wsid}
+        }
     },
     "attribute_description": {
-		"meta": {
+        "meta": {
             "func": "meta",
             "default": "",
             "type": "string",
@@ -69,7 +69,7 @@ module.exports = {
                 "max": 100000
             }
         },
-		"wsid": {
+        "wsid": {
             "func": "wsid",
             "default": "",
             "type": "string",
@@ -77,12 +77,12 @@ module.exports = {
                 "max": 5
             }
         },
-		"scrv": {
+        "scrv": {
             "func": "scrv",
             "default": -1,
             "type": "int"
         },
-		"sid": {
+        "sid": {
             "func": "sid",
             "default": "",
             "type": "string",
@@ -90,7 +90,7 @@ module.exports = {
                 "max": 2048
             }
         },
-		"msgID": {
+        "msgID": {
             "func": "msgID",
             "default": "",
             "type": "string",
@@ -98,17 +98,17 @@ module.exports = {
                 "max": 128
             }
         },
-		"avh": {
+        "avh": {
             "func": "avh",
             "default": -1,
             "type": "int"
         },
-		"avw": {
+        "avw": {
             "func": "avw",
             "default": -1,
             "type": "int"
         },
-		"base_uri": {
+        "base_uri": {
             "func": "base_uri",
             "default": "",
             "type": "string",
@@ -116,39 +116,39 @@ module.exports = {
                 "max": 2048
             }
         },
-		"cd": {
+        "cd": {
             "func": "cd",
             "default": -1,
             "type": "int"
         },
-		"ce": {
+        "ce": {
             "func": "ce",
             "default": -1,
             "type": "int"
         },
-		"dh": {
+        "dh": {
             "func": "dh",
             "default": -1,
             "type": "int"
         },
-		"dw": {
+        "dw": {
             "func": "dw",
             "default": -1,
             "type": "int"
         },
-		"ds": {
+        "ds": {
             "func": "ds",
             "default": 0,
             "type": "float",
-			"zero":4
+            "zero":4
         },
-		"dt": {
+        "dt": {
             "func": "dt",
             "default": 0,
             "type": "float",
-			"zero":4
+            "zero":4
         },
-		"eid": {
+        "eid": {
             "func": "eid",
             "default": "NA",
             "type": "string",
@@ -156,12 +156,12 @@ module.exports = {
                 "max": 2048
             }
         },
-		"fp": {
+        "fp": {
             "func": "fp",
             "default": "-1",
             "type": "int"
         },
-		"href": {
+        "href": {
             "func": "href",
             "default": "NA",
             "type": "string",
@@ -169,12 +169,12 @@ module.exports = {
                 "max": 2048
             }
         },
-		"ih": {
+        "ih": {
             "func": "ih",
             "default": -1,
             "type": "int"
         },
-		"ip": {
+        "ip": {
             "func": "placehip",
             "default": "NA",
             "type": "string",
@@ -182,12 +182,12 @@ module.exports = {
                 "max": 6
             }
         },
-		"iw": {
+        "iw": {
             "func": "iw",
             "default": -1,
             "type": "int"
         },
-		"lang": {
+        "lang": {
             "func": "lang",
             "default": "NA",
             "type": "string",
@@ -195,12 +195,12 @@ module.exports = {
                 "max": 32
             }
         },
-		"ord": {
+        "ord": {
             "func": "ord",
             "default": -1,
             "type": "int"
         },
-		"plat": {
+        "plat": {
             "func": "plat",
             "default": "NA",
             "type": "string",
@@ -208,27 +208,27 @@ module.exports = {
                 "max": 1024
             }
         },
-		"px": {
+        "px": {
             "func": "px",
             "default": -1,
             "type": "int"
         },
-		"py": {
+        "py": {
             "func": "py",
             "default": -1,
             "type": "int"
         },
-		"st": {
+        "st": {
             "func": "st",
             "default": -1,
             "type": "int"
         },
-		"t0": {
+        "t0": {
             "func": "t0",
             "default": 0,
             "type": "int"
         },
-		"title": {
+        "title": {
             "func": "title",
             "default": "NA",
             "type": "string",
@@ -236,12 +236,12 @@ module.exports = {
                 "max": 1024
             }
         },
-		"ts0": {
+        "ts0": {
             "func": "ts0",
             "default": 0,
             "type": "int"
         },
-		"type": {
+        "type": {
             "func": "type",
             "default": "NA",
             "type": "string",
@@ -249,12 +249,12 @@ module.exports = {
                 "max": 1024
             }
         },
-		"tzo":{
+        "tzo":{
             "func": "tzo",
             "default": 0,
             "type": "int"
         },
-		"ua": {
+        "ua": {
             "func": "ua",
             "default": null,
             "type": "string",
@@ -262,7 +262,7 @@ module.exports = {
                 "max": 1024
             }
         },
-		"vend": {
+        "vend": {
             "func": "vend",
             "default": null,
             "type": "string",
@@ -270,23 +270,31 @@ module.exports = {
                 "max": 1024
             }
         },
-		"wh": {
+        "wh": {
             "func": "wh",
             "default": 0,
             "type": "int"
         },
-		"ww": {
+        "ww": {
             "func": "ww",
             "default": 0,
             "type": "int"
         },
-		"move": {
-			"func": "move",
-			"default": null,
-			"type": "int",
-			"validate": {
-				"max": 1024
-			}
-		}
+        "move": {
+            "func": "move",
+            "default": null,
+            "type": "int",
+            "validate": {
+                "max": 1024
+            }
+        },
+        "pls": {
+            "func": "pls",
+            "default": null,
+            "type": "string",
+            "validate": {
+                "max": 4096
+            }
+        }
     }
 };

@@ -38,19 +38,19 @@ var fns = (function(){
             prev_timestamp = event_timestamp;
             return 0;
         },
-		sid:		 function(event, node){ return event.data.sid; },
-		meta:		 function(event, node){ return event.data.meta; },
-		wsid:		 function(event, node){ return event.data.base.wsid; },
-		scrv:		 function(event, node){ return event.data.base.scriptVersion; },
-		msgID:		 function(event, node){ return event.data.msgID; },
+        sid:         function(event, node){ return event.data.sid; },
+        meta:        function(event, node){ return event.data.meta; },
+        wsid:        function(event, node){ return event.data.base.wsid; },
+        scrv:        function(event, node){ return event.data.base.scriptVersion; },
+        msgID:       function(event, node){ return event.data.msgID; },
         mov:         function(event, node){ return v_current; },
         mosumds:     function(event, node){ return sum_ds; },
         mosumdt:     function(event, node){ return sum_dt; },
         moavgv:      function(event, node){ return v_sum / n_mousemove; },
         moavgdt:     function(event, node){ return sum_dt / n_mousemove; },
         moavgds:     function(event, node){ return sum_ds / n_mousemove; },
-		ds:			 function(event, node){ return ds_current; },
-		dt:			 function(event, node){ return dt_current; },
+        ds:          function(event, node){ return ds_current; },
+        dt:          function(event, node){ return dt_current; },
         dump:        function(event, node){ return console.log(event);},
         ord:         function(event, node){ return n_ord++; },
         t0:          function(event, node){ return t0; },
@@ -114,13 +114,14 @@ var fns = (function(){
                     return D.scrollLeft;
                 }
             },
-		dh:         function(event, node){ return $(document).height(); },
-		dw:         function(event, node){ return $(document).width(); },
-		wh:         function(event, node){ return $(window).height(); },
-		ww:         function(event, node){ return $(window).width(); },
-		placehip:	function(event, node) { return "<ip>";},
-		placehts:	function(event, node) { return "<sts>";}
-	}
+        dh:         function(event, node){ return $(document).height(); },
+        dw:         function(event, node){ return $(document).width(); },
+        wh:         function(event, node){ return $(window).height(); },
+        ww:         function(event, node){ return $(window).width(); },
+        placehip:   function(event, node) { return "<ip>";},
+        placehts:   function(event, node) { return "<sts>";},
+        pls:        function(event, node) { return bfp.getPluginsString();}
+    }
 })();
 
 module.exports = fns;
