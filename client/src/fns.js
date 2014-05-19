@@ -118,10 +118,10 @@ var fns = (function(){
         dw:         function(event, node){ return $(document).width(); },
         wh:         function(event, node){ return $(window).height(); },
         ww:         function(event, node){ return $(window).width(); },
-        placehip:   function(event, node) { return "<ip>";},
-        placehts:   function(event, node) { return "<sts>";},
+        ip:   function(event, node) { return "<ip>";},
+        sts:   function(event, node) { return "<sts>";},
         pls:        function(event, node) { return bfp.getPluginsString();}
     }
 })();
-
+console.log('sdfsds');
 module.exports = fns;

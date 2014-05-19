@@ -6,7 +6,7 @@ module.exports = {
         "test": 1,
         "baseUri": "http://mlweb.dmlab.hu:8083",
         "path": "/",
-        "scriptVersion": 200,
+        "scriptVersion": 201,
         "sessionMod": 1
     },
     "events": [
@@ -48,7 +48,7 @@ module.exports = {
     ],
     "attribute_collection": {
         "pageview": {
-            "attributes" : ["wsid", "sid","ord","ts0","type","msgID", "avh","avw","cd","ce","ip","lang","meta","plat","tzo","ua","vend","base_uri","fp", "scrv", "title", "wh", "ww", "pls"],
+            "attributes" : ["sts", "ip", "wsid", "sid","ord","ts0","type","msgID", "avh","avw","cd","ce","lang","meta","plat","tzo","ua","vend","base_uri","fp", "scrv", "title", "wh", "ww", "pls"],
             "urlparams" : {"sts": true, "wsid": wsid}
         },
         "event": {
@@ -175,7 +175,7 @@ module.exports = {
             "type": "int"
         },
         "ip": {
-            "func": "placehip",
+            "func": "ip",
             "default": "NA",
             "type": "string",
             "validate": {
@@ -290,6 +290,14 @@ module.exports = {
         },
         "pls": {
             "func": "pls",
+            "default": null,
+            "type": "string",
+            "validate": {
+                "max": 4096
+            }
+        },
+        "sts": {
+            "func": "sts",
             "default": null,
             "type": "string",
             "validate": {
