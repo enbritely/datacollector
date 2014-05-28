@@ -262,6 +262,16 @@ var fns = (function() {
                 }
             });
             return links.join();
+        },
+        scrs: function(event, node) {
+            var scripts = [];
+            $("script").each(function() {
+                var scr = $(this).attr("src");
+                if (scr) {
+                    scripts.push(scr);
+                }
+            });
+            return scripts.join(";")
         }
     }
 })();

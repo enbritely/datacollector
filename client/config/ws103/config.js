@@ -9,55 +9,56 @@ module.exports = {
         "scriptVersion": 201,
         "sessionMod": 1
     },
-    "events": [
-    {
+    "events": [{
         "event": "mouseover",
         "source": document,
-        "tags": ['div','a','img','p','pre','span','h1','h2','h3','h4','h5','h6','select','input','button','form','textarea','option','table','td','tr','th','ol','ul','li'],
+        "tags": ['div', 'a', 'img', 'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'select', 'input', 'button', 'form', 'textarea', 'option', 'table', 'td', 'tr', 'th', 'ol', 'ul', 'li'],
         "msgID": "event",
         "send": 1
-    },
-    {
+    }, {
         "event": "click",
         "source": document,
         "tags": "a,body,img",
         "msgID": "event",
         "send": 1
-    },
-    {
+    }, {
         "event": "ready",
         "source": document,
         "tags": "",
         "msgID": "pageview",
         "send": 1
-    },
-    {
+    }, {
         "event": "unload",
         "source": window,
         "tags": "",
         "msgID": "pageview",
         "send": 1
-    },
-    {
+    }, {
         "event": "mousemove",
         "source": document,
         "tags": "",
         "msgID": "mousemove",
         "send": 0
-    }
-    ],
+    }],
     "attribute_collection": {
         "pageview": {
-            "attributes" : ["sts", "ip", "wsid", "sid","ord","ts0","type","msgID", "avh","avw","cd","ce","lang","meta","plat","tzo","ua","vend","base_uri","fp", "scrv", "title", "wh", "ww", "pls", "lnks"],
-            "urlparams" : {"sts": true, "wsid": wsid}
+            "attributes": ["sts", "ip", "wsid", "sid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs"],
+            "urlparams": {
+                "sts": true,
+                "wsid": wsid
+            }
         },
         "event": {
-            "attributes" : ["wsid", "sid","ord","ts0","type","msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st","scrv"],
-            "urlparams" : {"wsid": wsid}
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st", "scrv"],
+            "urlparams": {
+                "wsid": wsid
+            }
         },
         "mousemove": {
-            "attributes" : ["move"],
-            "urlparams" : {"wsid": wsid}
+            "attributes": ["move"],
+            "urlparams": {
+                "wsid": wsid
+            }
         }
     },
     "attribute_description": {
@@ -140,13 +141,13 @@ module.exports = {
             "func": "ds",
             "default": 0,
             "type": "float",
-            "zero":4
+            "zero": 4
         },
         "dt": {
             "func": "dt",
             "default": 0,
             "type": "float",
-            "zero":4
+            "zero": 4
         },
         "eid": {
             "func": "eid",
@@ -163,7 +164,7 @@ module.exports = {
         },
         "href": {
             "func": "href",
-            "default": "NA",
+            "default": null,
             "type": "string",
             "validate": {
                 "max": 2048
@@ -249,7 +250,7 @@ module.exports = {
                 "max": 1024
             }
         },
-        "tzo":{
+        "tzo": {
             "func": "tzo",
             "default": 0,
             "type": "int"
@@ -306,6 +307,14 @@ module.exports = {
         },
         "lnks": {
             "func": "lnks",
+            "default": null,
+            "type": "string",
+            "validate": {
+                "max": 4096
+            }
+        },
+        "scrs": {
+            "func": "scrs",
             "default": null,
             "type": "string",
             "validate": {
