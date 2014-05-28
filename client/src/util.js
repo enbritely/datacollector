@@ -1,6 +1,6 @@
 // Utility functions
 var util = (function(){
-    var $ = require('./jq');
+    var jq_module = require('./jq');
     return {
         hasKey: function(dict, key){
             return dict.hasOwnProperty(key);
@@ -22,7 +22,7 @@ var util = (function(){
                 if (realNode.id) {
                     return name + '#' + realNode.id + (path ? '>' + path : '');
                 } else if (realNode.className) {
-                    var rncn = $.trim(realNode.className);
+                    var rncn = jq_module.trim(realNode.className);
                     name += '.' + rncn.split(/\s+/).join('.');
                 }
                 var parent = node.parent(), siblings = parent.children(name);

@@ -1,5 +1,3 @@
-/* dmPop client-dc v5.0*/
-
 var _SESSIONID;
 if (typeof(SESSIONID) === 'undefined') {
     _SESSIONID = 'na_SESSIONID';
@@ -16,14 +14,13 @@ if (typeof(meta) === 'undefined') {
 
 (function(SESSIONID, meta) {
 
-    var $ = require('./jq');
-
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
     var util  = require('./util')
     if(config.base.sessionMod && util.hash(SESSIONID) % config.base.sessionMod !== 0) {
         return;
     }
+    var jq_module = require('./jq');
     var Message  = require('./message')
 
     // Attach events
@@ -46,13 +43,13 @@ if (typeof(meta) === 'undefined') {
             'send': cev.send
         };
         var tags  = cev.tags ? cev.tags : null;
-        $(cev.source).on(
+        jq_module(cev.source).on(
             cev.event,
             tags,
             data,
             function(event){
-                if ($(event.target).is(this)) {
-                    var msg = new Message(event, $(this));
+                if (jq_module(event.target).is(this)) {
+                    var msg = new Message(event, jq_module(this));
                     msg.build();
                     if (event.data.send === 1) {
                         msg.send();

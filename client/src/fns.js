@@ -12,8 +12,7 @@ var fns = (function() {
     function getPathFromUrl(url) {
         return url.split("?")[0];
     }
-
-    var $ = require('./jq');
+    var jq_module = require('./jq');
     var n_ord = 0;
     var t0 = new Date().getTime();
     var Fingerprint = require('../lib/fingerprint.js');
@@ -30,7 +29,6 @@ var fns = (function() {
     var n_mousemove = 0;
     var max_scrollTop = 0.0;
     var v_sum = 0.0;
-    var host = getHost();
     return {
         move: function(event, node) {
             var event_time = new Date();
@@ -151,7 +149,7 @@ var fns = (function() {
             return node.attr("href");
         },
         title: function(event, node) {
-            return $(document).attr("title");
+            return jq_module(document).attr("title");
         },
         acn: function(event, node) {
             return navigator.appCodeName;
@@ -230,16 +228,16 @@ var fns = (function() {
             }
         },
         dh: function(event, node) {
-            return $(document).height();
+            return jq_module(document).height();
         },
         dw: function(event, node) {
-            return $(document).width();
+            return jq_module(document).width();
         },
         wh: function(event, node) {
-            return $(window).height();
+            return jq_module(window).height();
         },
         ww: function(event, node) {
-            return $(window).width();
+            return jq_module(window).width();
         },
         ip: function(event, node) {
             return "<ip>";
@@ -252,8 +250,9 @@ var fns = (function() {
         },
         lnks: function(event, node) {
             var links = [];
-            $("a").each(function(index) {
-                var link = $(this).attr("href");
+            var host = event.data.base.filterUri;
+            jq_module("a").each(function(index) {
+                var link = jq_module(this).attr("href");
                 if (!link || link.indexOf("javascript") === 0) {
                     return;
                 }
@@ -265,8 +264,8 @@ var fns = (function() {
         },
         scrs: function(event, node) {
             var scripts = [];
-            $("script").each(function() {
-                var scr = $(this).attr("src");
+            jq_module("script").each(function() {
+                var scr = jq_module(this).attr("src");
                 if (scr) {
                     scripts.push(scr);
                 }

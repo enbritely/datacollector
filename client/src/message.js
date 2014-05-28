@@ -2,11 +2,11 @@
 var Message = function(event, node) {
     var util = require('./util');
     var fns = require('./fns');
-    var $ = require('./jq');
     var dict = {};
     var message_config = event.data;
     var ev = event;
     var no = node;
+    var jq_module = require('./jq');
     return {
         getDict: function(){
             return dict;
@@ -68,9 +68,8 @@ var Message = function(event, node) {
                     var path = message_config.base.path;
                     var urlparams = message_config.urlparams;
 					var post_url = util.buildQuery(baseUri, path, urlparams);
-                    console.log(post_url);
-					$.support.cors = true;
-					$.ajax({
+					jq_module.support.cors = true;
+					jq_module.ajax({
 						url: post_url,
 						data: {payload: JSON_str},
 						type: 'POST',
