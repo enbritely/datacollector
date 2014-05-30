@@ -71,7 +71,7 @@ var Message = function(event, node) {
 					jq_module.support.cors = true;
 					jq_module.ajax({
 						url: post_url,
-						data: {payload: JSON_str},
+						data: JSON_str,
 						type: 'POST',
 						dataType: 'json'
 					}).done(function(data){});
