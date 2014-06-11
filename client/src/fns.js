@@ -274,6 +274,12 @@ var fns = (function() {
                 }
             });
             return scripts.join(";")
+        },
+        ot: function(event, node) {
+            return node.offset().top;
+        },
+        ol: function(event, node) {
+            return node.offset().left;
         }
     }
 })();

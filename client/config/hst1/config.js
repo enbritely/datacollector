@@ -50,7 +50,7 @@ module.exports = {
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st", "scrv"],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
             "urlparams": {
                 "wsid": wsid
             }
@@ -321,6 +321,16 @@ module.exports = {
             "validate": {
                 "max": 4096
             }
+        },
+        "ot": {
+            "func": "ot",
+            "default": null,
+            "type": "int"
+        },
+        "ol": {
+            "func": "ol",
+            "default": null,
+            "type": "int"
         }
     }
 };
