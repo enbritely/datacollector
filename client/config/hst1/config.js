@@ -7,7 +7,7 @@ module.exports = {
         "filterUri": "hardsextube",
         "baseUri": "http://mlweb.dmlab.hu:12001",
         "path": "/dc/hst/clientData",
-        "scriptVersion": 204,
+        "scriptVersion": 205,
         "sessionMod": 1
     },
     "events": [{

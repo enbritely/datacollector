@@ -268,7 +268,7 @@ var fns = (function() {
                 var scr = jq_module(this).attr("src");
                 if (scr) {
                     if (scr.indexOf("data:text/javascript;base64") === 0) {
-                        console.log("base64 found");
+                        scr = "base64"
                     }
                     scripts.push(scr);
                 }
