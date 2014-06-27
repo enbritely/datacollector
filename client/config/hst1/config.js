@@ -3,12 +3,12 @@ module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 1,
+        "test": 0,
         "filterUri": "hardsextube",
         "baseUri": "http://mlweb.dmlab.hu:12001",
         "path": "/dc/hst/clientData",
-        "scriptVersion": 205,
-        "sessionMod": 1
+        "scriptVersion": 206,
+        "sessionMod": 2
     },
     "events": [{
         "event": "mouseover",
