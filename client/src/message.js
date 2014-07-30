@@ -59,21 +59,21 @@ var Message = function(event, node) {
         },
         send: function(){
             var JSON_str = JSON.stringify(dict);
+            var encoded = util.Base64.encode(JSON_str)
+            var urlparams = message_config.urlparams;
+            urlparams.data = encoded
+            var baseUri = message_config.base.baseUri;
+            var path = message_config.base.path;
+            var post_url = util.buildQuery(baseUri, path, urlparams);
             if(message_config.base.test) {
-                console.log(JSON_str);
+                console.log(post_url);
             } else {
 				var event_timestamp = dict.ts0;
-				if (message_config.base.baseUri !== "") {
-                    var baseUri = message_config.base.baseUri;
-                    var path = message_config.base.path;
-                    var urlparams = message_config.urlparams;
-					var post_url = util.buildQuery(baseUri, path, urlparams);
+				if (baseUri !== "") {
 					jq_module.support.cors = true;
 					jq_module.ajax({
 						url: post_url,
-						data: JSON_str,
-						type: 'POST',
-						dataType: 'json'
+						type: 'GET'
 					}).done(function(data){});
 				}
             }
