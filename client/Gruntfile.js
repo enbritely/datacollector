@@ -4,21 +4,27 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: ['dist'],
     copy: {
-         main: {
-          files: [
-          {expand: true, flatten: true, src: ['config/' + grunt.option('config') + '/config.js'], dest: 'dist/'},
-          {expand: true, flatten: true, src: ['src/*.js'], dest: 'dist'},
-          ]
-        }
-      },
+      main: {
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['config/' + grunt.option('config') + '/config.js'],
+          dest: 'dist/'
+        }, {
+          expand: true,
+          flatten: true,
+          src: ['src/*.js'],
+          dest: 'dist'
+        }, ]
+      }
+    },
     browserify: {
       client: {
-       src: ['dist/skeloton.js', 'config/' + grunt.option('config') + '/config.json', 'lib/*.js'],
-       dest: distFile,
-       options: {
-       }
-     }
-   },
+        src: ['dist/skeloton.js', 'config/' + grunt.option('config') + '/config.json', 'lib/*.js'],
+        dest: distFile,
+        options: {}
+      }
+    },
     uglify: {
       options: {
         mangle: false,
@@ -39,6 +45,19 @@ module.exports = function(grunt) {
       }
 
     },
+    compress: {
+      main: {
+        options: {
+          mode: 'gzip',
+          pretty: true
+        },
+        expand: true,
+        ext: '.js.gz',
+        cwd: 'dist/',
+        src: ['<%= pkg.name %>-min.js'],
+        dest: 'dist/'
+      }
+    },
     watch: {
       files: ['<%= jshint.files %>'],
       tasks: ['clean', 'copy', 'jshint', 'browserify']
@@ -49,6 +68,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', ['clean', 'jshint', 'copy', 'browserify', 'uglify']);
+  grunt.registerTask('default', ['clean', 'jshint', 'copy', 'browserify', 'uglify', "compress"]);
 };
