@@ -310,6 +310,7 @@ module.exports = {
             "func": "lnks",
             "default": null,
             "type": "string",
+            "urlencode": true,
             "validate": {
                 "max": 4096
             }
@@ -318,6 +319,7 @@ module.exports = {
             "func": "scrs",
             "default": null,
             "type": "string",
+            "urlencode": true,
             "validate": {
                 "max": 4096
             }

@@ -31,7 +31,7 @@ var Message = function(event, node) {
                 this.addFloat(attr_config.func, fns[attr_config.func](ev, no), attr_config.zero, attr_config['default'])
             }
             if (attr_config.type === 'string') {
-                this.addString(attr_config.func, fns[attr_config.func](ev, no), attr_config['default'], attr_config.r, attr_config.validate.max)
+                this.addString(attr_config, ev, no)
             }
             if (attr_config.type === 'ts') {
                 this.addTimestamp(attr_config.func, fns[attr_config.func](ev, no), attr_config['default']);
@@ -43,8 +43,17 @@ var Message = function(event, node) {
         addFloat:   function(key, value, r, def){
             dict[key] = util.isUndefined(value) ? def : Math.round(value * Math.pow(10, r)) / Math.pow(10, r);
         },
-        addString:  function(key, value, def, trunc){
-            dict[key] = util.isUndefined(value) ? def : value.substr(0, trunc);
+        addString:  function(attr_config, ev, no){
+            var key = attr_config.func;
+            var value = fns[attr_config.func](ev, no);
+            var def = attr_config['default'];
+            var trunc = attr_config.validate.max;
+            var urlencode = attr_config.urlencode;
+            var result = util.isUndefined(value) ? def : value.substr(0, trunc);
+            if(urlencode) {
+                result = encodeURIComponent(result);
+            }
+            dict[key] = result;
         },
         addTimestamp: function(key, value, def) {
             if (!util.isUndefined(value)) {
