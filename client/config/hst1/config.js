@@ -5,10 +5,10 @@ module.exports = {
         "verbose": 0,
         "test": 0,
         "filterUri": "hardsextube",
-        "baseUri": "http://mlweb.dmlab.hu:12001",
-        "path": "/dc/hst/clientData",
-        "scriptVersion": 206,
-        "sessionMod": 2
+        "baseUri": "http://elb-scrubb-test-1002001651.us-east-1.elb.amazonaws.com",
+        "path": "/",
+        "scriptVersion": 301,
+        "sessionMod": 1
     },
     "events": [{
         "event": "mouseover",

@@ -16,6 +16,7 @@ var Message = function(event, node) {
             for (var k in message_config.attribute_config){
                 this.addAttribute(message_config.attribute_config[k]);
             }
+            var sid = event.data.sid;
             return this;
         },
         // add a generic attribute with an attribute configuration
