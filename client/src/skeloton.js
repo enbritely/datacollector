@@ -26,7 +26,6 @@ if (typeof(meta) === 'undefined') {
     // Attach events
     for (var i = 0; i < config.events.length; i++) {
         var msgID = config.events[i].msgID
-        console.log("Listen to:", msgID);
         var collected_attrs = config.attribute_collection[msgID].attributes;
         var attribute_config = {};
         for (var k=0; k<collected_attrs.length; k++){
