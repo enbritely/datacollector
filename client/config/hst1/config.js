@@ -7,7 +7,7 @@ module.exports = {
         "filterUri": "hardsextube",
         "baseUri": "http://elb-scrubb-test-1002001651.us-east-1.elb.amazonaws.com",
         "path": "/",
-        "scriptVersion": 301,
+        "scriptVersion": 302,
         "sessionMod": 1
     },
     "events": [{
