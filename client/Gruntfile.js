@@ -20,7 +20,7 @@ module.exports = function(grunt) {
     },
     browserify: {
       client: {
-        src: ['dist/skeloton.js', 'config/' + grunt.option('config') + '/config.json', 'lib/*.js'],
+        src: ['dist/skeloton.js', 'config/' + grunt.option('config') + '/config.json', 'lib/*.js', "node_modules"],
         dest: distFile,
         options: {}
       }

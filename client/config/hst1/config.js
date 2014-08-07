@@ -43,14 +43,14 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["sts", "ip", "wsid", "sid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref"],
+            "attributes": ["sts", "ip", "wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref"],
             "urlparams": {
                 "sts": true,
                 "wsid": wsid
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
             "urlparams": {
                 "wsid": wsid
             }
@@ -86,6 +86,14 @@ module.exports = {
         },
         "sid": {
             "func": "sid",
+            "default": "",
+            "type": "string",
+            "validate": {
+                "max": 2048
+            }
+        },
+        "vid": {
+            "func": "vid",
             "default": "",
             "type": "string",
             "validate": {

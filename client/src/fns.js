@@ -18,6 +18,8 @@ var fns = (function() {
     var Fingerprint = require('../lib/fingerprint.js');
     var util = require('./util');
     var bfp = new Fingerprint();
+    var cookie = require("cookie-cutter");
+    var vid = cookie.get("vid");
 
     // Mousemove helpers
     var prev_pageX, prev_pageY, prev_timestamp;
@@ -48,6 +50,9 @@ var fns = (function() {
             prev_pageY = event.pageY;
             prev_timestamp = event_timestamp;
             return 0;
+        },
+        vid: function(event, node) {
+            return vid;
         },
         sid: function(event, node) {
             return event.data.sid;
