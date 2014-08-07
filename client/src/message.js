@@ -61,10 +61,10 @@ var Message = function(event, node) {
                 dict[key] = def;
             }
             else if (value instanceof Date){
-                console.log('TODO');
+                // TODO
             }
             else if (typeof(value) === "string"){
-                console.log('TODO');
+                // TODO
             }
         },
         send: function(){
