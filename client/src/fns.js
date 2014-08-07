@@ -280,6 +280,9 @@ var fns = (function() {
         },
         ol: function(event, node) {
             return node.offset().left;
+        },
+        ref: function(event, node) {
+            return document.referrer;
         }
     }
 })();

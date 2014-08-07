@@ -43,7 +43,7 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["sts", "ip", "wsid", "sid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs"],
+            "attributes": ["sts", "ip", "wsid", "sid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref"],
             "urlparams": {
                 "sts": true,
                 "wsid": wsid
@@ -334,6 +334,15 @@ module.exports = {
             "func": "ol",
             "default": null,
             "type": "int"
+        },
+        "ref": {
+            "func": "ref",
+            "default": null,
+            "type": "string",
+            "urlencode": true,
+            "validate": {
+                "max": 512
+            }
         }
     }
 };
