@@ -167,6 +167,7 @@ module.exports = {
             "func": "href",
             "default": null,
             "type": "string",
+            "urlencode": true,
             "validate": {
                 "max": 2048
             }
