@@ -43,7 +43,7 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "novideo_msg"],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "novideo_msg", "url"],
             "urlparams": {
                 "wsid": wsid
             }
@@ -355,6 +355,15 @@ module.exports = {
             "func": "hsterror",
             "default": 0,
             "type": "int"
+        },
+        "url": {
+            "func": "turl",
+            "default": null,
+            "type": "string",
+            "urlencode": true,
+            "validate": {
+                "max": 2048
+            }
         }
     }
 };

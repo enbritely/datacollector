@@ -300,6 +300,9 @@ var fns = (function() {
                 }
             }
             return errorPanePresent;
+        },
+        turl: function(event, node) {
+            return document.URL;
         }
 
     }
