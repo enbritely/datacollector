@@ -13,7 +13,7 @@ module.exports = {
     "events": [{
         "event": "mouseover",
         "source": document,
-        "tags": ['div', 'a', 'img', 'p', 'pre', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'select', 'input', 'button', 'form', 'textarea', 'option', 'table', 'td', 'tr', 'th', 'ol', 'ul', 'li'],
+        "tags": 'div,a,img,p,pre,span,h1,h2,h3,h4,h5,h6,select,input,button,form,textarea,option,table,td,tr,th,ol,ul,li',
         "msgID": "event",
         "send": 1
     }, {
