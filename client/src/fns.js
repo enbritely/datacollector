@@ -12,6 +12,7 @@ var fns = (function() {
     function getPathFromUrl(url) {
         return url.split("?")[0];
     }
+	
     var jq_module = require('./jq');
     var n_ord = 0;
     var t0 = new Date().getTime();
@@ -22,6 +23,7 @@ var fns = (function() {
     var vid = cookie.get("vid");
 
     // Mousemove helpers
+	/*
     var prev_pageX, prev_pageY, prev_timestamp;
     var v_current = 0.0;
     var ds_current = 0.0;
@@ -31,7 +33,9 @@ var fns = (function() {
     var n_mousemove = 0;
     var max_scrollTop = 0.0;
     var v_sum = 0.0;
+	*/
     return {
+		/*
         move: function(event, node) {
             var event_time = new Date();
             var event_timestamp = event_time.getTime();
@@ -51,6 +55,7 @@ var fns = (function() {
             prev_timestamp = event_timestamp;
             return 0;
         },
+		*/
         vid: function(event, node) {
             return vid;
         },
@@ -69,6 +74,7 @@ var fns = (function() {
         msgID: function(event, node) {
             return event.data.msgID;
         },
+		/*
         mov: function(event, node) {
             return v_current;
         },
@@ -93,6 +99,7 @@ var fns = (function() {
         dt: function(event, node) {
             return dt_current;
         },
+		*/
         dump: function(event, node) {
             return console.log(event);
         },
