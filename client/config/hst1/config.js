@@ -34,13 +34,7 @@ module.exports = {
         "tags": "",
         "msgID": "pageview",
         "send": 1
-    }/*, {
-        "event": "mousemove",
-        "source": document,
-        "tags": "",
-        "msgID": "mousemove",
-        "send": 0
-    }*/	],
+    }],
     "attribute_collection": {
         "pageview": {
             "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "novideo_msg", "url"],
@@ -49,19 +43,11 @@ module.exports = {
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "ds", "dt", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
             "urlparams": {
                 "wsid": wsid
             }
         }
-		/*,
-        "mousemove": {
-            "attributes": ["move"],
-            "urlparams": {
-                "wsid": wsid
-            }
-        }
-		*/
     },
     "attribute_description": {
         "meta": {
@@ -147,20 +133,6 @@ module.exports = {
             "default": -1,
             "type": "int"
         },
-		/*
-        "ds": {
-            "func": "ds",
-            "default": 0,
-            "type": "float",
-            "zero": 4
-        },
-        "dt": {
-            "func": "dt",
-            "default": 0,
-            "type": "float",
-            "zero": 4
-        },
-		*/
         "eid": {
             "func": "eid",
             "default": "NA",
@@ -294,16 +266,6 @@ module.exports = {
             "default": 0,
             "type": "int"
         },
-		/*
-        "move": {
-            "func": "move",
-            "default": null,
-            "type": "int",
-            "validate": {
-                "max": 1024
-            }
-        },
-		*/
         "pls": {
             "func": "pls",
             "default": null,
