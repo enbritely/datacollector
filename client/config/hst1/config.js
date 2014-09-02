@@ -7,7 +7,7 @@ module.exports = {
         "filterUri": "hardsextube",
         "baseUri": "http://elb-scrubb-test-1002001651.us-east-1.elb.amazonaws.com",
         "path": "/",
-        "scriptVersion": 303,
+        "scriptVersion": 304,
         "sessionMod": 1
     },
     "events": [{
@@ -34,13 +34,13 @@ module.exports = {
         "tags": "",
         "msgID": "pageview",
         "send": 1
-    }, {
+    }/*, {
         "event": "mousemove",
         "source": document,
         "tags": "",
         "msgID": "mousemove",
         "send": 0
-    }],
+    }*/	],
     "attribute_collection": {
         "pageview": {
             "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "novideo_msg", "url"],
@@ -53,13 +53,15 @@ module.exports = {
             "urlparams": {
                 "wsid": wsid
             }
-        },
+        }
+		/*,
         "mousemove": {
             "attributes": ["move"],
             "urlparams": {
                 "wsid": wsid
             }
         }
+		*/
     },
     "attribute_description": {
         "meta": {
@@ -145,6 +147,7 @@ module.exports = {
             "default": -1,
             "type": "int"
         },
+		/*
         "ds": {
             "func": "ds",
             "default": 0,
@@ -157,6 +160,7 @@ module.exports = {
             "type": "float",
             "zero": 4
         },
+		*/
         "eid": {
             "func": "eid",
             "default": "NA",
@@ -290,6 +294,7 @@ module.exports = {
             "default": 0,
             "type": "int"
         },
+		/*
         "move": {
             "func": "move",
             "default": null,
@@ -298,6 +303,7 @@ module.exports = {
                 "max": 1024
             }
         },
+		*/
         "pls": {
             "func": "pls",
             "default": null,
