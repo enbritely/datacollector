@@ -1,5 +1,5 @@
 // Data functions
-var fns = (function() {
+var fns = (function(jq_module) {
 
     var getHost = function() {
         var pathArray = window.location.href.split('/');
@@ -13,7 +13,6 @@ var fns = (function() {
         return url.split("?")[0];
     }
 	
-    var jq_module = require('./jq');
     var n_ord = 0;
     var t0 = new Date().getTime();
     var Fingerprint = require('../lib/fingerprint.js');
@@ -22,40 +21,7 @@ var fns = (function() {
     var cookie = require("cookie-cutter");
     var vid = cookie.get("vid");
 
-    // Mousemove helpers
-	/*
-    var prev_pageX, prev_pageY, prev_timestamp;
-    var v_current = 0.0;
-    var ds_current = 0.0;
-    var dt_current = 0.0;
-    var sum_ds = 0.0;
-    var sum_dt = 0.0;
-    var n_mousemove = 0;
-    var max_scrollTop = 0.0;
-    var v_sum = 0.0;
-	*/
     return {
-		/*
-        move: function(event, node) {
-            var event_time = new Date();
-            var event_timestamp = event_time.getTime();
-            if (!util.isUndefined(prev_pageX) && !util.isUndefined(prev_pageY) && !util.isUndefined(prev_timestamp)) {
-                var ds = Math.sqrt(Math.pow(event.pageX - prev_pageX, 2) + Math.pow(event.pageY - prev_pageY, 2));
-                var dt = event_timestamp - prev_timestamp;
-                v_current = ds / dt;
-                ds_current = ds;
-                dt_current = dt;
-                sum_ds += ds;
-                sum_dt += dt;
-                v_sum += v_current;
-            }
-            n_mousemove++;
-            prev_pageX = event.pageX;
-            prev_pageY = event.pageY;
-            prev_timestamp = event_timestamp;
-            return 0;
-        },
-		*/
         vid: function(event, node) {
             return vid;
         },
@@ -74,32 +40,6 @@ var fns = (function() {
         msgID: function(event, node) {
             return event.data.msgID;
         },
-		/*
-        mov: function(event, node) {
-            return v_current;
-        },
-        mosumds: function(event, node) {
-            return sum_ds;
-        },
-        mosumdt: function(event, node) {
-            return sum_dt;
-        },
-        moavgv: function(event, node) {
-            return v_sum / n_mousemove;
-        },
-        moavgdt: function(event, node) {
-            return sum_dt / n_mousemove;
-        },
-        moavgds: function(event, node) {
-            return sum_ds / n_mousemove;
-        },
-        ds: function(event, node) {
-            return ds_current;
-        },
-        dt: function(event, node) {
-            return dt_current;
-        },
-		*/
         dump: function(event, node) {
             return console.log(event);
         },
@@ -313,5 +253,5 @@ var fns = (function() {
         }
 
     }
-})();
+})($);
 module.exports = fns;

@@ -1,12 +1,13 @@
 // Messaging
-var Message = function(event, node) {
+var Message = function(event, node, jq_module) {
+	
     var util = require('./util');
     var fns = require('./fns');
     var dict = {};
     var message_config = event.data;
     var ev = event;
     var no = node;
-    var jq_module = require('./jq');
+
     var addInteger = function(attr_config, ev, no) {
         var value = fns[attr_config.func](ev, no);
         if (!util.isUndefined(value)) {
@@ -70,7 +71,8 @@ var Message = function(event, node) {
             var path = message_config.base.path;
             var post_url = util.buildQuery(baseUri, path, urlparams);
             if (message_config.base.test) {
-                console.log(post_url);
+                // console.log(post_url);
+				console.log(dict);
             } else {
                 var event_timestamp = dict.ts0;
                 if (baseUri !== "") {

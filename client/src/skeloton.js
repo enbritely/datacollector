@@ -12,8 +12,7 @@ if (typeof(meta) === 'undefined') {
     _meta = meta;
 }
 
-
-(function(SESSIONID, meta) {
+(function(SESSIONID, meta, jq_module) {
 
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
@@ -22,7 +21,6 @@ if (typeof(meta) === 'undefined') {
     if (config.base.sessionMod && util.hash(SESSIONID) % config.base.sessionMod !== 0) {
         return;
     }
-
 
     var initVisit = function() {
         cookie.set(
@@ -39,7 +37,6 @@ if (typeof(meta) === 'undefined') {
         initVisit();
     }
 
-    var jq_module = require('./jq');
     var Message = require('./message')
 
     // Attach events
@@ -67,7 +64,7 @@ if (typeof(meta) === 'undefined') {
             data,
             function(event) {
                 if (jq_module(event.target).is(this)) {
-                    var msg = new Message(event, jq_module(this));
+                    var msg = new Message(event, jq_module(this), jq_module);
                     msg.build();
                     if (event.data.send === 1) {
                         msg.send();
@@ -76,4 +73,4 @@ if (typeof(meta) === 'undefined') {
             }
         );
     }
-})(_SESSIONID, _meta);
+})(_SESSIONID, _meta, $);

@@ -7,13 +7,13 @@ module.exports = {
         "filterUri": "hardsextube",
         "baseUri": "http://elb-scrubb-test-1002001651.us-east-1.elb.amazonaws.com",
         "path": "/",
-        "scriptVersion": 304,
+        "scriptVersion": 305,
         "sessionMod": 1
     },
     "events": [{
         "event": "mouseover",
         "source": document,
-        "tags": 'div,a,img,p,pre,span,h1,h2,h3,h4,h5,h6,select,input,button,form,textarea,option,table,td,tr,th,ol,ul,li',
+        "tags": "div,a,img,p,pre,span,h1,h2,h3,h4,h5,h6,select,input,button,form,textarea,option,table,td,tr,th,ol,ul,li",
         "msgID": "event",
         "send": 1
     }, {
