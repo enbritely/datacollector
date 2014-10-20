@@ -236,18 +236,6 @@ var fns = (function(jq_module) {
         ref: function(event, node) {
             return document.referrer;
         },
-        hsterror: function(event, node) {
-            var errorPanePresent = false;
-            var errordiv = jq_module("div.error");
-            if(errordiv.length !== 0) {
-                var errorText = errordiv.find("p").text()
-                var index = errorText.indexOf("e requested video has been removed. Please choose a category instead")
-                if(index === 3) {
-                    errorPanePresent = true;
-                }
-            }
-            return errorPanePresent;
-        },
         turl: function(event, node) {
             return document.URL;
         }
