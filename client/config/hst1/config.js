@@ -14,7 +14,7 @@ module.exports = {
         "event": "mouseover",
         "source": document,
         "tags": "div,a,img,p,pre,span,h1,h2,h3,h4,h5,h6,select,input,button,form,textarea,option,table,td,tr,th,ol,ul,li",
-        "msgID": "event",
+        "msgID": "mouseevent",
         "send": 1
     }, {
         "event": "click",
@@ -47,7 +47,14 @@ module.exports = {
             "urlparams": {
                 "wsid": wsid
             }
+        },
+        "mouseevent": {
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "urlparams": {
+                "wsid": wsid
+            }
         }
+
     },
     "attribute_description": {
         "meta": {
