@@ -37,7 +37,7 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "url"],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "url", 'dvc', 'hgeo', 'tt'],
             "urlparams": {
                 "wsid": wsid
             }
@@ -334,6 +334,33 @@ module.exports = {
             "validate": {
                 "max": 2048
             }
-        }
+        },
+        "tt": {
+            "func": "tt",
+            "default": null,
+            "type": "string",
+            "urlencode": false,
+            "validate": {
+                "max": 512
+            }
+        },
+        "hgeo": {
+            "func": "hgeo",
+            "default": null,
+            "type": "string",
+            "urlencode": false,
+            "validate": {
+                "max": 512
+            }
+        },
+        "dvc": {
+            "func": "dvc",
+            "default": null,
+            "type": "string",
+            "urlencode": false,
+            "validate": {
+                "max": 512
+            }
+        },
     }
 };

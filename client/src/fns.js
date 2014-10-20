@@ -238,8 +238,16 @@ var fns = (function(jq_module) {
         },
         turl: function(event, node) {
             return document.URL;
+        },
+        tt: function(event, node) {
+            return event.data.tt;
+        },
+        dvc: function(event, node) {
+            return event.data.dvc;
+        },
+        hgeo: function(event, node) {
+            return event.data.hgeo;
         }
-
     }
 })($);
 module.exports = fns;

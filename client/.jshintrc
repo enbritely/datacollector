@@ -51,6 +51,9 @@
         "document": true,
         "require": true,
         "SESSIONID": true,
+        "GEO": true,
+        "DEVICE": true,
+        "trafficType": true,
         "meta": true,
         "pageYOffset": true,
         "pageXOffset": true
