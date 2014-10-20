@@ -18,7 +18,7 @@ var fns = (function(jq_module) {
     var Fingerprint = require('../lib/fingerprint.js');
     var util = require('./util');
     var bfp = new Fingerprint();
-    var cookie = require("cookie-cutter");
+    var cookie = require("./cookie");
     var vid = cookie.get("vid");
 
     return {

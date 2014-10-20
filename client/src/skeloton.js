@@ -16,8 +16,8 @@ if (typeof(meta) === 'undefined') {
 
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
-    var util = require('./util')
-    var cookie = require('cookie-cutter');
+    var util = require('./util');
+    var cookie = require('./cookie');
     if (config.base.sessionMod && util.hash(SESSIONID) % config.base.sessionMod !== 0) {
         return;
     }
@@ -26,18 +26,18 @@ if (typeof(meta) === 'undefined') {
         cookie.set(
             "vid",
             util.generateVisitID(),
-            {
-                expires: 1800,
-                path: "/"
-            }
-        )
+            "/",
+            10800
+        );
     }
 
     if (!cookie.get("vid")) {
         initVisit();
+    } else {
+        cookie.update("vid", "/", 10800);
     }
 
-    var Message = require('./message')
+    var Message = require('./message');
 
     // Attach events
     for (var i = 0; i < config.events.length; i++) {
