@@ -1,6 +1,7 @@
 {
-  "name": "dmpop-data-collector",
-  "description": "Dmpop data collector package",
+  "name": "enbritely-data-collector",
+  "asset_name": "en",
+  "description": "Enbritely data collector package",
   "version": "1.0.0",
   "title": "client",
   "devDependencies": {

@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-  var distFile = 'dist/<%= pkg.name %>.js';
+  var distFile = 'dist/<%= pkg.asset_name %>.js';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: ['dist'],
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'dist/<%= pkg.name %>-min.js': [distFile]
+          'dist/<%= pkg.asset_name %>-min.js': [distFile]
         }
       }
     },
@@ -54,13 +54,13 @@ module.exports = function(grunt) {
         expand: true,
         ext: '.js.gz',
         cwd: 'dist/',
-        src: ['<%= pkg.name %>-min.js'],
+        src: ['<%= pkg.asset_name %>-min.js'],
         dest: 'dist/'
       }
     },
     watch: {
       files: ['<%= jshint.files %>'],
-      tasks: ['clean', 'copy', 'jshint', 'browserify']
+      tasks: ['clean', 'copy:main', 'jshint', 'browserify']
     }
   });
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -70,5 +70,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', ['clean', 'jshint', 'copy', 'browserify', 'uglify', "compress"]);
+  grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'browserify', 'uglify', 'compress']);
 };
