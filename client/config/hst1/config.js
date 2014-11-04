@@ -7,7 +7,7 @@ module.exports = {
         "filterUri": "hardsextube",
         "baseUri": "http://elb-scrubb-test-1002001651.us-east-1.elb.amazonaws.com",
         "path": "/",
-        "scriptVersion": 306,
+        "scriptVersion": 310,
         "sessionMod": 1
     },
     "events": [{
@@ -37,13 +37,13 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "url", 'dvc', 'hgeo', 'tt'],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "ref", "url", 'dvc', 'hgeo', 'tt'],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
             "urlparams": {
                 "wsid": wsid
             }
