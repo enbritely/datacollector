@@ -1,25 +1,25 @@
-var wsid = "hst1";
+var wsid = "shorte";
 module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 1,
+        "test": 0,
         "filterUri": "",
-        "baseUri": "http://elb-scrubb-test-1002001651.us-east-1.elb.amazonaws.com",
+        "baseUri": "http://en-elb-shorte-collector-1329186418.us-east-1.elb.amazonaws.com",
         "path": "/",
-        "scriptVersion": 307,
+        "scriptVersion": 309,
         "sessionMod": 1
     },
     "events": [{
         "event": "mouseover",
         "source": document,
-        "tags": "div,a,img,p,pre,span,h1,h2,h3,h4,h5,h6,select,input,button,form,textarea,option,table,td,tr,th,ol,ul,li",
+        "tags": "div,a,img,p,pre,span,h1,h2,h3,h4,h5,h6,select,input,button,form,textarea,option,table,td,tr,th,ol,ul,li,iframe",
         "msgID": "mouseevent",
         "send": 1
     }, {
         "event": "click",
         "source": document,
-        "tags": "a,body,img",
+        "tags": "a,body,img,iframe",
         "msgID": "event",
         "send": 1
     }, {
@@ -37,19 +37,19 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "pls", "lnks", "scrs", "ref", "url", 'dvc', 'hgeo', 'tt'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "ref", "url"],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "eid", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol', 'eid'],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "mouseevent": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol', 'eid'],
             "urlparams": {
                 "wsid": wsid
             }
@@ -70,7 +70,7 @@ module.exports = {
             "default": "",
             "type": "string",
             "validate": {
-                "max": 5
+                "max": 6
             }
         },
         "scrv": {

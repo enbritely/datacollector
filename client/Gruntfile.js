@@ -58,17 +58,28 @@ module.exports = function(grunt) {
         dest: 'dist/'
       }
     },
+    rename: {
+        normal: {
+            src: 'dist/<%= pkg.asset_name %>-min.js',
+            dest: 'dist/<%= pkg.asset_name %>.js'
+        },
+        compressed: {
+            src: 'dist/<%= pkg.asset_name %>-min.js.gz',
+            dest: 'dist/<%= pkg.asset_name %>.js.gz'
+        }
+    },
     watch: {
       files: ['<%= jshint.files %>'],
       tasks: ['clean', 'copy:main', 'jshint', 'browserify']
     }
   });
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-rename');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'browserify', 'uglify', 'compress']);
+  grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'browserify', 'uglify', 'compress', 'rename']);
 };
