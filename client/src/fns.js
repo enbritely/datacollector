@@ -228,14 +228,14 @@ var fns = (function(jq_module) {
         turl: function(event, node) {
             return document.URL;
         },
-        tt: function(event, node) {
-            return event.data.tt;
+        etag: function(event, node) {
+            return node[0].tagName;
         },
-        dvc: function(event, node) {
-            return event.data.dvc;
+        eclass: function(event, node) {
+            return node[0].className;
         },
-        hgeo: function(event, node) {
-            return event.data.hgeo;
+        ei: function(event, node) {
+            return node[0].id;
         }
     }
 })($);

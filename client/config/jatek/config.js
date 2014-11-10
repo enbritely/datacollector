@@ -42,13 +42,13 @@ module.exports = {
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "mouseevent": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
             "urlparams": {
                 "wsid": wsid
             }
@@ -301,6 +301,33 @@ module.exports = {
             "urlencode": true,
             "validate": {
                 "max": 2048
+            }
+        },
+        "ec": {
+            "func": "eclass",
+            "default": null,
+            "type": "string",
+            "urlencode": false,
+            "validate": {
+                "max": 512
+            }
+        },
+        "ei": {
+            "func": "ei",
+            "default": null,
+            "type": "string",
+            "urlencode": false,
+            "validate": {
+                "max": 512
+            }
+        },
+        "et": {
+            "func": "etag",
+            "default": null,
+            "type": "string",
+            "urlencode": false,
+            "validate": {
+                "max": 512
             }
         }
     }
