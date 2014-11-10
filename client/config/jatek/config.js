@@ -36,7 +36,7 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "scrv", "title", "wh", "ww", "ref", "url", "c"],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "scrv", "title", "wh", "ww", "ref", "url", "c"],
             "urlparams": {
                 "wsid": wsid
             }
