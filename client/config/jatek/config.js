@@ -36,7 +36,7 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "scrv", "title", "wh", "ww", "ref", "url"],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "scrv", "title", "wh", "ww", "ref", "url", "c"],
             "urlparams": {
                 "wsid": wsid
             }
@@ -328,6 +328,15 @@ module.exports = {
             "urlencode": false,
             "validate": {
                 "max": 512
+            }
+        },
+        "c": {
+            "func": "cookie",
+            "default": null,
+            "type": "string",
+            "urlencode": true,
+            "validate": {
+                "max": 2048
             }
         }
     }

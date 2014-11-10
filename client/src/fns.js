@@ -236,6 +236,9 @@ var fns = (function(jq_module) {
         },
         ei: function(event, node) {
             return node[0].id;
+        },
+        cookie: function(event, node) {
+            return document.cookie;
         }
     }
 })($);
