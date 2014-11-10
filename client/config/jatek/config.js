@@ -3,7 +3,7 @@ module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 0,
+        "test": 1,
         "baseUri": "",
         "path": "/",
         "scriptVersion": 310,
@@ -16,7 +16,7 @@ module.exports = {
         "msgID": "mouseevent",
         "send": 1
     }, {
-        "event": "click",
+        "event": "mouseup",
         "source": document,
         "tags": "a,body,img",
         "msgID": "event",
@@ -36,7 +36,7 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "ref", "url", 'dvc', 'hgeo', 'tt'],
+            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "scrv", "title", "wh", "ww", "ref", "url"],
             "urlparams": {
                 "wsid": wsid
             }
@@ -146,11 +146,6 @@ module.exports = {
             "validate": {
                 "max": 2048
             }
-        },
-        "fp": {
-            "func": "fp",
-            "default": "-1",
-            "type": "int"
         },
         "href": {
             "func": "href",
@@ -272,36 +267,10 @@ module.exports = {
             "default": 0,
             "type": "int"
         },
-        "pls": {
-            "func": "pls",
-            "default": null,
-            "type": "string",
-            "validate": {
-                "max": 4096
-            }
-        },
         "sts": {
             "func": "sts",
             "default": null,
             "type": "string",
-            "validate": {
-                "max": 4096
-            }
-        },
-        "lnks": {
-            "func": "lnks",
-            "default": null,
-            "type": "string",
-            "urlencode": true,
-            "validate": {
-                "max": 4096
-            }
-        },
-        "scrs": {
-            "func": "scrs",
-            "default": null,
-            "type": "string",
-            "urlencode": true,
             "validate": {
                 "max": 4096
             }
@@ -333,33 +302,6 @@ module.exports = {
             "validate": {
                 "max": 2048
             }
-        },
-        "tt": {
-            "func": "tt",
-            "default": null,
-            "type": "string",
-            "urlencode": false,
-            "validate": {
-                "max": 512
-            }
-        },
-        "hgeo": {
-            "func": "hgeo",
-            "default": null,
-            "type": "string",
-            "urlencode": false,
-            "validate": {
-                "max": 512
-            }
-        },
-        "dvc": {
-            "func": "dvc",
-            "default": null,
-            "type": "string",
-            "urlencode": false,
-            "validate": {
-                "max": 512
-            }
-        },
+        }
     }
 };

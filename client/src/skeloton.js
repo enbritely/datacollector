@@ -12,30 +12,6 @@ if (typeof(meta) === 'undefined') {
     _meta = meta;
 }
 
-var _geo;
-if (typeof(GEO) !== 'undefined') {
-    _geo = GEO;
-}
-else {
-    _geo = "na_geo";
-}
-
-var _device;
-if (typeof(DEVICE) !== 'undefined') {
-    _device = DEVICE;
-}
-else {
-    _device = "na_device";
-}
-
-var _trafficType;
-if (typeof(trafficType) !== 'undefined') {
-    _trafficType = trafficType;
-}
-else {
-    _trafficType = "na_traffictype";
-}
-
 (function(SESSIONID, meta, jq_module) {
 
     // ----------- DATA COLLECTION DEFINITION -----------
@@ -76,9 +52,6 @@ else {
             'base': config.base,
             'sid': SESSIONID,
             'meta': meta,
-            'tt': _trafficType,
-            'dvc': _device,
-            'hgeo': _geo,
             'msgID': msgID,
             'attribute_config': attribute_config,
             'urlparams': config.attribute_collection[msgID].urlparams,

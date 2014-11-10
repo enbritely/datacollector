@@ -15,9 +15,7 @@ var fns = (function(jq_module) {
 	
     var n_ord = 0;
     var t0 = new Date().getTime();
-    var Fingerprint = require('../lib/fingerprint.js');
     var util = require('./util');
-    var bfp = new Fingerprint();
     var cookie = require("./cookie");
     var vid = cookie.get("vid");
 
@@ -48,12 +46,6 @@ var fns = (function(jq_module) {
         },
         t0: function(event, node) {
             return t0;
-        },
-        fp: function(event, node) {
-            return bfp.get();
-        },
-        bpin: function(event, node) {
-            return bfp.getPluginsString();
         },
         eid: function(event, node) {
             return util.elementPath(node);
@@ -196,9 +188,6 @@ var fns = (function(jq_module) {
         },
         sts: function(event, node) {
             return "<sts>";
-        },
-        pls: function(event, node) {
-            return bfp.getPluginsString();
         },
         lnks: function(event, node) {
             var links = [];
