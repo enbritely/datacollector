@@ -1,9 +1,9 @@
-var wsid = "eoptika";
+var wsid = "jatek";
 module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 0,
+        "test": 1,
         "baseUri": "",
         "path": "/",
         "scriptVersion": 310,
@@ -16,7 +16,7 @@ module.exports = {
         "msgID": "mouseevent",
         "send": 1
     }, {
-        "event": "click",
+        "event": "mouseup",
         "source": document,
         "tags": "a,body,img",
         "msgID": "event",
@@ -36,19 +36,19 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "base_uri", "fp", "scrv", "title", "wh", "ww", "ref", "url", 'dvc', 'hgeo', 'tt'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "scrv", "title", "wh", "ww", "ref", "url", "c", "uid"],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "mouseevent": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
             "urlparams": {
                 "wsid": wsid
             }
@@ -56,6 +56,14 @@ module.exports = {
 
     },
     "attribute_description": {
+        "uid": {
+            "func": "uid",
+            "default": "",
+            "type": "string",
+            "validate": {
+                "max": 256
+            }
+        },
         "meta": {
             "func": "meta",
             "default": "",
@@ -79,14 +87,6 @@ module.exports = {
         },
         "sid": {
             "func": "sid",
-            "default": "",
-            "type": "string",
-            "validate": {
-                "max": 2048
-            }
-        },
-        "vid": {
-            "func": "vid",
             "default": "",
             "type": "string",
             "validate": {
@@ -118,8 +118,7 @@ module.exports = {
             "validate": {
                 "max": 2048
             }
-        },
-        "cd": {
+        }, "cd": {
             "func": "cd",
             "default": -1,
             "type": "int"
@@ -146,11 +145,6 @@ module.exports = {
             "validate": {
                 "max": 2048
             }
-        },
-        "fp": {
-            "func": "fp",
-            "default": "-1",
-            "type": "int"
         },
         "href": {
             "func": "href",
@@ -272,36 +266,10 @@ module.exports = {
             "default": 0,
             "type": "int"
         },
-        "pls": {
-            "func": "pls",
-            "default": null,
-            "type": "string",
-            "validate": {
-                "max": 4096
-            }
-        },
         "sts": {
             "func": "sts",
             "default": null,
             "type": "string",
-            "validate": {
-                "max": 4096
-            }
-        },
-        "lnks": {
-            "func": "lnks",
-            "default": null,
-            "type": "string",
-            "urlencode": true,
-            "validate": {
-                "max": 4096
-            }
-        },
-        "scrs": {
-            "func": "scrs",
-            "default": null,
-            "type": "string",
-            "urlencode": true,
             "validate": {
                 "max": 4096
             }
@@ -334,8 +302,8 @@ module.exports = {
                 "max": 2048
             }
         },
-        "tt": {
-            "func": "tt",
+        "ec": {
+            "func": "eclass",
             "default": null,
             "type": "string",
             "urlencode": false,
@@ -343,8 +311,8 @@ module.exports = {
                 "max": 512
             }
         },
-        "hgeo": {
-            "func": "hgeo",
+        "ei": {
+            "func": "ei",
             "default": null,
             "type": "string",
             "urlencode": false,
@@ -352,8 +320,8 @@ module.exports = {
                 "max": 512
             }
         },
-        "dvc": {
-            "func": "dvc",
+        "et": {
+            "func": "etag",
             "default": null,
             "type": "string",
             "urlencode": false,
@@ -361,5 +329,14 @@ module.exports = {
                 "max": 512
             }
         },
+        "c": {
+            "func": "cookie",
+            "default": null,
+            "type": "string",
+            "urlencode": true,
+            "validate": {
+                "max": 2048
+            }
+        }
     }
 };
