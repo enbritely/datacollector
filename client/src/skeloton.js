@@ -5,31 +5,16 @@
     var util = require('./util');
     var cookie = require('./cookie');
 
-    var sessionid = cookie.get("SESSIONID") || "na_sessionid";
+    var sessionid = cookie.get("SESSIONID");
     var userid = cookie.get("USERID");
 
     // We don't track logged in users.
-    if(userid) {
+    if(userid && !sessionid) {
         return;
     }
 
     if (config.base.sessionMod && util.hash(sessionid) % config.base.sessionMod !== 0) {
         return;
-    }
-
-    var initVisit = function() {
-        cookie.set(
-            "vid",
-            util.generateVisitID(),
-            "/",
-            10800
-        );
-    }
-
-    if (!cookie.get("vid")) {
-        initVisit();
-    } else {
-        cookie.update("vid", "/", 10800);
     }
 
     var Message = require('./message');

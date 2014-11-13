@@ -36,19 +36,19 @@ module.exports = {
     }],
     "attribute_collection": {
         "pageview": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "scrv", "title", "wh", "ww", "ref", "url", "c"],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "avh", "avw", "cd", "ce", "lang", "meta", "plat", "tzo", "ua", "vend", "scrv", "title", "wh", "ww", "ref", "url", "c", "uid"],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "event": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "href", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
             "urlparams": {
                 "wsid": wsid
             }
         },
         "mouseevent": {
-            "attributes": ["wsid", "sid", "vid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
+            "attributes": ["wsid", "sid", "ord", "ts0", "type", "msgID", "px", "py", "dh", "dw", "ih", "iw", "st", "scrv", 'ot', 'ol', 'et', 'ec', 'ei'],
             "urlparams": {
                 "wsid": wsid
             }
@@ -56,6 +56,14 @@ module.exports = {
 
     },
     "attribute_description": {
+        "uid": {
+            "func": "uid",
+            "default": "",
+            "type": "string",
+            "validate": {
+                "max": 256
+            }
+        },
         "meta": {
             "func": "meta",
             "default": "",
@@ -79,14 +87,6 @@ module.exports = {
         },
         "sid": {
             "func": "sid",
-            "default": "",
-            "type": "string",
-            "validate": {
-                "max": 2048
-            }
-        },
-        "vid": {
-            "func": "vid",
             "default": "",
             "type": "string",
             "validate": {
@@ -118,8 +118,7 @@ module.exports = {
             "validate": {
                 "max": 2048
             }
-        },
-        "cd": {
+        }, "cd": {
             "func": "cd",
             "default": -1,
             "type": "int"

@@ -17,17 +17,16 @@ var fns = (function(jq_module) {
     var t0 = new Date().getTime();
     var util = require('./util');
     var cookie = require("./cookie");
-    var vid = cookie.get("vid");
 
     return {
-        vid: function(event, node) {
-            return vid;
-        },
         sid: function(event, node) {
             return event.data.sid;
         },
         meta: function(event, node) {
             return cookie.get("meta");
+        },
+        uid: function(event, node){
+            return cookie.get("USERID");
         },
         wsid: function(event, node) {
             return event.data.base.wsid;
