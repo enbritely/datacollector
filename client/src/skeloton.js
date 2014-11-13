@@ -1,24 +1,19 @@
-var _SESSIONID;
-if (typeof(SESSIONID) === 'undefined') {
-    _SESSIONID = 'na_SESSIONID';
-} else {
-    _SESSIONID = SESSIONID;
-}
-
-var _meta;
-if (typeof(meta) === 'undefined') {
-    _meta = 'na_meta';
-} else {
-    _meta = meta;
-}
-
-(function(SESSIONID, meta, jq_module) {
+(function(jq_module) {
 
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
     var util = require('./util');
     var cookie = require('./cookie');
-    if (config.base.sessionMod && util.hash(SESSIONID) % config.base.sessionMod !== 0) {
+
+    var sessionid = cookie.get("SESSIONID") || "na_sessionid";
+    var userid = cookie.get("USERID");
+
+    // We don't track logged in users.
+    if(userid) {
+        return;
+    }
+
+    if (config.base.sessionMod && util.hash(sessionid) % config.base.sessionMod !== 0) {
         return;
     }
 
@@ -50,8 +45,7 @@ if (typeof(meta) === 'undefined') {
         var cev = config.events[i];
         var data = {
             'base': config.base,
-            'sid': SESSIONID,
-            'meta': meta,
+            'sid': sessionid,
             'msgID': msgID,
             'attribute_config': attribute_config,
             'urlparams': config.attribute_collection[msgID].urlparams,
@@ -73,4 +67,4 @@ if (typeof(meta) === 'undefined') {
             }
         );
     }
-})(_SESSIONID, _meta, $);
+})($);

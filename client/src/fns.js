@@ -27,7 +27,7 @@ var fns = (function(jq_module) {
             return event.data.sid;
         },
         meta: function(event, node) {
-            return event.data.meta;
+            return cookie.get("meta");
         },
         wsid: function(event, node) {
             return event.data.base.wsid;
