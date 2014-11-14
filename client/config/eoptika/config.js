@@ -1,4 +1,4 @@
-var wsid = "jatek";
+var wsid = "eoptika";
 module.exports = {
     "base": {
         "wsid": wsid,
@@ -6,7 +6,7 @@ module.exports = {
         "test": 1,
         "baseUri": "",
         "path": "/",
-        "scriptVersion": 310,
+        "scriptVersion": 311,
         "sessionMod": 1
     },
     "events": [{
