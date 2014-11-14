@@ -8,8 +8,9 @@
     var sessionid = cookie.get("SESSIONID");
     var userid = cookie.get("USERID");
 
+
     // We don't track logged in users.
-    if(userid && !sessionid) {
+    if(userid !== "0" || !sessionid) {
         return;
     }
 
