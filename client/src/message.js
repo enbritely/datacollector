@@ -1,6 +1,6 @@
 // Messaging
 var Message = function(event, node, jq_module) {
-    
+
     var util = require('./util');
     var fns = require('./fns');
     var dict = {};

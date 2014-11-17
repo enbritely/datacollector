@@ -1,5 +1,5 @@
 // Data functions
-var fns = (function(jq_module) {
+var fns = (function() {
 
     var getHost = function() {
         var pathArray = window.location.href.split('/');

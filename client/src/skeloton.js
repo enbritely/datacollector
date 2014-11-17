@@ -6,10 +6,8 @@
     var cookie = require('./cookie');
     var jq_module = require('./jquery');
 
-    // var sessionid = cookie.get("SESSIONID");
-    // var userid = cookie.get("USERID");
-    var sessionid = "cicuka";
-    var userid = "0";
+    var sessionid = cookie.get("SESSIONID");
+    var userid = cookie.get("USERID");
 
     // We don't track logged in users.
     if(userid !== "0" || !sessionid) {
@@ -39,7 +37,7 @@
             'urlparams': config.attribute_collection[msgID].urlparams,
             'send': cev.send
         };
-        var tags = cev.tags ? cev.tags : null;        
+        var tags = cev.tags ? cev.tags : null;
         jq_module(cev.source).on(
             cev.event,
             tags,

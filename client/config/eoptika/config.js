@@ -2,10 +2,10 @@ var wsid = "eoptika";
 module.exports = {
     "base": {
         "wsid": wsid,
-        "verbose": 1,
+        "verbose": 0,
         "test": 0,
-        "baseUri": "http://localhost:8081/",
-        "path": "a.html",
+        "baseUri": "http://datacollector-1-511160611.eu-central-1.elb.amazonaws.com",
+        "path": "/",
         "scriptVersion": 311,
         "sessionMod": 1
     },
