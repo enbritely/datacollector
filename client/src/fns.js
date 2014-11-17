@@ -17,6 +17,7 @@ var fns = (function(jq_module) {
     var t0 = new Date().getTime();
     var util = require('./util');
     var cookie = require("./cookie");
+    var jq_module = require('./jquery');
 
     return {
         sid: function(event, node) {
@@ -240,5 +241,5 @@ var fns = (function(jq_module) {
             return document.cookie;
         }
     }
-})($);
+})();
 module.exports = fns;
