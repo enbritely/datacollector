@@ -3,10 +3,10 @@ module.exports = {
     "base": {
         "wsid": wsid,
         "verbose": 0,
-        "test": 1,
-        "baseUri": "",
+        "test": 0,
+        "baseUri": "http://datacollector-1-511160611.eu-central-1.elb.amazonaws.com",
         "path": "/",
-        "scriptVersion": 310,
+        "scriptVersion": 312,
         "sessionMod": 1
     },
     "events": [{
