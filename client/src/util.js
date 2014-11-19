@@ -1,7 +1,8 @@
 // Utility functions
-var util = (function(jq_module) {
+var util = (function(providedJquery) {
+    var jq_module = require("./jquery");
     if(!jq_module) {
-        jq_module = require('./jquery');
+        jq_module = providedJquery;
     }
     return {
         hasKey: function(dict, key) {

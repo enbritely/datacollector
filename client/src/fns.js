@@ -1,5 +1,5 @@
 // Data functions
-var fns = (function(jq_module) {
+var fns = (function(providedJquery) {
 
     var getHost = function() {
         var pathArray = window.location.href.split('/');
@@ -17,15 +17,16 @@ var fns = (function(jq_module) {
     var t0 = new Date().getTime();
     var util = require('./util');
     var cookie = require("./cookie");
+    var jq_module = require("./jquery");
     if(!jq_module) {
-        jq_module = require('./jquery');
+        jq_module = providedJquery;
     }
     return {
         sid: function(event, node) {
             return event.data.sid;
         },
         meta: function(event, node) {
-            return cookie.get("meta");
+            return cookie.get("META");
         },
         uid: function(event, node){
             return cookie.get("USERID");

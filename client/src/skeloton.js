@@ -1,19 +1,20 @@
-(function(jq_module) {
+(function(providedJquery) {
 
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
     var util = require('./util');
     var cookie = require('./cookie');
+    var jq_module = require("./jquery");
+
     if(!jq_module) {
-        jq_module = require('./jquery');
+        jq_module = providedJquery;
     }
 
     var sessionid = cookie.get("SESSIONID");
     var userid = cookie.get("USERID");
-
-    // We don't track logged in users.
-    if(userid !== "0" || !sessionid) {
-        return;
+    
+    if(!sessionid) {
+        sessionid = "na";
     }
 
     if (config.base.sessionMod && util.hash(sessionid) % config.base.sessionMod !== 0) {

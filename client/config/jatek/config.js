@@ -6,7 +6,7 @@ module.exports = {
         "test": 0,
         "baseUri": "http://datacollector-1-511160611.eu-central-1.elb.amazonaws.com",
         "path": "/",
-        "scriptVersion": 312,
+        "scriptVersion": 313,
         "sessionMod": 1
     },
     "events": [{
@@ -17,6 +17,12 @@ module.exports = {
         "send": 1
     }, {
         "event": "mouseup",
+        "source": document,
+        "tags": "a,body,img",
+        "msgID": "event",
+        "send": 1
+    },  {
+        "event": "mousedown",
         "source": document,
         "tags": "a,body,img",
         "msgID": "event",
