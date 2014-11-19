@@ -1,6 +1,8 @@
 // Utility functions
-var util = (function() {
-    var jq_module = require('./jquery');
+var util = (function(jq_module) {
+    if(!jq_module) {
+        jq_module = require('./jquery');
+    }
     return {
         hasKey: function(dict, key) {
             return dict.hasOwnProperty(key);
@@ -146,6 +148,6 @@ var util = (function() {
             });
         }
     }
-})();
+})($);
 
 module.exports = util;

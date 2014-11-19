@@ -1,10 +1,12 @@
-(function() {
+(function(jq_module) {
 
     // ----------- DATA COLLECTION DEFINITION -----------
     var config = require('./config');
     var util = require('./util');
     var cookie = require('./cookie');
-    var jq_module = require('./jquery');
+    if(!jq_module) {
+        jq_module = require('./jquery');
+    }
 
     var sessionid = cookie.get("SESSIONID");
     var userid = cookie.get("USERID");
@@ -53,4 +55,4 @@
             }
         );
     }
-})();
+})($);

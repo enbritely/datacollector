@@ -10,17 +10,28 @@ module.exports = function(grunt) {
           flatten: true,
           src: ['config/' + grunt.option('config') + '/config.js'],
           dest: 'dist/'
-        }, {
+        },
+        {
           expand: true,
           flatten: true,
           src: ['src/*.js'],
           dest: 'dist'
-        }, ]
+        },
+        {
+            expand: true,
+            flatten: true,
+            src: [grunt.option('jq')],
+            dest: 'dist',
+            rename: function(dest, src) {
+                return dest + "/jquery.js";
+            }
+        }
+        ]
       }
     },
     browserify: {
       client: {
-        src: ['dist/skeloton.js', 'config/' + grunt.option('config') + '/config.json', 'lib/*.js', "node_modules"],
+        src: ['dist/skeloton.js', 'config/' + grunt.option('config') + '/config.json', "node_modules"],
         dest: distFile,
         options: {}
       }
