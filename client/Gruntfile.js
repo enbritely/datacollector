@@ -80,7 +80,7 @@ module.exports = function(grunt) {
         }
     },
     watch: {
-      files: ['<%= jshint.files %>'],
+      files: ['<%= jshint.files %>', "lib/*.js"],
       tasks: ['clean', 'copy:main', 'jshint', 'browserify']
     }
   });

@@ -149,6 +149,6 @@ var util = (function(providedJquery) {
             });
         }
     }
-})($);
+})(jQuery);
 
 module.exports = util;

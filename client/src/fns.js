@@ -243,5 +243,5 @@ var fns = (function(providedJquery) {
             return document.cookie;
         }
     }
-})($);
+})(jQuery);
 module.exports = fns;
