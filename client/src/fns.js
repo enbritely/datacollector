@@ -38,7 +38,7 @@ var fns = (function(providedJquery) {
             return event.data.base.scriptVersion;
         },
         msgID: function(event, node) {
-            return event.data.msgID;
+            return event.data.msgid;
         },
         dump: function(event, node) {
             return console.log(event);
