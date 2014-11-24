@@ -28,12 +28,6 @@ module.exports = {
         "msgID": "event",
         "send": 1
     }, {
-        "event": "ready",
-        "source": document,
-        "tags": "",
-        "msgID": "pageview",
-        "send": 1
-    }, {
         "event": "unload",
         "source": window,
         "tags": "",
