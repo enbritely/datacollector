@@ -4,7 +4,7 @@ module.exports = {
         "wsid": wsid,
         "verbose": 0,
         "test": 0,
-        "baseUri": "http://datacollector-1-511160611.eu-central-1.elb.amazonaws.com",
+        "baseUri": "http://localhost:6042",
         "path": "/",
         "scriptVersion": 313,
         "sessionMod": 1
