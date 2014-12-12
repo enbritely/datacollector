@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Iframe with iframe script included</title>
+    <style>
+        body {font-family: Arial, sans-serif; cursor: crosshair;}  
+        #wrapper { width: 100%; height: 100%; display: block;}
+        #test_iframe {width: 100%; height: 100%; display: block; }
+        #test_me {z-index: 100; position: absolute; top: 0; left:0; width:100%; height: 100%; display:block;}
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div id="test_me"></div>
+    <iframe width="200" height="500" id="test_iframe" src="http://localhost:8081/bare_iframe.html" /></iframe>
+</div>
+</body>
+</html>

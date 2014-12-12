@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Iframe with script included</title>
+    <style>
+        body {font-family: Arial, sans-serif; cursor: crosshair;}  
+        #test_me{width: 100%; height: 100%; top: 0; left: 0; position: absolute; background: #ddd;}
+        #wrapper { width: 100%; height: 100%; display: block;}
+        #test_iframe { width: 100%; height: 100%; display: block;}
+    </style>
+    <script>
+        (function(e,n,b,r,i,te,d,o,t,l,y){
+            e['_enbrtly_']={'window':e,'document':n,'wsid':i,'sid':te,'pid':d,'aid':o,'hid':t,'banw':l,'banh':y};
+            a=n.createElement(b),m=n.getElementsByTagName(b)[0]; a.async=1; a.src=r; m.parentNode.insertBefore(a,m)
+        })(window,document,'script','http://localhost:8082/gerbil.js','ws_id','impression_id','partner_id','ad_id','host_id','banner_width','banner_height');
+    </script>      
+</head>
+<body>
+    <div id="test_me" class="cl">
+        <h1>AD</h1>
+        <a href="http://index.hu">Link</a>
+    </div>
+</body>
+</html>
