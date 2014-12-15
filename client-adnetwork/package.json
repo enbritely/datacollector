@@ -1,0 +1,17 @@
+{
+  "name": "enbrtly-adnw-dc",
+  "asset_name": "en",
+  "description": "Enbritely adnetworks data collector package",
+  "version": "1.0.0",
+  "title": "client",
+  "devDependencies": {
+    "grunt": "0.4.1",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-compress": "^0.10.0",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-jshint": "0.10.0",
+    "grunt-contrib-uglify": "0.2.0",
+    "grunt-contrib-watch": "0.5.3",
+    "jshint-stylish": "*"
+  }
+}
