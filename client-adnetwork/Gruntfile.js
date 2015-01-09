@@ -17,7 +17,7 @@ module.exports = function(grunt) {
         options: {
             report: 'min',
             squeeze: {dead_code: false},
-            mangle: false
+            mangle: true
         },
         all: {
             files: [{
