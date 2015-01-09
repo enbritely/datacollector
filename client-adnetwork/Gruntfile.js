@@ -16,14 +16,15 @@ module.exports = function(grunt) {
     uglify: {
         options: {
             report: 'min',
-            squeeze: {dead_code: false}
+            squeeze: {dead_code: false},
+            mangle: false
         },
         all: {
             files: [{
                 expand: true,
                 cwd: '.',
                 src: ['dist/*.js'],
-                ext: '-min.js',
+                ext: '.js'
             }],
         },
     },
@@ -45,7 +46,7 @@ module.exports = function(grunt) {
         expand: true,
         ext: '.js.gz',
         cwd: '.',
-        src: ['dist/en-min.js', 'dist/gerbil-min.js']
+        src: ['dist/en.js', 'dist/gerbil.js']
       }
     },
     watch: {
