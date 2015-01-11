@@ -54,6 +54,10 @@ module.exports = function(grunt) {
       tasks: ['clean', 'copy:main', 'jshint']
     }
   });
+
+  require('load-grunt-tasks')(grunt, { scope: 'devDependencies' });
+  require('time-grunt')(grunt);
+
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
