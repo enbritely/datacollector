@@ -24,7 +24,6 @@
         'imid': impressionId,
         'pid': partnerId,
         'aid': adId,
-        'pid': publisherId,
         'banw': bannerWidth,
         'banh': bannerHeight,
         'sid': getCookie("SESSIONID")
