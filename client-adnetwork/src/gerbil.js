@@ -1,6 +1,6 @@
 (function(w) {
 
-    var BASE_URL = 'http://bd-prod-collector-shorte-737783554.us-east-1.elb.amazonaws.com/';
+    var BASE_URL = 'http://bd-prod-collector-propads-654752744.us-east-1.elb.amazonaws.com';
 
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",

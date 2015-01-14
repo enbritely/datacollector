@@ -33,4 +33,4 @@
     a.async = 1;
     a.src = scriptUrl;
     m.parentNode.insertBefore(a, m);
-})(window, document, 'script', 'http://2b49fa8f0c16a03e1592-2366b89f86f9049a8d564854bcebe54e.r94.cf5.rackcdn.com/shorte/gerbil.js', 'shorte', 'impression_id', 'partner_id', 'ad_id', 'eoptika.hu/', 'banner_width', 'banner_height', 2);
+})(window, document, 'script', 'http://2b49fa8f0c16a03e1592-2366b89f86f9049a8d564854bcebe54e.r94.cf5.rackcdn.com/adprops/gerbil.js', 'adprops', 'impression_id', 'partner_id', 'ad_id', 'publisher_url', 'banner_width', 'banner_height', 2);
