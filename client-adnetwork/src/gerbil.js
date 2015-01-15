@@ -121,10 +121,12 @@
         ts0: pl,
         ord: ord,
         sid: en.sid,
-        iid: en.imid,
+        iid: en.iid,
         wsid: en.wsid,
         pid: en.pid,
+        purl: en.purl,
         aid: en.aid,
+        adid: en.adid,
         hid: en.hid,
         banw: en.banw,
         banh: en.banh,
@@ -205,7 +207,7 @@
         }
     };
 
-    function al(el, en, h) {
+    function addEventListener(el, en, h) {
         if (el.addEventListener) {
             el.addEventListener(en, h);
         } else {
@@ -215,10 +217,10 @@
         }
     }
 
-    al(d, 'mousemove', evlog);
-    al(d, 'mouseover', evlog);
-    al(d, 'mousedown', evlog);
-    al(d, 'mouseup', evlog);
-    al(d, 'click', evlog);
+    addEventListener(d, 'mousemove', evlog);
+    addEventListener(d, 'mouseover', evlog);
+    addEventListener(d, 'mousedown', evlog);
+    addEventListener(d, 'mouseup', evlog);
+    addEventListener(d, 'click', evlog);
 
 }(window));
