@@ -61,7 +61,7 @@ module.exports = function(grunt) {
                 'region': 'IAD',
                 'upload': [{
                     'container': 'client-scripts',
-                    'src': 'dist/*',
+                    'src': 'dist/gerbil.js*',
                     'dest': 'adprops/',
                     'stripcomponents': 1,
                     'purge': {
