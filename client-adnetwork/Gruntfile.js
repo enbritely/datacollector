@@ -50,6 +50,10 @@ module.exports = function(grunt) {
                 src: ['dist/en.js', 'dist/gerbil.js']
             }
         },
+        jsbeautifier: {
+            files: ["src/*.js", 'Gruntfile.js'],
+            options: {}
+        },
         cloudfiles: {
             prod: {
                 'user': 'gulyasm',
@@ -69,7 +73,7 @@ module.exports = function(grunt) {
         },
         watch: {
             files: ['<%= jshint.files %>', "lib/*.js"],
-            tasks: ['clean', 'copy:main', 'jshint']
+            tasks: ['clean', 'copy:main', 'jshint', 'jsbeautifier']
         }
     });
 
@@ -78,12 +82,13 @@ module.exports = function(grunt) {
     });
     require('time-grunt')(grunt);
 
+    grunt.loadNpmTasks('grunt-jsbeautifier');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'uglify', 'compress']);
-    grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'uglify', 'compress', 'cloudfiles']);
+    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'uglify', 'jsbeautifier', 'compress']);
+    grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'uglify', 'compress', 'jsbeautifier', 'cloudfiles']);
 };
