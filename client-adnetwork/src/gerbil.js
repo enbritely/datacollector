@@ -123,6 +123,7 @@
         sid: en.sid,
         iid: en.iid,
         wsid: en.wsid,
+        zid: en.zid,
         pid: en.pid,
         purl: en.purl,
         aid: en.aid,
