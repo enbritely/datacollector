@@ -1,0 +1,23 @@
+## Adnetwork data collecting parameters
+---
+'impression_id' -
+'advertiser_id' - Entity paying for the ad
+'ad_id'
+'pid' - Entity who displays the ad
+'purl' - Url that displays the ad ( := document.baseUri)
+'banner_width'
+'banner_height'
+'sample_ratio' - 1/sr
+'zone_id' - The id of the zone displaying the ad
+
+## Advertiser data collecting parameters
+---
+'impression_id' - (like sessionid)
+'cid' - channelId, the channel where the traffic comes from
+'curl' - channelUrl, the channel where the traffic comes from
+'pid' - Entity who displays the ad
+'purl' - Url that displays the ad ( := document.referrer)
+'banner_width'
+'banner_height'
+'sample_ratio' - 1/sr
+'zone_id' - The id of the zone displaying the ad
