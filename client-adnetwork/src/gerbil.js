@@ -172,6 +172,7 @@
         o = {
             wsid: x.wsid,
             sid: x.sid,
+            iid: en.iid,
             ts0: pl,
             ts: ts,
             ord: ord++,
@@ -196,6 +197,7 @@
                     ts: ts,
                     wsid: x.wsid,
                     sid: x.sid,
+                    iid: en.iid,
                     co: co.join('|'),
                     evtc: evtc,
                     type: evt.type
