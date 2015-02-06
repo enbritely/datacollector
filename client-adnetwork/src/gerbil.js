@@ -115,12 +115,12 @@
         }
         // other browser
         return 0;
-    }
+    };
 
     // Returns UTC timestamp in milliseconds
     var now = function(){
         return new Date().getTime();
-    }
+    };
 
     var LOGGER_URL = 'http://bd-prod-collector-propads-654752744.us-east-1.elb.amazonaws.com'; // Logging server URL
     var SCRIPT_VERSION = 'ad-1.2';
@@ -230,11 +230,11 @@
         return f(x / w) + ':' + f(y / w);
     };
 
-    var co = [];
-    var ps = '';
-    var o = {};
-    var pageX, pageY;
-    var viewed = false;
+    var co = [];        // Segment coordinate Array
+    var ps = '';        // Previous segment coordinate String
+    var o = {};         // Event object to be sent
+    var pageX, pageY;   // pageXY coordinates
+    var viewed = false; // Viewed flag
     var evlog = function(evt) {
         evt = evt || window.event;  // global window.event for ie 6,7,8
         pageX = evt.pageX;          // pageX is evt.pageX if defined
