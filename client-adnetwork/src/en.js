@@ -3,6 +3,7 @@
     if ((Math.random() * 100 | 0) % sampleSize !== 0) {
         return;
     }
+    var version = 100;
     var getCookie = function(key) {
         var name = key + "=";
         var ca = document.cookie.split(';');
@@ -31,7 +32,8 @@
         'sid': getCookie("SESSIONID"),
         'zid': zoneId,
         'cid': channelId,
-        'curl': channelUrl
+        'curl': channelUrl,
+        'envr': version
     };
     a = n.createElement(b);
     m = n.getElementsByTagName(b)[0];
