@@ -3,6 +3,7 @@
     if ((Math.random() * 100 | 0) % sampleSize !== 0) {
         return;
     }
+    var version = 100;
     var getCookie = function(key) {
         var name = key + "=";
         var ca = document.cookie.split(';');
@@ -31,13 +32,12 @@
         'sid': getCookie("SESSIONID"),
         'zid': zoneId,
         'cid': channelId,
-        'curl': channelUrl
+        'curl': channelUrl,
+        'envr': version
     };
     a = n.createElement(b);
     m = n.getElementsByTagName(b)[0];
     a.async = 1;
     a.src = scriptUrl;
     m.parentNode.insertBefore(a, m);
-})(window, document, 'script', 'http://2b49fa8f0c16a03e1592-2366b89f86f9049a8d564854bcebe54e.r94.cf5.rackcdn.com/adprops/gerbil.js',
-'adprops', 'impression_id', 'advertiser_id', 'ad_id', 'publisher_id', 'publisher_url', 'banner_width', 'banner_height', 1, 'zone_id',
-'channel_id','channel_url');
+})(window, document, 'script', 'gerbil.js', 'adprops', 'impression_id', 'advertiser_id', 'ad_id', 'publisher_id', 'publisher_url', 'banner_width', 'banner_height', 1, 'zone_id', 'channel_id', 'channel_url');
