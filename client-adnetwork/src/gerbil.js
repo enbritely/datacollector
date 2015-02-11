@@ -1,4 +1,3 @@
-;
 (function(w) {
     // Base64 encoding
     var Base64 = {
@@ -150,7 +149,8 @@
                 var n;
                 if (gap = "", indent = "", "number" == typeof r)
                     for (n = 0; r > n; n += 1) indent += " ";
-                else "string" == typeof r && (indent = r); if (rep = e, e && "function" != typeof e && ("object" != typeof e || "number" != typeof e.length)) throw Error("JSON.stringify");
+                else "string" == typeof r && (indent = r);
+                if (rep = e, e && "function" != typeof e && ("object" != typeof e || "number" != typeof e.length)) throw Error("JSON.stringify");
                 return str("", {
                     "": t
                 })
@@ -163,8 +163,8 @@
                 }
                 var j;
                 if (text += "", cx.lastIndex = 0, cx.test(text) && (text = text.replace(cx, function(t) {
-                    return "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4)
-                })), /^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, ""))) return j = eval("(" + text + ")"), "function" == typeof reviver ? walk({
+                        return "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4)
+                    })), /^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, ""))) return j = eval("(" + text + ")"), "function" == typeof reviver ? walk({
                     "": j
                 }, "") : j;
                 throw new SyntaxError("JSON.parse")
@@ -198,9 +198,8 @@
     var now = function() {
         return new Date().getTime();
     };
-
-    var LOGGER_URL = 'http://bd-prod-collector-propads-654752744.us-east-1.elb.amazonaws.com'; // Logging server URL
-    var SCRIPT_VERSION = 100;
+    var SCRIPT_VERSION = 100
+    var LOGGER_URL = 'http://bd-prod-collector-juicy-833682875.us-east-1.elb.amazonaws.com'; // Logging server URL
     var ord = 0;
     var pl = now();
     var en = w._enbrtly_;
