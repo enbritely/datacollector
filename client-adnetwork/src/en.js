@@ -3,7 +3,7 @@
     if ((Math.random() * 100 | 0) % sampleSize !== 0) {
         return;
     }
-    var version = 100;
+    var version = 101;
     var getCookie = function(key) {
         var name = key + "=";
         var ca = document.cookie.split(';');

@@ -62,7 +62,7 @@ module.exports = function(grunt) {
                 'upload': [{
                     'container': 'client-scripts',
                     'src': 'dist/gerbil.js*',
-                    'dest': 'adprops/',
+                    'dest': grunt.option('wsid') + '/',
                     'stripcomponents': 1,
                     'purge': {
                         'emails': ['mgulyas86@gmail.com'],

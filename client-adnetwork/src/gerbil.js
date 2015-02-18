@@ -198,8 +198,8 @@
     var now = function() {
         return new Date().getTime();
     };
-    var SCRIPT_VERSION = 100
-    var LOGGER_URL = 'http://bd-prod-collector-juicy-833682875.us-east-1.elb.amazonaws.com'; // Logging server URL
+    var SCRIPT_VERSION = 101
+    var LOGGER_URL = 'http://bd-prod-collector-shorte-737783554.us-east-1.elb.amazonaws.com'; // Logging server URL
     var ord = 0;
     var pl = now();
     var en = w._enbrtly_;
