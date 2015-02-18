@@ -269,7 +269,7 @@
             // ie 8, 9 has microsoft specific XDomainRequest, booo!
             request = new XDomainRequest();
         }
-        if (ie_version == 6 || ie_version === 7) {
+        if (ie_version === 6 || ie_version === 7) {
             // ie 6, 7 has ActiveXObjects!
             request = new window.ActiveXObject('Microsoft.XMLHTTP');
         }
