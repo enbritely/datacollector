@@ -199,10 +199,10 @@
         return new Date().getTime();
     };
     var SCRIPT_VERSION = 101
-    var LOGGER_URL = 'http://bd-prod-collector-shorte-737783554.us-east-1.elb.amazonaws.com'; // Logging server URL
     var ord = 0;
     var pl = now();
     var en = w._enbrtly_;
+    var LOGGER_URL = en.clt_url;
     var d = en.document;
     var b = d.getElementsByTagName('body')[0];
     var e = d.documentElement; // The Element that is the root element of the document (for example, the <html> element for HTML documents). - Read-only
