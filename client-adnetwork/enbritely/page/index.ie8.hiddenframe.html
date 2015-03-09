@@ -10,32 +10,21 @@
             overflow:hidden;
         }
         .box {
+            width: 0;
+            height: 0;
             position: relative;
-            border: 1px solid #000;
-            background: #aaa;
+            border: none;
+            background: none;
             margin: 0;
             padding: 0;            
         }
         #ad1{            
             left: 0px;
             top:  0px;
-            width: 100%;
-            height: 100px;
-            background: blue;
-        }
-        #ad2{            
-            left: 0px;
-            top:  0px;
-            width: 100%;
-            height: 100px;
-            background: blue;
-        }
-        #ad3{            
-            right: 20px;
-            top:  200px;
-            width: 150px;
-            height: 320px;
-            background: blue;
+            width: 0;
+            height: 0;
+            background: none;
+            border: 0;
         }
         iframe {
             position: absolute;
@@ -45,15 +34,16 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            width: 100%;
-            height: 100%;
             z-index: 1;
         }
     </style>
 </head>
 <body>
+    <script>
+        document.cookie="SESSIONID=IE8";
+    </script>
     <div id="ad1" class="box">
-        <iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups" src="http://localhost:8081/iframe.html"></iframe>
+        <iframe width="0" height="0" src="http://ccnet6.dmlab.hu:8082/iframe.html"></iframe>
     </div>    
 </body>
 </html>
