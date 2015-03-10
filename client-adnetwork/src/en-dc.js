@@ -3,8 +3,8 @@
     CONFIG = {
         GERBIL_URL: 'http://localhost:8083/gerbil.js',
         SCRIPT_NAME: 'en-dc.js',
-        COLLECTOR_URL: 'http://localhost:8080/a.gif',
-    }
+        COLLECTOR_URL: 'http://bd-dev-collector-ivo-1326709857.us-east-1.elb.amazonaws.com/'
+    };
 
     function getParams(script_name) {
         // Find all script tags
@@ -30,12 +30,19 @@
     var p = getParams(CONFIG.SCRIPT_NAME);
     console.log(p);
 
+
     // Sampling. Only pageloads/sampleSize part will inject the tracking code. The rest exits here.
     var sampleSize = p.ssize || 1; // ...&ssize=1&... ! custom constant parameter
     if ((Math.random() * 100 | 0) % sampleSize !== 0) {
         return;
     }
-
+    // URL template:
+    // http://localhost:8084/en-dc.js?wsid=en-js-test&ssize=1&banw=100&banh=100&n=12345678&esid=PID&s=PURL&eaid=AID&eadv=ADID&epid=ZID&ebuy=CID
+    // KONSTANS RÉSZ: wsid=en-js-test&ssize=1&banw=100&banh=100
+    // MACRO RÉSZ:    n=12345678&esid=PID&s=PURL&eaid=AID&eadv=ADID&epid=ZID&ebuy=CID
+    //                az egyes értékeket a makró nevével kell helyettesíteni, tehát:
+    //                n=%n&esid=%esid&....
+    // Megfeleltetés:
     // ----- %eaid = ad_id
     // ----- %eadv = advertiser_id
     // ----- %ebuy = channel_id
@@ -71,7 +78,7 @@
     a = n.createElement(r);
     m = n.getElementsByTagName(r)[0];
     a.async = 1;
-    a.src = cfg.GERBIL_URL;
+    a.src = CONFIG.GERBIL_URL;
     m.parentNode.insertBefore(a, m);
     // Comment out this last block !!444!!!!
     console.log('wsid', e._enbrtly_.wsid);
