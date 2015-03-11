@@ -1,0 +1,10 @@
+---
+- name: Installs nginx web server
+  apt: pkg=nginx state=installed update_cache=true
+  sudo: yes
+
+- name: Copy config file
+  copy: src=datacollector.conf dest=/etc/nginx/nginx.conf force=yes
+  notify:
+    - start nginx
+  sudo: yes

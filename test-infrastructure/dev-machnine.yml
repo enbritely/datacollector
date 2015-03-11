@@ -1,0 +1,9 @@
+---
+- hosts: test-servers
+  gather_facts: no
+  vars: 
+    user_name: ubuntu
+
+  roles:
+      - { role: test-server, user_name: "{{ user_name }}"}
+      - { role: disrepency-test-server, user_name: "{{ user_name }}"}

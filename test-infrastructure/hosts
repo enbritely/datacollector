@@ -1,0 +1,2 @@
+[test-servers]
+droplet ansible_ssh_host=45.55.190.144 ansible_ssh_user=root
