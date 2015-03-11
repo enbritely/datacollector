@@ -198,7 +198,8 @@
     var now = function() {
         return new Date().getTime();
     };
-    var SCRIPT_VERSION = 101
+
+    var SCRIPT_VERSION = 101;
     var ord = 0;
     var pl = now();
     var en = w._enbrtly_;
@@ -297,6 +298,8 @@
         obj.wsid = en.wsid; // webshop id (str)
         obj.sid = en.sid; // session id (str)
         obj.iid = en.iid; // impression id (str)
+        console.log(obj);
+        console.log(LOGGER_URL);
         return LOGGER_URL + '?ts=' + ts + '&wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj));
     };
 

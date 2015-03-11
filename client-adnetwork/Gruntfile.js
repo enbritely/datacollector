@@ -7,8 +7,25 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['src/gerbil.js', 'src/en.js'],
+                    src: ['src/gerbil.js', 'src/en.js', 'src/en-dc.js'],
                     dest: 'dist'
+                }]
+            },
+            test: {
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['src/gerbil.js'],
+                    dest: 'enbritely/js'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    src: ['src/en.js', 'src/en-dc.js'],
+                    dest: 'enbritely/en'
+                }, {
+                    expand: true,
+                    src: ['enbritely/**'],
+                    dest: '/var/www/'
                 }]
             }
         },
@@ -38,6 +55,11 @@ module.exports = function(grunt) {
             }
 
         },
+        removelogging: {
+            dist: {
+                src: "dist/**/*.js" // Each file will be overwritten with the output!
+            }
+        },
         compress: {
             main: {
                 options: {
@@ -47,7 +69,7 @@ module.exports = function(grunt) {
                 expand: true,
                 ext: '.js.gz',
                 cwd: '.',
-                src: ['dist/en.js', 'dist/gerbil.js']
+                src: ['dist/en.js', 'dist/gerbil.js', 'dist/en-dc.js']
             }
         },
         jsbeautifier: {
@@ -89,6 +111,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'uglify', 'jsbeautifier', 'compress']);
-    grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'uglify', 'compress', 'jsbeautifier', 'cloudfiles']);
+    grunt.loadNpmTasks("grunt-remove-logging");
+    grunt.registerTask('default', ['clean', 'jshint', 'removelogging', 'copy:main', 'uglify', 'jsbeautifier', 'compress']);
+    grunt.registerTask('test', ['clean', 'jshint', 'copy:test', 'jsbeautifier']);
+    grunt.registerTask('deploy', ['clean', 'jshint', 'removelogging', 'copy:main', 'uglify', 'compress', 'jsbeautifier', 'cloudfiles']);
 };
