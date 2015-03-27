@@ -1,9 +1,9 @@
 (function(e, n, r) {
 
     CONFIG = {
-        GERBIL_URL: 'http://2b49fa8f0c16a03e1592-2366b89f86f9049a8d564854bcebe54e.r94.cf5.rackcdn.com/isobar/gerbil.js',
+        GERBIL_URL: 'http://2b49fa8f0c16a03e1592-2366b89f86f9049a8d564854bcebe54e.r94.cf5.rackcdn.com/teamred/gerbil.js',
         SCRIPT_NAME: 'en-dc.js',
-        COLLECTOR_URL: 'http://bd-prod-collector-isobar-1850207057.us-east-1.elb.amazonaws.com/'
+        COLLECTOR_URL: 'http://bd-prod-collector-teamred-205687726.us-east-1.elb.amazonaws.com/'
     };
 
     function getParams(script_name) {
