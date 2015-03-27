@@ -1,9 +1,9 @@
 (function(e, n, r) {
 
     CONFIG = {
-        GERBIL_URL: 'http://2b49fa8f0c16a03e1592-2366b89f86f9049a8d564854bcebe54e.r94.cf5.rackcdn.com/teamred/gerbil.js',
+        GERBIL_URL: '@@GERBIL_URL',
         SCRIPT_NAME: 'en-dc.js',
-        COLLECTOR_URL: 'http://bd-prod-collector-teamred-205687726.us-east-1.elb.amazonaws.com/'
+        COLLECTOR_URL: '@@COLLECTOR_URL'
     };
 
     function getParams(script_name) {
@@ -30,12 +30,12 @@
     var p = getParams(CONFIG.SCRIPT_NAME);
     console.log(p);
 
-
     // Sampling. Only pageloads/sampleSize part will inject the tracking code. The rest exits here.
     var sampleSize = p.ssize || 1; // ...&ssize=1&... ! custom constant parameter
     if ((Math.random() * 100 | 0) % sampleSize !== 0) {
         return;
     }
+
     // URL template:
     // http://localhost:8084/en-dc.js?wsid=en-js-test&ssize=1&banw=100&banh=100&n=12345678&esid=PID&s=PURL&eaid=AID&eadv=ADID&epid=ZID&ebuy=CID
     // KONSTANS RÉSZ: wsid=en-js-test&ssize=1&banw=100&banh=100
@@ -80,7 +80,9 @@
     a.async = 1;
     a.src = CONFIG.GERBIL_URL;
     m.parentNode.insertBefore(a, m);
-    // Comment out this last block !!444!!!!
+
+    // Console logs will be automatically ripped in distribution
+
     console.log('wsid', e._enbrtly_.wsid);
     console.log('iid', e._enbrtly_.iid);
     console.log('sid', e._enbrtly_.sid);
@@ -95,5 +97,5 @@
     console.log('banw', e._enbrtly_.banw);
     console.log('banh', e._enbrtly_.banh);
     console.log('curl', e._enbrtly_.curl);
-    // Comment out this last block !!444!!!!
+
 })(window, document, 'script');

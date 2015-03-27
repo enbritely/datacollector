@@ -1,7 +1,7 @@
 {
   "name": "enbrtly-adnw-dc",
   "asset_name": "en",
-  "description": "Enbritely adnetworks data collector package",
+  "description": "Enbritely adnetwork data collector package",
   "version": "1.0.0",
   "title": "client",
   "devDependencies": {

@@ -304,7 +304,7 @@
     };
 
     // Segments the page by wxw pixel squares and returns the segments coordinate as astring
-    // Top left corner = 0
+    // Top left corner = 0,0
     var se = function(x, y, w) {
         var f = Math.floor;
         return f(x / w) + ':' + f(y / w);

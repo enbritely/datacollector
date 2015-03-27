@@ -1,23 +1,9 @@
-(function(e, n, b, scriptUrl, wsid, impressionId, advertiserId, adId, partnerId, partnerUrl, bannerWidth, bannerHeight, sampleSize, zoneId, channelId, channelUrl, clt_url) {
+(function(e, n, b, scriptUrl, wsid, sid, impressionId, advertiserId, adId, partnerId, partnerUrl, bannerWidth, bannerHeight, sampleSize, zoneId, channelId, channelUrl, clt_url) {
     // Sampling. Only pageloads/sampleSize part will inject the tracking code. The rest exits here.
     if ((Math.random() * 100 | 0) % sampleSize !== 0) {
         return;
     }
-    var version = 101;
-    var getCookie = function(key) {
-        var name = key + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) !== -1) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return undefined;
-    };
+    var version = 102;
     e._enbrtly_ = {
         'window': e,
         'document': n,
@@ -29,7 +15,7 @@
         'adid': advertiserId,
         'banw': bannerWidth,
         'banh': bannerHeight,
-        'sid': getCookie("SESSIONID"),
+        'sid': sid,
         'zid': zoneId,
         'cid': channelId,
         'curl': channelUrl,
@@ -41,4 +27,4 @@
     a.async = 1;
     a.src = scriptUrl;
     m.parentNode.insertBefore(a, m);
-})(window, document, 'script', 'gerbil.js', 'adprops', 'impression_id', 'advertiser_id', 'ad_id', 'publisher_id', 'publisher_url', 'banner_width', 'banner_height', 1, 'zone_id', 'channel_id', 'channel_url', "collector_url");
+})(window, document, 'script', '@@GERBIL_URL', 'wsid', 'sid', 'impression_id', 'advertiser_id', 'ad_id', 'publisher_id', 'publisher_url', 'banner_width', 'banner_height', 1, 'zone_id', 'channel_id', 'channel_url', '@@COLLECTOR_URL');
