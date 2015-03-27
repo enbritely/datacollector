@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '.',
-                    src: ['dist/*.js'],
+                    src: ['dist/en-dc.js', 'dist/en.js','dist/gerbil.js'],
                     ext: '.js'
                 }],
             },
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
         },
         removelogging: {
             dist: {
-                src: "dist/**/*.js" // Each file will be overwritten with the output!
+                src: "dist/**/*.js"
             }
         },
         compress: {
@@ -98,20 +98,20 @@ module.exports = function(grunt) {
             tasks: ['clean', 'copy:main', 'jshint', 'jsbeautifier']
         },
         'replace': {
-            prod: {
+            impression_test: {
                 options: {
                     patterns: [{
-                        match: 'the_gerbil_url',
-                        replacement: "http://2b49fa8f0c16a03e1592-2366b89f86f9049a8d564854bcebe54e.r94.cf5.rackcdn.com/impression-test/en-dc.js"
+                        match: 'GERBIL_URL',
+                        replacement: grunt.option('gerbil_url')
                     }, {
-                        match: 'collector_url',
-                        replacement: "http://bd-dev-collector-ivo-1326709857.us-east-1.elb.amazonaws.com/"
+                        match: 'COLLECTOR_URL',
+                        replacement: grunt.option('collector_url')
                     }]
                 },
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: 'dist/en-dc.js',
+                    src: ['dist/en-dc.js', 'dist/en.js'],
                     dest: 'dist/'
                 }]
             }
@@ -130,8 +130,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-replace');
-    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'uglify', 'jsbeautifier', 'compress']);
-    grunt.registerTask('testcollector', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace', 'uglify', 'jsbeautifier', 'compress']);
+    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:impression_test', 'uglify', 'jsbeautifier', 'compress']);
     grunt.registerTask('test', ['clean', 'jshint', 'copy:test', 'jsbeautifier']);
-    grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'uglify', 'jsbeautifier', 'compress', 'cloudfiles']);
+    grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:impression_test', 'uglify', 'jsbeautifier', 'compress', 'cloudfiles']);
 };
