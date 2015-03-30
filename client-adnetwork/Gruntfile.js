@@ -7,7 +7,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['src/gerbil.js', 'src/en.js', 'src/en-dc.js'],
+                    src: ['src/gerbil.js', 'src/en.js', 'src/en-ss.js', 'src/en-dc.js'],
                     dest: 'dist'
                 }]
             },
@@ -20,7 +20,7 @@ module.exports = function(grunt) {
                 }, {
                     expand: true,
                     flatten: true,
-                    src: ['src/en.js', 'src/en-dc.js'],
+                    src: ['src/en.js', 'src/en-dc.js', 'src/en-ss.js'],
                     dest: 'enbritely/en'
                 }, {
                     expand: true,
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '.',
-                    src: ['dist/en-dc.js', 'dist/en.js','dist/gerbil.js'],
+                    src: ['dist/en-dc.js', 'dist/en-ss.js', 'dist/en.js', 'dist/gerbil.js'],
                     ext: '.js'
                 }],
             },
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
                 expand: true,
                 ext: '.js.gz',
                 cwd: '.',
-                src: ['dist/en.js', 'dist/gerbil.js', 'dist/en-dc.js']
+                src: ['dist/en.js', 'dist/gerbil.js', 'dist/en-dc.js', 'dist/en-ss.js']
             }
         },
         jsbeautifier: {
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['dist/en-dc.js', 'dist/en.js'],
+                    src: ['dist/en-dc.js', 'dist/en-ss.js', 'dist/en.js'],
                     dest: 'dist/'
                 }]
             }
