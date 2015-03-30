@@ -106,6 +106,9 @@ module.exports = function(grunt) {
                     }, {
                         match: 'COLLECTOR_URL',
                         replacement: grunt.option('collector_url')
+                    }, {
+                        match: 'WSID',
+                        replacement: grunt.option('collector_url')
                     }]
                 },
                 files: [{

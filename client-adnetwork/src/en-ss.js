@@ -62,4 +62,4 @@
     a.async = 1;
     a.src = scriptUrl;
     m.parentNode.insertBefore(a, m);
-})(window, document, 'script', '@@GERBIL_URL', 'wsid', 'advertiser_id', 'ad_id', 'publisher_id', 'publisher_url', 'banner_width', 'banner_height', 1, 'zone_id', 'channel_id', 'channel_url', '@@COLLECTOR_URL');
+})(window, document, 'script', '@@GERBIL_URL', '@@WSID', 'advertiser_id', 'ad_id', 'publisher_id', 'publisher_url', 'banner_width', 'banner_height', 1, 'zone_id', 'channel_id', 'channel_url', '@@COLLECTOR_URL');
