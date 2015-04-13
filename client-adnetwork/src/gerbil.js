@@ -199,7 +199,8 @@
         return new Date().getTime();
     };
 
-    var SCRIPT_VERSION = 101;
+
+    var SCRIPT_VERSION = 102;
     var ord = 0;
     var pl = now();
     var en = w._enbrtly_;
@@ -301,6 +302,12 @@
         console.log(obj);
         console.log(LOGGER_URL);
         return LOGGER_URL + '?ts=' + ts + '&wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj));
+    };
+
+    // Attach custom_event function to _enbrtly_ window object to call externally and send custom objects
+    w._enbrtly_.custom_event = function(obj) {
+        obj['type'] = 'custom';
+        req(xurl(obj));
     };
 
     // Segments the page by wxw pixel squares and returns the segments coordinate as astring
