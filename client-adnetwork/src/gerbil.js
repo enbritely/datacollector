@@ -336,7 +336,7 @@
 
     // Attach custom_event function to _enbrtly_ window object to call externally and send custom objects
     w._enbrtly_.custom_event = function(obj) {
-        obj['type'] = 'custom';
+        obj.type = 'custom';
         req(xurl(obj));
     };
 
