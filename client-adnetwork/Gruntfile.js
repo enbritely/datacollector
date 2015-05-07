@@ -7,11 +7,11 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['src/gerbil.js', 'src/en.js', 'src/en-ss.js', 'src/en-dc.js'],
+                    src: ['src/en.js', 'src/en-ss.js', 'src/en-dc.js', 'src/gerbil.js'],
                     dest: 'dist'
                 }]
             },
-            test: {
+            test_to_enbritely_dir: {
                 files: [{
                     expand: true,
                     flatten: true,
@@ -22,11 +22,24 @@ module.exports = function(grunt) {
                     flatten: true,
                     src: ['src/en.js', 'src/en-dc.js', 'src/en-ss.js'],
                     dest: 'enbritely/en'
-                }, {
+                }]
+            },
+            enbritely_to_www_dir: {
+                files: [{
                     expand: true,
                     src: ['enbritely/**'],
                     dest: '/var/www/'
                 }]
+            }
+        },
+        rename: {
+            gerbil_js_gz: {
+                src: 'dist/gerbil.js.gz',
+                dest: 'dist/gerbil-<%= pkg.version %>.js.gz'
+            },
+            gerbil_js: {
+                src: 'dist/gerbil.js',
+                dest: 'dist/gerbil-<%= pkg.version %>.js'
             }
         },
         uglify: {
@@ -41,8 +54,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '.',
-                    src: ['dist/en-dc.js', 'dist/en-ss.js', 'dist/en.js', 'dist/gerbil.js'],
-                    ext: '.js'
+                    src: ['dist/*.js']
                 }],
             },
         },
@@ -69,7 +81,7 @@ module.exports = function(grunt) {
                 expand: true,
                 ext: '.js.gz',
                 cwd: '.',
-                src: ['dist/en.js', 'dist/gerbil.js', 'dist/en-dc.js', 'dist/en-ss.js']
+                src: ['dist/*.js']
             }
         },
         jsbeautifier: {
@@ -94,11 +106,11 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['<%= jshint.files %>', "lib/*.js"],
-            tasks: ['clean', 'copy:main', 'jshint', 'jsbeautifier']
+            files: ['<%= jshint.files %>', "src/*.js", "enbritely/page/*.html", "enbritely/iframe/*.html"],
+            tasks: ['clean', 'copy:test_to_enbritely_dir', 'replace:test', 'copy:enbritely_to_www_dir']
         },
         'replace': {
-            impression_test: {
+            default: {
                 options: {
                     patterns: [{
                         match: 'GERBIL_URL',
@@ -108,7 +120,7 @@ module.exports = function(grunt) {
                         replacement: grunt.option('collector_url')
                     }, {
                         match: 'WSID',
-                        replacement: grunt.option('collector_url')
+                        replacement: grunt.option('wsid')
                     }]
                 },
                 files: [{
@@ -116,6 +128,26 @@ module.exports = function(grunt) {
                     flatten: true,
                     src: ['dist/en-dc.js', 'dist/en-ss.js', 'dist/en.js'],
                     dest: 'dist/'
+                }]
+            },
+            test: {
+                options: {
+                    patterns: [{
+                        match: 'GERBIL_URL',
+                        replacement: grunt.option('gerbil_url')
+                    }, {
+                        match: 'COLLECTOR_URL',
+                        replacement: grunt.option('collector_url')
+                    }, {
+                        match: 'WSID',
+                        replacement: grunt.option('wsid')
+                    }]
+                },
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['enbritely/en/en-dc.js', 'enbritely/en/en-ss.js', 'enbritely/en/en.js'],
+                    dest: 'enbritely/en/'
                 }]
             }
         }
@@ -133,7 +165,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-replace');
-    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:impression_test', 'uglify', 'jsbeautifier', 'compress']);
-    grunt.registerTask('test', ['clean', 'jshint', 'copy:test', 'jsbeautifier']);
-    grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:impression_test', 'uglify', 'jsbeautifier', 'compress', 'cloudfiles']);
+    grunt.loadNpmTasks('grunt-rename');
+    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:default', 'uglify', 'jsbeautifier', 'compress', 'rename:gerbil_js', 'rename:gerbil_js_gz']);
+    grunt.registerTask('test', ['clean', 'copy:test_to_enbritely_dir', 'replace:test', 'copy:enbritely_to_www_dir']);
+    grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:default', 'uglify', 'jsbeautifier', 'compress', 'cloudfiles']);
 };
