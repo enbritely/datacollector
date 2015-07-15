@@ -90,7 +90,6 @@
             return t;
         }
     };
-
     // JSON encoding support for IE6 and IE7
     "object" != typeof JSON && (JSON = {}),
         function() {
@@ -171,99 +170,251 @@
             })
         }();
 
-    // IE version detection
-    var detect_ie = function() {
-        var ua = window.navigator.userAgent;
-        var msie = ua.indexOf('MSIE ');
-        if (msie > 0) {
-            // IE 10 or older => return version number
-            return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-        }
-        var trident = ua.indexOf('Trident/');
-        if (trident > 0) {
-            // IE 11 => return version number
-            var rv = ua.indexOf('rv:');
-            return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-        }
-        var edge = ua.indexOf('Edge/');
-        if (edge > 0) {
-            // IE 12 => return version number
-            return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
-        }
-        // other browser
-        return 0;
-    };
-
-    // Returns UTC timestamp in milliseconds
-    var now = function() {
-        return new Date().getTime();
-    };
-
-    // Returns 1 if page is displayed in iframe otherwise 0
-    // http://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
-    function is_in_iframe() {
-        try {
-            return +(window.self !== window.top);
-        } catch (e) {
-            return 1;
+    var util = {
+        // IE version detection
+        detectIEVersion: function(ua) {
+            var msie = ua.indexOf('msie ');
+            if (msie > 0) {
+                // IE 10 or older => return version number
+                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+            }
+            var trident = ua.indexOf('trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+            }
+            var edge = ua.indexOf('edge/');
+            if (edge > 0) {
+                // IE 12 => return version number
+                return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+            }
+            // other browser
+            return 0;
+        },
+        // Returns UTC timestamp in milliseconds
+        now: function() {
+            return new Date().getTime();
+        },
+        // Returns an object from query string of the gerbil.js
+        getQueryParams: function(script_url) {
+            // Find all script tags for our collector if any
+            var scripts = document.getElementsByTagName("script");
+            // Look through them trying to find ourselves
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].src.indexOf(script_url) > -1) {
+                    // Get an array of key=value strings of params
+                    var pa = scripts[i].src.split("?").pop().split("&");
+                    // Split each key=value into array, the construct js object
+                    var p = {};
+                    for (var j = 0; j < pa.length; j++) {
+                        var kv = pa[j].split("=");
+                        p[kv[0]] = kv[1];
+                    }
+                    return p;
+                }
+            }
+            // No scripts match
+            return {};
+        },
+        // Returns 1 if window is in an iframe and 0 if not
+        inIframe: function() {
+            try { return +(window.self !== window.top); } catch (e) { return 1; }
+        },
+        // Segments the page by wxw pixel squares and returns the segments coordinate as a string
+        // Top left corner = 0:0
+        segment: function(x, y, w) {
+            return  Math.floor(x / w) + ':' +  Math.floor(y / w);
+        },
+        // Generate document dimension object based on various width metrics
+        documentDimensions: function() {
+            var documentElement = document.documentElement;
+            var body = document.getElementsByTagName('body')[0];
+            return {
+                'width': Math.max(
+                    body.scrollWidth,
+                    body.offsetWidth,
+                    documentElement.scrollWidth,
+                    documentElement.offsetWidth,
+                    documentElement.clientWidth
+                ),
+                'height': Math.max(
+                    body.scrollHeight,
+                    body.offsetHeight,
+                    documentElement.scrollHeight,
+                    documentElement.offsetHeight,
+                    documentElement.clientHeight
+                )
+            }
+        },
+        // Browser sniffing function
+        browser: function() {
+            var n = navigator.userAgent.toLowerCase();
+            var b = {
+                webkit:  +(/webkit/.test(n)),
+                mozilla: +((/mozilla/.test(n)) && (!/(compatible|webkit)/.test(n))),
+                chrome:  +((/chrome/.test(n) || /crios/.test(n))),
+                msie:    +((/msie/.test(n)) && (!/opera/.test(n))),
+                firefox: +(/firefox/.test(n)),
+                safari:  +((/safari/.test(n) && !(/chrome/.test(n)) && !(/crios/.test(n)))),
+                opera:   +(/opera/.test(n)),
+                mobile:  +((/android|webos|iphone|ipad|ipod|blackberry|iemobile|mobi|opera mini/i.test(n)))
+            };
+            b.version     = (b.safari) ? (n.match(/.+(?:ri)[\/: ]([\d.]+)/) || [])[1] : (n.match(/.+(?:ox|me|ra|rv|ie|crios)[\/: ]([\d.]+)/) || [])[1];
+            b.mainVersion = parseInt(b.version);
+            return b;
+        },
+        // Cookie handling functionality
+        cookie: {
+          prefix: '__nbrtl-',
+          set: function(name, value, days) {
+              if (days) {
+                  var date = new Date();
+                  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                  var expires = "; expires=" + date.toGMTString();
+              } else var expires = "";
+              document.cookie = this.prefix + name + "=" + value + expires + "; path=/";
+              return value;
+          },
+          get: function (name) {
+              var nameEQ = this.prefix + name + "=";
+              var ca = document.cookie.split(';');
+              for (var i = 0; i < ca.length; i++) {
+                  var c = ca[i];
+                  while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                  if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+              }
+              return null;
+          }
+        },
+        // Returns a random string of length len
+        randomString: function(len) {
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var text = '';
+            for (var i = 0; i < len; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        },
+        elementDimensionsByID: function(id){
+            var obj = document.getElementById(id);
+            var dim = obj.getBoundingClientRect();
+            var width = dim.right - dim.left;
+            var height = dim.bottom - dim.top;
+            var curleft = curtop = 0;
+            if (obj.offsetParent) {
+                do {
+                    curleft += obj.offsetLeft;
+                    curtop += obj.offsetTop;
+                } while (obj = obj.offsetParent);
+            }
+            return {
+                'top': curtop,
+                'right': curleft + width,
+                'bottom': curtop + height,
+                'left': curleft,
+                'height': height,
+                'width': width
+            }
         }
     }
 
-    var SCRIPT_VERSION = 103;
-    var ord = 0;
-    var pl = now();
-    var en = w._enbrtly_;
-    var LOGGER_URL = en.clt_url;
-    var d = en.document;
-    var b = d.getElementsByTagName('body')[0];
-    var e = d.documentElement; // The Element that is the root element of the document (for example, the <html> element for HTML documents). - Read-only
+    // Initialize constants
+    var SCRIPT_VERSION = 200;
+    var PAGELOAD_TIMESTAMP = util.now();
+    var SEGMENTW = 10;
+    var GERBIL_NAME = "gerbil.js";
+
+
+    // Set default impression and session identifiers
+    var default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+    var default_iid = util.randomString(16);
+
+    // Try extracting parameters from the URL
+    var params = util.getQueryParams(GERBIL_NAME);
+
+    // Initialize enviroment
+    // TODO: environment building
+    var enviroment = window._enbrtly_ || {};
+    enviroment.wsid = enviroment.wsid || params.wsid;
+
+    if (enviroment.wsid === undefined) {
+        throw('No WSID. Aborting.');
+        return false;
+    }
+
+    console.log(location.protocol);
+
+    var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
+
+    // TODO: add params collector support in request URL
+    // var params_collector = params.collector && decodeURIComponent(params.collector);
+
+    var LOGGER_URL = enviroment.collector || default_collector;
+
+    // TODO: try-catch connection error, and abort if host is not reachable
+
+    enviroment.sid  = enviroment.sid    || params.n    || params.sid         || default_sid;
+    enviroment.iid  = enviroment.iid    || params.n    || params.iid         || default_iid;
+    enviroment.pid  = enviroment.pid    || params.esid || params.pid         || 'NAN';
+    enviroment.purl = enviroment.purl   || params.s    || params.purl        || 'NAN';
+    enviroment.aid  = enviroment.aid    || params.eiad || params.aid         || 'NAN';
+    enviroment.adid = enviroment.adid   || params.eadv || params.adid        || 'NAN';
+    enviroment.zid  = enviroment.zid    || params.epid || params.zid         || 'NAN';
+    enviroment.cid  = enviroment.cid    || params.ebuy || params.cid         || 'NAN';
+    enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
+
+    var dims = util.documentDimensions();
+    // TODO:
+    enviroment.banh = enviroment.banh   || params.banh || dims.height;
+    enviroment.banw = enviroment.banw   || params.banw || dims.width;
+
+    // TODO: browser function check for ie_versions
+    var b = util.browser();
+    // console.log(b);
+
+    // console.log("Default sid", enviroment.sid);
+    // console.log("Default iid", enviroment.iid);
+
+    var body = document.getElementsByTagName('body')[0];
+    var e = document.documentElement; // The Element that is the root element of the document (for example, the <html> element for HTML documents). - Read-only
     var n = navigator;
     var s = screen;
-    var ie_version = detect_ie();
-    var in_iframe = is_in_iframe();
+    var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
 
     var x = {
-        cid: en.cid, // client id (str)
-        curl: en.curl, // client url (str)
-        zid: en.zid, // zone id (str)
-        pid: en.pid, // partner id (str)
-        purl: en.purl, // partner url (str)
-        aid: en.aid, // advertiser id (str) - ez baromsag hogy forditva van :)
-        adid: en.adid, // ad id (str)
-        banw: en.banw, // banner width (int)
-        banh: en.banh, // banner height (int)
-        ref: d.referrer, // document.referrer (str) - Returns the URI of the page that linked to this page.
-        domain: d.domain, // document.domain (str) -  The domain portion of the origin of the current document, as used by the same origin policy
-        url: d.URL, // document.URL (str)
+        ref: document.referrer, // document.referrer (str) - Returns the URI of the page that linked to this page.
+        domain: document.domain, // document.domain (str) -  The domain portion of the origin of the current document, as used by the same origin policy
+        url: document.URL, // document.URL (str)
         base_uri: w.location.pathname, // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
-        ua: n.userAgent, // User agent string (str)
-        plat: n.platform, // platform of the browser (str)
+        ua: navigator.userAgent, // User agent string (str)
+        plat: navigator.platform, // platform of the browser (str)
+        // bchrome: b.chrome, // browser specific stuff
+        // bfirefox: b.firefox,
+        // bmobile: b.mobile,
+        // bmozilla: b.mozilla,
+        // bmsie: b.msie,
+        // bopera: b.opera,
+        // bsafari: b.safari,
+        // bversion: b.version,
+        // bmainver: b.mainVersion,
+        // bwebkit: b.webkit,
         iev: ie_version, // ineternet explorer version, 0="not ie" (int)
-        eh: e.clientHeight, // Read-only property: the root element's height (int)
-        ew: e.clientWidth, // Read-only property from the root element's width   (int)
-        bh: b.clientHeight, // Read-only property from the body element's height (int)
-        bw: b.clientWidth, // Read-only property from the body element's width   (int)
-        iw: w.innerWidth || e.clientWidth, // Most unrelieable writeable width property  (int)
-        ih: w.innerHeight || e.clientWidth, // Most unrelieable writeable height property    (int)
-        avw: s.availWidth, // Available screen width in pixels (int)
-        avh: s.availHeight, // Available screen height in pixels (int)
-        sh: s.height, // Height of screen in pixels (int)
-        sw: s.width, // Width of screen in pixels (int)
-        inif: in_iframe, // 1 if page is in iframe else 0
+        inif: util.inIframe(), // 1 if page is in iframe else 0
+        cid: enviroment.cid, // client id (str)
+        curl: enviroment.curl, // client url (str)
+        zid: enviroment.zid, // zone id (str)
+        pid: enviroment.pid, // partner id (str)
+        purl: enviroment.purl, // partner url (str)
+        aid: enviroment.aid, // advertiser id (str) - ez baromsag hogy forditva van :)
+        adid: enviroment.adid, // ad id (str)
+        banw: enviroment.banw, // banner width (int)
+        banh: enviroment.banh, // banner height (int)
         type: 'ready'
     };
 
-    var evtc = {
-        ready: 1,
-        click: 0,
-        mousemove: 0,
-        mouseup: 0,
-        mousedown: 0,
-        mouseover: 0,
-        sn: 0,
-        sent: 0,
-        charlen: 0
-    };
+    // var outQueue = [];
+    // var executingQueue = false;
 
     // Makes a CORS AJAX request to logging server
     var req = function(url) {
@@ -293,47 +444,115 @@
         request.open('GET', url, true);
         request.send();
         request = null;
-        evtc.sent += 1;
-        evtc.charlen += url.length;
         return false;
+          // var req = request();
+		// outQueue.push(url);
+		// if (!executingQueue && (outQueue.length >= 1)) {
+		// 	executeQueue();
+		// }
     };
+
+    // function executeQueue () {
+
+    //   console.log(outQueue.length);
+    //   // Failsafe in case there is some way for a bad value like "null" to end up in the outQueue
+    //   while (outQueue.length && typeof outQueue[0] !== 'string' && typeof outQueue[0] !== 'object') {
+    //     outQueue.shift();
+    //   }
+
+    //   if (outQueue.length < 1) {
+    //     executingQueue = false;
+    //     return;
+    //   }
+
+    //   executingQueue = true;
+
+    //   var nextRequest = outQueue[0];
+    //   var img = new Image(1,1);
+    //   // img.addEvent('load', function(e) { alert('Image is done loading!'); });
+    //   // var img = document.createElement("img");
+    //   console.log(img.complete);
+    //   console.log(img.readyState);
+    //   console.log(img.load);
+    //   console.log(img.onload);
+
+    //   img.onload = function () {
+    //     console.log("asdfasfd");
+    //     outQueue.shift();
+    //     executeQueue();
+    //   };
+
+
+    //   img.onerror = function() {
+    //     console.log("error");
+    //     console.log(executingQueue);
+    //     executingQueue = false;
+    //   };
+
+    //   img.src = nextRequest;
+
+    // }
+
+    // var i = 0;
+    // function request(){
+    //   var r = (Math.random() * 10000) % 10000;
+    //   var x = 'http://enbritely-public.s3-website-us-east-1.amazonaws.com/a.gif?ts='+i+'&q='+r;
+    //   ++i;
+    //   outQueue.push(x);
+    // }
+
+    /*
+     * Queue an image beacon for submission to the collector.
+     * If we're not processing the queue, we'll start.
+     */
+    // function enqueueRequest(req) {
+
+    // }
 
     // Builds a query URL from event object
     var xurl = function(obj) {
-        ts = now();
+        ts = util.now();
+        docdim = util.documentDimensions();
         // Attributes that should be included in all messages
-        obj.ts0 = pl; // pageload timestamp (int)
-        obj.ts = ts; // timestamp of the event (int)
-        obj.ord = ord++; // the number of the message in the current pageload (int)
+        obj.ts0 = PAGELOAD_TIMESTAMP; // pageload timestamp (int)
+        obj.ts  = ts; // timestamp of the event (int)đ
         obj.gvr = SCRIPT_VERSION; // gerbil.js script version (int)
-        obj.evr = en.envr; // en.js script version (int)
-        obj.wsid = en.wsid; // webshop id (str)
-        obj.sid = en.sid; // session id (str)
-        obj.iid = en.iid; // impression id (str)
-        console.log(obj);
-        console.log(LOGGER_URL);
-        return LOGGER_URL + '?ts=' + ts + '&wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj));
+        obj.wsid = enviroment.wsid; // webshop id (str)
+        obj.sid = enviroment.sid; // session id (str)
+        obj.iid = enviroment.iid; // impression id (str)
+        obj.dw = docdim.width;
+        obj.dh = docdim.height;
+        obj.eh = document.documentElement.clientHeight; // Read-only property = the root element's height (int)
+        obj.ew = document.documentElement.clientWidth;  // Read-only property from the root element's width (int)
+        obj.bh = body.clientHeight; // Read-only property from the body element's height (int)
+        obj.bw = body.clientWidth; // Read-only property from the body element's width   (int)
+        obj.avw = screen.availWidth; // Available screen width in pixels (int)
+        obj.avh = screen.availHeight; // Available screen height in pixels (int)
+        obj.sh = screen.height; // Height of screen in pixels (int)
+        obj.sw = screen.width; // Width of screen in pixels (int)
+        obj.iw = w.innerWidth || document.documentElement.clientWidth; // Most unrelieable writeable width property  (int)
+        obj.ih = w.innerHeight || document.documentElement.clientWidth; // Most unrelieable writeable height property (int)
+        // obj.iw = -1;
+        // obj.ih = -1;
+        var qurl = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
+        console.log(qurl);
+        return qurl;
     };
 
     // Attach custom_event function to _enbrtly_ window object to call externally and send custom objects
-    w._enbrtly_.custom_event = function(obj) {
-        obj.type = 'custom';
-        req(xurl(obj));
-    };
+    if (w._enbrtly_) {
+        w._enbrtly_.custom_event = function(obj) {
+            obj.type = 'custom';
+            req(xurl(obj));
+        };
+    }
 
-    // Segments the page by wxw pixel squares and returns the segments coordinate as astring
-    // Top left corner = 0,0
-    var se = function(x, y, w) {
-        var f = Math.floor;
-        return f(x / w) + ':' + f(y / w);
-    };
-
+    // Mouse event logging
     var co = []; // Segment coordinate Array
-    var ps = ''; // Previous segment coordinate String
-    var o = {}; // Event object to be sent
+    var ps = '';
     var pageX, pageY; // pageXY coordinates
     var viewed = false; // Viewed flag
-    var evlog = function(evt) {
+    var handleMouseEvents = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
         pageX = evt.pageX; // pageX is evt.pageX if defined
         pageY = evt.pageY;
@@ -341,40 +560,21 @@
             pageX = evt.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
             pageY = evt.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
-        evtc[evt.type] += 1;
         if (evt.type == 'mousemove') {
-            s = se(pageX, pageY, 20);
-            if (s != ps) {
-                co.push(s);
-                evtc.sn++;
-                ps = s;
-            }
+            s = util.segment(pageX, pageY, SEGMENTW);
+            if (s != ps) co.push(s);
+            ps = s;
         } else {
             req(xurl({
                 px: pageX,
                 py: pageY,
-                sx: evt.screenX,
-                sy: evt.screenY,
-                ox: evt.offsetX,
-                oy: evt.offsetY,
-                cx: evt.clientX,
-                cy: evt.clientY,
-                ere: evtc.ready,
-                edwn: evtc.mousedown,
-                eup: evtc.mouseup,
-                ecl: evtc.click,
-                emov: evtc.mousemove,
-                eov: evtc.mouseover,
-                ese: evtc.sent,
-                sn: evtc.sn,
-                chlen: evtc.charlen,
                 type: evt.type
             }));
         }
     };
 
-    // Event listener
-    function addEventListener(el, en, h) {
+    // Add Event listener
+    var ael = function(el, en, h) {
         if (el.addEventListener) {
             // As the standard
             el.addEventListener(en, h);
@@ -386,50 +586,98 @@
         }
     }
 
-    // Attach listeners to the document
-    addEventListener(d, 'mousemove', evlog);
-    addEventListener(d, 'mouseover', evlog);
-    addEventListener(d, 'mousedown', evlog);
-    addEventListener(d, 'mouseup', evlog);
-    addEventListener(d, 'click', evlog);
+    ael(document, 'mousemove', handleMouseEvents);
+    ael(document, 'mouseover', handleMouseEvents);
+    ael(document, 'mousedown', handleMouseEvents);
+    ael(document, 'mouseup', handleMouseEvents);
+    ael(document, 'click', handleMouseEvents);
+
+    // Mobile events
+    var touchSegments = [];
+    var lastTouchSegment = '';
+    var handleTouchEvents = function(evt) {
+        // TODO: Multiple touch events
+        var touches = evt.changedTouches;
+        var px = touches[0].pageX;
+        var py = touches[0].pageY;
+        var sg = util.segment(px, py, SEGMENTW);
+        if (lastTouchSegment != sg) touchSegments.push(sg);
+        lastTouchSegment = sg;
+        if (evt.type == 'touchmove') {
+            s = util.segment(pageX, pageY, SEGMENTW);
+            if (s != ps) co.push(s);
+            ps = s;
+        } else {
+            req(xurl({
+                px: px,
+                py: py,
+                type: evt.type
+            }));
+        }
+    }
+    ael(window, 'touchstart', handleTouchEvents);
+    ael(window, 'touchend', handleTouchEvents);
+    ael(window, 'touchmove', handleTouchEvents);
+
+    // Scroll event handling
+    // ael(window, 'scroll', handleWindowEvents);
+    // ael(window, 'resize', handleWindowEvents);
+
+    // Handle window events
+    var handleWindowEvents = function(evt) {
+        evt = evt || window.event; // global window.event for ie 6,7,8
+        req(xurl({
+            type: evt.type
+        }));
+    };
+    ael(window, 'focus', handleWindowEvents);
+    ael(window, 'blur', handleWindowEvents);
+    ael(window, 'beforeunload', handleWindowEvents);
+    ael(window, 'unload', handleWindowEvents);
+
+    // http://snipplr.com/view/69951/
+    var setExactTimeout = function(callback, duration, resolution) {
+        var start = (new Date()).getTime();
+        var timeout = setInterval(function(){
+            if ((new Date()).getTime() - start > duration) {
+                callback();
+                clearInterval(timeout);
+            }
+        }, resolution);
+        return timeout;
+    };
 
     // Periodically send segment Arrays, if segment Array length is > 0
-    var ukk = setInterval(function() {
+    setInterval(function() {
         if (co.length > 0) {
             req(xurl({
                 co: co.join('|'),
-                ere: evtc.ready,
-                edwn: evtc.mousedown,
-                eup: evtc.mouseup,
-                ecl: evtc.click,
-                emov: evtc.mousemove,
-                eov: evtc.mouseover,
-                sn: evtc.sn,
-                ese: evtc.sent,
-                chlen: evtc.charlen,
                 type: 'heartbeat'
             }));
             co = [];
         }
-        // Send viewed message after 1 sec delay
+        if (touchSegments.length > 0) {
+            req(xurl({
+                co: touchSegments.join('|'),
+                type: 'theartbeat'
+            }));
+            touchSegments = [];
+        }
+    }, 500);
+
+    // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
+    setTimeout(function() {
+        req(xurl(x));
+    }, 5);
+
+    // Send viewed message after 1 sec delay
+    setExactTimeout(function() {
         if (!viewed) {
             req(xurl({
-                ere: evtc.ready,
-                edwn: evtc.mousedown,
-                eup: evtc.mouseup,
-                ecl: evtc.click,
-                emov: evtc.mousemove,
-                eov: evtc.mouseover,
-                sn: evtc.sn,
-                ese: evtc.sent,
-                chlen: evtc.charlen,
                 type: 'viewed'
             }));
             viewed = true;
         }
-    }, 1000);
-    // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
-    var mukk = setTimeout(function() {
-        req(xurl(x));
-    }, 5);
+    }, 1000, 100);
+
 }(window));
