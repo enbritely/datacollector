@@ -1,13 +1,14 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        secret: grunt.file.readJSON('secret.json'),
         clean: ['dist'],
         copy: {
             main: {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['src/en.js', 'src/en-ss.js', 'src/en-dc.js', 'src/gerbil.js'],
+                    src: ['src/en.js', 'src/en-ss.js', 'src/en-dc.js', 'src/gerbil.js', 'src/gerbil2.js'],
                     dest: 'dist'
                 }]
             },
@@ -32,6 +33,24 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        environments: {
+            options: {
+                local_path: 'dist',
+                current_symlink: 'current',
+                deploy_path: '/usr/share/nginx/html/',
+                privateKey: require('fs').readFileSync('F:/_projektek/enbritely/keys/dmlab_prod.pem')
+            },
+            staging: {
+                options: {
+                    host: '<%= secret.staging.host %>',
+                    username: '<%= secret.staging.username %>',
+                    password: '<%= secret.staging.password %>',
+                    port: '<%= secret.staging.port %>',
+                    debug: true,
+                    releases_to_keep: '3'
+                }
+            }
+        },
         rename: {
             gerbil_js_gz: {
                 src: 'dist/gerbil.js.gz',
@@ -46,7 +65,7 @@ module.exports = function(grunt) {
             options: {
                 report: 'min',
                 squeeze: {
-                    dead_code: false
+                    dead_code: true
                 },
                 mangle: true
             },
@@ -59,7 +78,7 @@ module.exports = function(grunt) {
             },
         },
         jshint: {
-            files: ['Gruntfile.js', 'src/**/*.js', '.jshintrc'],
+            files: ['src/**/*.js', '.jshintrc'],
             options: {
                 reporter: require('jshint-stylish'),
                 force: true,
@@ -166,6 +185,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-rename');
+    grunt.loadNpmTasks('grunt-ssh-deploy');
+    grunt.registerTask('gerbil2', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'uglify', 'compress']);
     grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:default', 'uglify', 'jsbeautifier', 'compress', 'rename:gerbil_js', 'rename:gerbil_js_gz']);
     grunt.registerTask('test', ['clean', 'copy:test_to_enbritely_dir', 'replace:test', 'copy:enbritely_to_www_dir']);
     grunt.registerTask('deploy', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'replace:default', 'uglify', 'jsbeautifier', 'compress', 'cloudfiles']);

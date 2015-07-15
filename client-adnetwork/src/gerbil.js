@@ -209,25 +209,6 @@
         }
     }
 
-    // Browser check
-    // var browser = function() {
-    //     var n = navigator.userAgent.toLowerCase();
-    //     var b = {
-    //         webkit:  +(/webkit/.test(n)),
-    //         mozilla: +((/mozilla/.test(n)) && (!/(compatible|webkit)/.test(n))),
-    //         chrome:  +((/chrome/.test(n) || /crios/.test(n))),
-    //         msie:    +((/msie/.test(n)) && (!/opera/.test(n))),
-    //         firefox: +(/firefox/.test(n)),
-    //         safari:  +((/safari/.test(n) && !(/chrome/.test(n)) && !(/crios/.test(n)))),
-    //         opera:   +(/opera/.test(n)),
-    //         mobile:  +((/android|webos|iphone|ipad|ipod|blackberry|iemobile|mobi|opera mini/i.test(n)))
-    //     };
-    //     b.version     = (b.safari) ? (n.match(/.+(?:ri)[\/: ]([\d.]+)/) || [])[1] : (n.match(/.+(?:ox|me|ra|ie|crios)[\/: ]([\d.]+)/) || [])[1];
-    //     b.mainVersion = parseInt(b.version);
-    //     return b;
-    // }();
-    // console.log(browser);
-
     var SCRIPT_VERSION = 103;
     var ord = 0;
     var pl = now();
