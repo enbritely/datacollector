@@ -245,7 +245,7 @@
                     documentElement.offsetHeight,
                     documentElement.clientHeight
                 )
-            }
+            };
         },
         // Browser sniffing function
         browser: function() {
@@ -306,7 +306,7 @@
                 do {
                     curleft += obj.offsetLeft;
                     curtop += obj.offsetTop;
-                } while (obj = obj.offsetParent);
+                } while (obj == obj.offsetParent);
             }
             return {
                 'top': curtop,
@@ -315,15 +315,15 @@
                 'left': curleft,
                 'height': height,
                 'width': width
-            }
+            };
         }
-    }
+    };
 
     // Initialize constants
     var SCRIPT_VERSION = 200;
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
-    var GERBIL_NAME = "gerbil.js";
+    var GERBIL_NAME = "gerbil";
 
 
     // Set default impression and session identifiers
@@ -340,7 +340,6 @@
 
     if (enviroment.wsid === undefined) {
         throw('No WSID. Aborting.');
-        return false;
     }
 
     console.log(location.protocol);
@@ -584,7 +583,7 @@
                 h.call(el);
             });
         }
-    }
+    };
 
     ael(document, 'mousemove', handleMouseEvents);
     ael(document, 'mouseover', handleMouseEvents);
@@ -614,7 +613,7 @@
                 type: evt.type
             }));
         }
-    }
+    };
     ael(window, 'touchstart', handleTouchEvents);
     ael(window, 'touchend', handleTouchEvents);
     ael(window, 'touchmove', handleTouchEvents);
