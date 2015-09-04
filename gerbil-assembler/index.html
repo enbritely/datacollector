@@ -22,6 +22,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
   </head>
 
   <body>
@@ -29,7 +30,7 @@
 
       <div class="page-header">
         <h1 class="cover-heading">Gerbil Assembler</h1>
-        <p class="lead">This page helps You assemble The Gerbil data collector script and lets You test it on this page.</p>
+        <p class="lead">This page helps You assemble the data collector script for the clients and lets You test it on this page. If the server backend is already up and runing with the given wsid, the requests are collected </p>
         <h4>Gerbil URL</h4>
         <textarea name="gerbilurl" value="sdfasdf" style="width: 100%" onclick="this.focus();this.select()" readonly="readonly"></textarea>
       </div>
@@ -42,7 +43,13 @@
           </select>
           <hr>
           <p>
-            <button id="update">Update</button>
+            <button id="update">Update URL</button>
+          </p>
+          <p>
+            <button id="test">Test Gerbil</button>
+          </p>
+          <p>
+            <button id="remove">Remove Gerbil</button>
           </p>
         </div>
         <div class="col-md-9">
@@ -134,6 +141,7 @@
     <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
+        var can_test = false;
         function assemble(){
           console.log($("input[name=wsid]").val());
           if ($("input[name=wsid]").val() != "") {
@@ -149,14 +157,25 @@
             });
             query_string = query_string.join("&");
             $("textarea[name=gerbilurl]").val(gerbil_url + query_string);
+            can_test = true;
           }
           else {
-            $("textarea[name=gerbilurl]").val("Fill mandatory fields");
+            $("textarea[name=gerbilurl]").val("Fill WSID field");
+            can_test = false;
           }
         }
-        $("#update").click(function(){
-          assemble();
-        });
+        function test(){
+          if (can_test) {
+            var gerbil_url = encodeURIComponent($("textarea[name=gerbilurl]").val());
+            window.open("test.html#"+gerbil_url);
+          }
+        }
+        function remove(){
+          $("#tester").remove();
+        }
+        $("#update").click(assemble);
+        $("#test").click(test);
+        $("#remove").click(remove);
       });
     </script>
   </body>
