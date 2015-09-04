@@ -48,9 +48,6 @@
           <p>
             <button id="test">Test Gerbil</button>
           </p>
-          <p>
-            <button id="remove">Remove Gerbil</button>
-          </p>
         </div>
         <div class="col-md-9">
             <h2 class="cover-heading">Gerbil Macros</h2>
@@ -170,12 +167,8 @@
             window.open("test.html#"+gerbil_url);
           }
         }
-        function remove(){
-          $("#tester").remove();
-        }
         $("#update").click(assemble);
         $("#test").click(test);
-        $("#remove").click(remove);
       });
     </script>
   </body>
