@@ -32,14 +32,21 @@
         <h1 class="cover-heading">Gerbil Assembler</h1>
         <p class="lead">This page helps You assemble the data collector script for the clients and lets You test it on this page. If the server backend is already up and runing with the given wsid, the requests are collected </p>
         <h4>Gerbil URL</h4>
-        <textarea name="gerbilurl" value="sdfasdf" style="width: 100%" onclick="this.focus();this.select()" readonly="readonly"></textarea>
+        <textarea name="gerbilurl" value="sdfasdf" style="width: 100%; height: 80px;" onclick="this.focus();this.select()" readonly="readonly"></textarea>
       </div>
 
       <div class="row">
         <div class="col-md-3">
           <h2 class="cover-heading">Gerbil Version</h2>
-          <select name="version">
-            <option value="2.0.1">v2.0.1 (Latest)</option>
+          <select name="version" size="4" style="width: 98%">
+            <option selected="selected" value="2.0.1">v2.0.1 (Latest)</option>
+          </select>
+          <hr>
+          <h2 class="cover-heading">Macro Templates</h2>
+          <select name="template" size="4" style="width: 98%">
+            <option selected="selected" value="default">Default</option>
+            <option value="gemius">Gemius</option>
+            <option value="appnexus">AppNexus</option>
           </select>
           <hr>
           <p>
@@ -138,7 +145,9 @@
     <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
+
         var can_test = false;
+
         function assemble(){
           console.log($("input[name=wsid]").val());
           if ($("input[name=wsid]").val() != "") {
@@ -153,7 +162,8 @@
               }
             });
             query_string = query_string.join("&");
-            $("textarea[name=gerbilurl]").val(gerbil_url + query_string);
+            var gerbil_url = gerbil_url + query_string;
+            $("textarea[name=gerbilurl]").val(gerbil_url);
             can_test = true;
           }
           else {
@@ -161,14 +171,92 @@
             can_test = false;
           }
         }
+
         function test(){
           if (can_test) {
             var gerbil_url = encodeURIComponent($("textarea[name=gerbilurl]").val());
             window.open("test.html#"+gerbil_url);
           }
         }
+
+        function get_macro_template(template_name){
+          console.log("Getting template for:", template_name);
+          var macro_template;
+          switch (template_name){
+            // MACRO list: https://docs.zoho.com/ws/crm/file/9de9db7ff666b1e074762ac9ce4b87d7c2dd6
+            // enviroment.sid  = enviroment.sid    || params.n    || params.sid         || default_sid;
+            // enviroment.iid  = enviroment.iid    || params.n    || params.iid         || default_iid;
+            // enviroment.pid  = enviroment.pid    || params.esid || params.pid         || 'NAN';
+            // enviroment.purl = enviroment.purl   || params.s    || params.purl        || 'NAN';
+            // enviroment.aid  = enviroment.aid    || params.eiad || params.aid         || 'NAN';
+            // enviroment.adid = enviroment.adid   || params.eadv || params.adid        || 'NAN';
+            // enviroment.zid  = enviroment.zid    || params.epid || params.zid         || 'NAN';
+            // enviroment.cid  = enviroment.cid    || params.ebuy || params.cid         || 'NAN';
+            // enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
+            case "appnexus":
+              macro_template = {
+                banh: '${HEIGHT}',
+                banw: '${WIDTH}',
+                sid: '',
+                iid: '${AUCTION_ID}',
+                pid: '${SITE_ID}',
+                purl: '${SOURCE_URL}',
+                aid: '${IO_ID}',
+                adid: '${ADV_ID}',
+                zid: '${PUBLISHER_ID}',
+                cid: '${INV_SOURCE_ID}',
+                curl: '',
+              }
+              break;
+            case "gemius":
+              macro_template = {
+                banh: 0,
+                banw: 0,
+                sid: '',
+                iid: '',
+                pid: '',
+                purl: '',
+                aid: '',
+                adid: '',
+                zid: '',
+                cid: '',
+                curl: '',
+              }
+              break;
+            default:
+              macro_template = {
+                banh: 0,
+                banw: 0,
+                sid: '',
+                iid: '',
+                pid: '',
+                purl: '',
+                aid: '',
+                adid: '',
+                zid: '',
+                cid: '',
+                curl: '',
+              }
+              break;
+          }
+          return macro_template;
+        }
+
+        function apply_macro_template(macro_template){
+          for (var macroname in macro_template){
+            console.log(macroname, macro_template[macroname]);
+            var macro_value = macro_template[macroname];
+            $(".param[name="+macroname+"]").val(macro_value);
+          }
+        }
+
         $("#update").click(assemble);
         $("#test").click(test);
+        $("select[name=template]").change(function(i){
+          var v2 = $(this).val();
+          var macro = get_macro_template(v2);
+          apply_macro_template(macro);
+        });
       });
     </script>
   </body>
