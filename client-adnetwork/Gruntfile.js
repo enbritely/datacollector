@@ -79,7 +79,7 @@ module.exports = function(grunt) {
         },
         watch: {
             files: ['<%= jshint.files %>', "src/*.js", "enbritely/page/*.html", "enbritely/iframe/*.html"],
-            tasks: ['clean', 'copy:test_to_enbritely_dir', 'replace:test', 'copy:enbritely_to_www_dir']
+            tasks: ['clean', 'copy:test_to_enbritely_dir', 'replace:test', 'copy:test']
         },
     });
     require('load-grunt-tasks')(grunt, {
