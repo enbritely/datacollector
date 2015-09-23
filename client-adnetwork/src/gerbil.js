@@ -172,6 +172,7 @@
 
     var util = {
         getURLSid: function (location) {
+            var paramName = "enby_sid";
             var query = location.search.split("?");
             if(query.length < 2) {
                 return undefined;
@@ -183,7 +184,7 @@
             var params = paramPart.split("&");
             for (var i = 0; i < params.length; i++) {
                 kv = params[i].split("=");
-                if (kv.length < 2 || kv[0].toLowerCase() !== "es") {
+                if (kv.length < 2 || kv[0].toLowerCase() !== paramName) {
                     continue;
                 } else {
                     return kv[1]
