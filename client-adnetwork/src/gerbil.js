@@ -171,6 +171,26 @@
         }();
 
     var util = {
+        getURLSid: function (location) {
+            var paramName = "enby_sid";
+            var query = location.search.split("?");
+            if(query.length < 2) {
+                return undefined;
+            }
+            var paramPart = query[1];
+            if (paramPart.indexOf("?") == 0) {
+                paramPart = paramPart.substr(1);
+            }
+            var params = paramPart.split("&");
+            for (var i = 0; i < params.length; i++) {
+                kv = params[i].split("=");
+                if (kv.length < 2 || kv[0].toLowerCase() !== paramName) {
+                    continue;
+                } else {
+                    return kv[1]
+                }
+            }
+        },
         // IE version detection
         detectIEVersion: function(ua) {
             var msie = ua.indexOf('msie ');
@@ -320,7 +340,7 @@
     };
 
     // Initialize constants
-    var SCRIPT_VERSION = 200;
+    var SCRIPT_VERSION = 201;
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
@@ -350,10 +370,11 @@
     // var params_collector = params.collector && decodeURIComponent(params.collector);
 
     var LOGGER_URL = enviroment.collector || default_collector;
+    var urlSid = util.getURLSid(location)
 
     // TODO: try-catch connection error, and abort if host is not reachable
 
-    enviroment.sid  = enviroment.sid    || params.n    || params.sid         || default_sid;
+    enviroment.sid  = urlSid || enviroment.sid || params.n || params.sid || default_sid;
     enviroment.iid  = enviroment.iid    || params.n    || params.iid         || default_iid;
     enviroment.pid  = enviroment.pid    || params.esid || params.pid         || 'NAN';
     enviroment.purl = enviroment.purl   || params.s    || params.purl        || 'NAN';
