@@ -191,6 +191,19 @@
                 }
             }
         },
+
+        fetchLinks: function (document) {
+            console.log(document.links.length)
+        },
+
+        fetchIfIframe: function(docuemnt) {
+            if (util.inIframe()) {
+                return fetchLinks();
+            } else {
+                return undefined;
+            }
+        },
+
         // IE version detection
         detectIEVersion: function(ua) {
             var msie = ua.indexOf('msie ');
@@ -338,7 +351,6 @@
             };
         }
     };
-
     // Initialize constants
     var SCRIPT_VERSION = 201;
     var PAGELOAD_TIMESTAMP = util.now();
@@ -430,6 +442,7 @@
         adid: enviroment.adid, // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
+        links: util.fetchIfIframe(document),
         type: 'ready'
     };
 
