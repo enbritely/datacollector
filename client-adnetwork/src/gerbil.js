@@ -193,7 +193,7 @@
         },
 
         fetchLinks: function (document) {
-            console.log(document.links.length)
+            return document.links;
         },
 
         fetchIfIframe: function(docuemnt) {
