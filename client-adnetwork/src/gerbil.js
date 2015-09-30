@@ -193,12 +193,40 @@
         },
 
         fetchLinks: function (document) {
-            return document.links;
+            l = [];
+            result = {};
+            var tags = document.getElementsByTagName('script');
+            for (var i = 0; i < tags.length; i++) {
+                var s = tags[i].src;
+                if(s.trim().length > 0) {
+                    l.push(s);
+                }
+            }
+            result.script = l;
+            l = [];
+            tags = document.getElementsByTagName('img');
+            for (var i = 0; i < tags.length; i++) {
+                var s = tags[i].src;
+                if(s.trim().length > 0) {
+                    l.push(s);
+                }
+            }
+            result.img = l;
+            l = [];
+            tags = document.getElementsByTagName('a');
+            for (var i = 0; i < tags.length; i++) {
+                var s = tags[i].href;
+                if(s.trim().length > 0) {
+                    l.push(s);
+                }
+            }
+            result.a = l
+            return result;
         },
 
         fetchIfIframe: function(docuemnt) {
             if (util.inIframe()) {
-                return fetchLinks();
+                return util.fetchLinks(document);
             } else {
                 return undefined;
             }
@@ -356,7 +384,6 @@
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
-
 
     // Set default impression and session identifiers
     var default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
