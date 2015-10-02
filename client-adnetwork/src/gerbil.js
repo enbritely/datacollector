@@ -365,7 +365,7 @@
         }
     };
     // Initialize constants
-    var SCRIPT_VERSION = 201;
+    var SCRIPT_VERSION = 211;
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
@@ -454,7 +454,6 @@
         adid: enviroment.adid, // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
-        links: util.fetchIfIframe(document),
         type: 'ready'
     };
 
@@ -714,6 +713,14 @@
     setTimeout(function() {
         req(xurl(x));
     }, 5);
+
+    setTimeout(function(){
+        var msg = {
+            links: util.fetchIfIframe(document),
+            type: 'links'
+        };
+        req(xurl(msg));
+    }, 100);
 
     // Send viewed message after 1 sec delay
     setExactTimeout(function() {
