@@ -191,6 +191,32 @@
                 }
             }
         },
+        fetchLinks: function (document) {
+            result = {};
+            tags = ['script','img','a','iframe']
+            for (tag in tags) {
+                l = [];
+                tag_elements = document.getElementsByTagName(tags[tag]);
+                console.log(tags[tag] + ": " + tag_elements.length);
+                for (e in tag_elements) {
+                    var cur = tag_elements[e];
+                    var v = cur.src || cur.href;
+                    if(v != null) {
+                        l.push(v);
+                    }
+                }
+                result[tags[tag]] = l;
+            }
+            return result;
+        },
+        fetchIfIframe: function(docuemnt) {
+            if (util.inIframe()) {
+                return util.fetchLinks(document);
+            } else {
+                return undefined;
+            }
+        },
+
         // IE version detection
         detectIEVersion: function(ua) {
             var msie = ua.indexOf('msie ');
@@ -338,13 +364,11 @@
             };
         }
     };
-
     // Initialize constants
-    var SCRIPT_VERSION = 201;
+    var SCRIPT_VERSION = 211;
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
-
 
     // Set default impression and session identifiers
     var default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
@@ -689,6 +713,14 @@
     setTimeout(function() {
         req(xurl(x));
     }, 5);
+
+    setTimeout(function(){
+        var msg = {
+            links: util.fetchIfIframe(document),
+            type: 'links'
+        };
+        req(xurl(msg));
+    }, 100);
 
     // Send viewed message after 1 sec delay
     setExactTimeout(function() {
