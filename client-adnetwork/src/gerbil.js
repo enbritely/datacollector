@@ -191,39 +191,24 @@
                 }
             }
         },
-
         fetchLinks: function (document) {
-            l = [];
             result = {};
-            var tags = document.getElementsByTagName('script');
-            for (var i = 0; i < tags.length; i++) {
-                var s = tags[i].src;
-                if(s.trim().length > 0) {
-                    l.push(s);
+            tags = ['script','img','a','iframe']
+            for (tag in tags) {
+                l = [];
+                tag_elements = document.getElementsByTagName(tags[tag]);
+                console.log(tags[tag] + ": " + tag_elements.length);
+                for (e in tag_elements) {
+                    var cur = tag_elements[e];
+                    var v = cur.src || cur.href;
+                    if(v != null) {
+                        l.push(v);
+                    }
                 }
+                result[tags[tag]] = l;
             }
-            result.script = l;
-            l = [];
-            tags = document.getElementsByTagName('img');
-            for (var i = 0; i < tags.length; i++) {
-                var s = tags[i].src;
-                if(s.trim().length > 0) {
-                    l.push(s);
-                }
-            }
-            result.img = l;
-            l = [];
-            tags = document.getElementsByTagName('a');
-            for (var i = 0; i < tags.length; i++) {
-                var s = tags[i].href;
-                if(s.trim().length > 0) {
-                    l.push(s);
-                }
-            }
-            result.a = l
             return result;
         },
-
         fetchIfIframe: function(docuemnt) {
             if (util.inIframe()) {
                 return util.fetchLinks(document);
