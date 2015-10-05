@@ -454,6 +454,7 @@
         adid: enviroment.adid, // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
+        lang: navigator.language,
         type: 'ready'
     };
 
