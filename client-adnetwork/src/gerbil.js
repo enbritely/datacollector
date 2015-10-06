@@ -364,6 +364,28 @@
             };
         }
     };
+
+    var adtag = function(){
+        var adtagExtractors = {
+            "pubmatic": function (document) {
+                return {};
+            }
+        };
+        var adtagHeuristics = function(window) {
+            return "pubmatic";
+        };
+        return {
+            get: function(window) {
+                var heuristics = adtagHeuristics(window);
+                if(heuristics != "" && heuristics != undefined) {
+                    return adtagExtractors[heuristics](window);
+                } else {
+                    return {};
+                }
+            }
+        };
+    }();
+
     // Initialize constants
     var SCRIPT_VERSION = 211;
     var PAGELOAD_TIMESTAMP = util.now();
