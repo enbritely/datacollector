@@ -415,10 +415,6 @@
 
     // TODO: browser function check for ie_versions
     var b = util.browser();
-    // console.log(b);
-
-    // console.log("Default sid", enviroment.sid);
-    // console.log("Default iid", enviroment.iid);
 
     var body = document.getElementsByTagName('body')[0];
     var e = document.documentElement; // The Element that is the root element of the document (for example, the <html> element for HTML documents). - Read-only
@@ -433,16 +429,6 @@
         base_uri: w.location.pathname, // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
         ua: navigator.userAgent, // User agent string (str)
         plat: navigator.platform, // platform of the browser (str)
-        // bchrome: b.chrome, // browser specific stuff
-        // bfirefox: b.firefox,
-        // bmobile: b.mobile,
-        // bmozilla: b.mozilla,
-        // bmsie: b.msie,
-        // bopera: b.opera,
-        // bsafari: b.safari,
-        // bversion: b.version,
-        // bmainver: b.mainVersion,
-        // bwebkit: b.webkit,
         iev: ie_version, // ineternet explorer version, 0="not ie" (int)
         inif: util.inIframe(), // 1 if page is in iframe else 0
         cid: enviroment.cid, // client id (str)
@@ -457,9 +443,6 @@
         lang: navigator.language,
         type: 'ready'
     };
-
-    // var outQueue = [];
-    // var executingQueue = false;
 
     // Makes a CORS AJAX request to logging server
     var req = function(url) {
@@ -490,69 +473,7 @@
         request.send();
         request = null;
         return false;
-          // var req = request();
-		// outQueue.push(url);
-		// if (!executingQueue && (outQueue.length >= 1)) {
-		// 	executeQueue();
-		// }
     };
-
-    // function executeQueue () {
-
-    //   console.log(outQueue.length);
-    //   // Failsafe in case there is some way for a bad value like "null" to end up in the outQueue
-    //   while (outQueue.length && typeof outQueue[0] !== 'string' && typeof outQueue[0] !== 'object') {
-    //     outQueue.shift();
-    //   }
-
-    //   if (outQueue.length < 1) {
-    //     executingQueue = false;
-    //     return;
-    //   }
-
-    //   executingQueue = true;
-
-    //   var nextRequest = outQueue[0];
-    //   var img = new Image(1,1);
-    //   // img.addEvent('load', function(e) { alert('Image is done loading!'); });
-    //   // var img = document.createElement("img");
-    //   console.log(img.complete);
-    //   console.log(img.readyState);
-    //   console.log(img.load);
-    //   console.log(img.onload);
-
-    //   img.onload = function () {
-    //     console.log("asdfasfd");
-    //     outQueue.shift();
-    //     executeQueue();
-    //   };
-
-
-    //   img.onerror = function() {
-    //     console.log("error");
-    //     console.log(executingQueue);
-    //     executingQueue = false;
-    //   };
-
-    //   img.src = nextRequest;
-
-    // }
-
-    // var i = 0;
-    // function request(){
-    //   var r = (Math.random() * 10000) % 10000;
-    //   var x = 'http://enbritely-public.s3-website-us-east-1.amazonaws.com/a.gif?ts='+i+'&q='+r;
-    //   ++i;
-    //   outQueue.push(x);
-    // }
-
-    /*
-     * Queue an image beacon for submission to the collector.
-     * If we're not processing the queue, we'll start.
-     */
-    // function enqueueRequest(req) {
-
-    // }
 
     // Builds a query URL from event object
     var xurl = function(obj) {
@@ -577,8 +498,6 @@
         obj.sw = screen.width; // Width of screen in pixels (int)
         obj.iw = w.innerWidth || document.documentElement.clientWidth; // Most unrelieable writeable width property  (int)
         obj.ih = w.innerHeight || document.documentElement.clientWidth; // Most unrelieable writeable height property (int)
-        // obj.iw = -1;
-        // obj.ih = -1;
         var qurl = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
         console.log(qurl);
         return qurl;
@@ -663,10 +582,6 @@
     ael(window, 'touchstart', handleTouchEvents);
     ael(window, 'touchend', handleTouchEvents);
     ael(window, 'touchmove', handleTouchEvents);
-
-    // Scroll event handling
-    // ael(window, 'scroll', handleWindowEvents);
-    // ael(window, 'resize', handleWindowEvents);
 
     // Handle window events
     var handleWindowEvents = function(evt) {
