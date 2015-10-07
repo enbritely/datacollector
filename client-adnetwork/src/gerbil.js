@@ -399,7 +399,13 @@
             }
         };
         var adtagHeuristics = function(window) {
-            return "pubmatic";
+            var scripts = document.getElementsByTagName("script");
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].src.indexOf("showads.pubmatic.com/AdServer/AdServerServlet") > -1) {
+                    return "pubmatic";
+                }
+            }
+            return "";
         };
         return {
             get: function(document, window) {
@@ -430,7 +436,6 @@
     // TODO: environment building
     var enviroment = window._enbrtly_ || {};
     enviroment.wsid = enviroment.wsid || params.wsid;
-
     if (enviroment.wsid === undefined) {
         throw('No WSID. Aborting.');
     }
