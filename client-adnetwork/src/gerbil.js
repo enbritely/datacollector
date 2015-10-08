@@ -398,18 +398,18 @@
                 return {};
             }
         };
-        var adtagHeuristics = function(window) {
-            var scripts = document.getElementsByTagName("script");
-            for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.indexOf("showads.pubmatic.com/AdServer/AdServerServlet") > -1) {
-                    return "pubmatic";
-                }
-            }
-            return "";
-        };
         return {
+            adtagHeuristics: function(window) {
+                var scripts = document.getElementsByTagName("script");
+                for (var i = 0; i < scripts.length; i++) {
+                    if (scripts[i].src.indexOf("showads.pubmatic.com/AdServer/AdServerServlet") > -1) {
+                        return "pubmatic";
+                    }
+                }
+                return "";
+            },
             get: function(document, window) {
-                var heuristics = adtagHeuristics(window);
+                var heuristics = this.adtagHeuristics(window);
                 if(heuristics !== "" && heuristics !== undefined) {
                     return adtagExtractors[heuristics](document);
                 } else {
@@ -495,6 +495,7 @@
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
         lang: navigator.language,
+        at_heur: adtag.adtagHeuristics(window),
         type: 'ready'
     };
    
