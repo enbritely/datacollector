@@ -209,7 +209,7 @@
             }
             return result;
         },
-        fetchIfIframe: function(docuemnt) {
+        fetchIfIframe: function(document) {
             if (util.inIframe()) {
                 return util.fetchLinks(document);
             } else {
@@ -372,12 +372,12 @@
     }
 
     var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
-    console.log("Default collector:", default_collector)
+    console.log("Default collector:", default_collector);
     // TODO: add params collector support in request URL
     // var params_collector = params.collector && decodeURIComponent(params.collector);
 
     var LOGGER_URL = enviroment.collector || default_collector;
-    var urlSid = util.getURLSid(location)
+    var urlSid = util.getURLSid(location);
 
     // TODO: try-catch connection error, and abort if host is not reachable
 
@@ -549,28 +549,9 @@
     // Handle window events
     var handleWindowEvents = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
-        if (evt.type == 'resize') {
-            req({
-                dw: docdim.width,
-                dh: docdim.height,
-                eh: document.documentElement.clientHeight, // Read-only property: the root element's height (int)
-                ew: document.documentElement.clientWidth,  // Read-only property from the root element's width (int)
-                bh: body.clientHeight, // Read-only property from the body element's height (int)
-                bw: body.clientWidth, // Read-only property from the body element's width   (int)
-                iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
-                ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
-                avw: screen.availWidth, // Available screen width in pixels (int)
-                avh: screen.availHeight, // Available screen height in pixels (int)
-                sh: screen.height, // Height of screen in pixels (int)
-                sw: screen.width, // Width of screen in pixels (int)
-                type: evt.type
-            });
-        }
-        else {
-            req({
-                type: evt.type
-            });
-        }
+        req({
+            type: evt.type
+        });
     };
 
     var handleScrollEvent = function(evt) {
@@ -578,6 +559,25 @@
         req({
             st: document.body.scrollTop,
             sl: document.body.scrollLeft
+        });
+    };
+
+    var handleResizeEvent = function(evt){
+        evt = evt || window.event; // global window.event for ie 6,7,8
+        req({
+            dw: docdim.width,
+            dh: docdim.height,
+            eh: document.documentElement.clientHeight, // Read-only property: the root element's height (int)
+            ew: document.documentElement.clientWidth,  // Read-only property from the root element's width (int)
+            bh: body.clientHeight, // Read-only property from the body element's height (int)
+            bw: body.clientWidth, // Read-only property from the body element's width   (int)
+            iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
+            ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
+            avw: screen.availWidth, // Available screen width in pixels (int)
+            avh: screen.availHeight, // Available screen height in pixels (int)
+            sh: screen.height, // Height of screen in pixels (int)
+            sw: screen.width, // Width of screen in pixels (int)
+            type: evt.type
         });
     };
 
@@ -622,7 +622,7 @@
     ael(window, 'beforeunload', handleWindowEvents);
     ael(window, 'load',         handleWindowEvents);
     ael(window, 'unload',       handleWindowEvents);
-    ael(window, 'resize',       debounce(handleWindowEvents, 200));
+    ael(window, 'resize',       debounce(handleResizeEvent, 200));
     ael(window, 'scroll',       debounce(handleScrollEvent, 200));
 
     // http://snipplr.com/view/69951/
