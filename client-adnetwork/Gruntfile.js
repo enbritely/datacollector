@@ -94,6 +94,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-remove-logging');
+    grunt.loadNpmTasks('grunt-cloudfront');
     grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'uglify', 'compress', 'rename']);
     grunt.registerTask('test', ['clean', 'jshint', 'copy:test']);
 };
