@@ -293,23 +293,6 @@
                 )
             };
         },
-        // Browser sniffing function
-        browser: function() {
-            var n = navigator.userAgent.toLowerCase();
-            var b = {
-                webkit:  +(/webkit/.test(n)),
-                mozilla: +((/mozilla/.test(n)) && (!/(compatible|webkit)/.test(n))),
-                chrome:  +((/chrome/.test(n) || /crios/.test(n))),
-                msie:    +((/msie/.test(n)) && (!/opera/.test(n))),
-                firefox: +(/firefox/.test(n)),
-                safari:  +((/safari/.test(n) && !(/chrome/.test(n)) && !(/crios/.test(n)))),
-                opera:   +(/opera/.test(n)),
-                mobile:  +((/android|webos|iphone|ipad|ipod|blackberry|iemobile|mobi|opera mini/i.test(n)))
-            };
-            b.version     = (b.safari) ? (n.match(/.+(?:ri)[\/: ]([\d.]+)/) || [])[1] : (n.match(/.+(?:ox|me|ra|rv|ie|crios)[\/: ]([\d.]+)/) || [])[1];
-            b.mainVersion = parseInt(b.version);
-            return b;
-        },
         // Cookie handling functionality
         cookie: {
           prefix: '__nbrtl-',
@@ -365,7 +348,7 @@
         }
     };
     // Initialize constants
-    var SCRIPT_VERSION = 211;
+    var SCRIPT_VERSION = 212;
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
@@ -412,9 +395,6 @@
     // TODO:
     enviroment.banh = enviroment.banh   || params.banh || dims.height;
     enviroment.banw = enviroment.banw   || params.banw || dims.width;
-
-    // TODO: browser function check for ie_versions
-    var b = util.browser();
 
     var body = document.getElementsByTagName('body')[0];
     var e = document.documentElement; // The Element that is the root element of the document (for example, the <html> element for HTML documents). - Read-only
@@ -590,10 +570,12 @@
             type: evt.type
         }));
     };
+
     ael(window, 'focus', handleWindowEvents);
     ael(window, 'blur', handleWindowEvents);
     ael(window, 'beforeunload', handleWindowEvents);
     ael(window, 'unload', handleWindowEvents);
+    ael(window, 'resize', handleWindowEvents);
 
     // http://snipplr.com/view/69951/
     var setExactTimeout = function(callback, duration, resolution) {
