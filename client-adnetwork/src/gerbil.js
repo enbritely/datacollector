@@ -387,8 +387,8 @@
     enviroment.aid  = enviroment.aid    || params.eiad || params.aid         || 'NAN';
     enviroment.adid = enviroment.adid   || params.eadv || params.adid        || 'NAN';
     enviroment.zid  = enviroment.zid    || params.epid || params.zid         || 'NAN';
-    enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
     enviroment.cid  = enviroment.cid    || params.ebuy || params.cid         || 'NAN';
+    enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
 
     var dims = util.documentDimensions();
     enviroment.banh = enviroment.banh   || params.banh || dims.height;
@@ -403,7 +403,7 @@
         base_uri: w.location.pathname, // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
         ua: navigator.userAgent, // User agent string (str)
         plat: navigator.platform, // platform of the browser (str)
-        iev: util.detectIEVersion(navigator.userAgent.toLowerCase()), // ineternet explorer version, 0="not ie" (int)
+        iev: util.detectIEVersion(navigator.userAgent.toLowerCase()), // internet explorer version, 0="not ie" (int)
         inif: util.inIframe(), // 1 if page is in iframe else 0
         cid: enviroment.cid, // client id (str)
         curl: enviroment.curl, // client url (str)
