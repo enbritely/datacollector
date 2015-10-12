@@ -216,7 +216,6 @@
                 return undefined;
             }
         },
-
         // IE version detection
         detectIEVersion: function(ua) {
             var msie = ua.indexOf('msie ');
@@ -388,19 +387,14 @@
     enviroment.aid  = enviroment.aid    || params.eiad || params.aid         || 'NAN';
     enviroment.adid = enviroment.adid   || params.eadv || params.adid        || 'NAN';
     enviroment.zid  = enviroment.zid    || params.epid || params.zid         || 'NAN';
-    enviroment.cid  = enviroment.cid    || params.ebuy || params.cid         || 'NAN';
     enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
+    enviroment.cid  = enviroment.cid    || params.ebuy || params.cid         || 'NAN';
 
     var dims = util.documentDimensions();
-    // TODO:
     enviroment.banh = enviroment.banh   || params.banh || dims.height;
     enviroment.banw = enviroment.banw   || params.banw || dims.width;
 
     var body = document.getElementsByTagName('body')[0];
-    var e = document.documentElement; // The Element that is the root element of the document (for example, the <html> element for HTML documents). - Read-only
-    var n = navigator;
-    var s = screen;
-    var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
 
     var x = {
         ref: document.referrer, // document.referrer (str) - Returns the URI of the page that linked to this page.
@@ -409,7 +403,7 @@
         base_uri: w.location.pathname, // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
         ua: navigator.userAgent, // User agent string (str)
         plat: navigator.platform, // platform of the browser (str)
-        iev: ie_version, // ineternet explorer version, 0="not ie" (int)
+        iev: util.detectIEVersion(navigator.userAgent.toLowerCase()), // ineternet explorer version, 0="not ie" (int)
         inif: util.inIframe(), // 1 if page is in iframe else 0
         cid: enviroment.cid, // client id (str)
         curl: enviroment.curl, // client url (str)
@@ -424,8 +418,17 @@
         type: 'ready'
     };
 
+    // Add custom macros
+    for (var key in params){
+        console.log(key[0]);
+        if (key[0] == '_') {
+            x[key] = params[key];
+        }
+    }
+
     // Makes a CORS AJAX request to logging server
     var req = function(url) {
+        var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
         // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
         // https://msdn.microsoft.com/en-us/library/ie/cc288060%28v=vs.85%29.aspx
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Browser_compatibility
@@ -457,8 +460,9 @@
 
     // Builds a query URL from event object
     var xurl = function(obj) {
+
         ts = util.now();
-        docdim = util.documentDimensions();
+
         // Attributes that should be included in all messages
         obj.ts0 = PAGELOAD_TIMESTAMP; // pageload timestamp (int)
         obj.ts  = ts; // timestamp of the event (int)đ
@@ -466,20 +470,28 @@
         obj.wsid = enviroment.wsid; // webshop id (str)
         obj.sid = enviroment.sid; // session id (str)
         obj.iid = enviroment.iid; // impression id (str)
+
+        docdim = util.documentDimensions();
         obj.dw = docdim.width;
         obj.dh = docdim.height;
         obj.eh = document.documentElement.clientHeight; // Read-only property = the root element's height (int)
         obj.ew = document.documentElement.clientWidth;  // Read-only property from the root element's width (int)
         obj.bh = body.clientHeight; // Read-only property from the body element's height (int)
         obj.bw = body.clientWidth; // Read-only property from the body element's width   (int)
+        obj.iw = w.innerWidth || document.documentElement.clientWidth; // Most unrelieable writeable width property  (int)
+        obj.ih = w.innerHeight || document.documentElement.clientWidth; // Most unrelieable writeable height property (int)
         obj.avw = screen.availWidth; // Available screen width in pixels (int)
         obj.avh = screen.availHeight; // Available screen height in pixels (int)
         obj.sh = screen.height; // Height of screen in pixels (int)
         obj.sw = screen.width; // Width of screen in pixels (int)
-        obj.iw = w.innerWidth || document.documentElement.clientWidth; // Most unrelieable writeable width property  (int)
-        obj.ih = w.innerHeight || document.documentElement.clientWidth; // Most unrelieable writeable height property (int)
+
+        obj.st = document.body.scrollTop;
+        obj.sl = document.body.scrollLeft;
+
         var qurl = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
-        console.log(qurl);
+
+        console.log(ts, obj.type, obj.st, obj.dh, obj.ih, obj.bh, obj.eh);
+
         return qurl;
     };
 
@@ -517,25 +529,6 @@
         }
     };
 
-    // Add Event listener
-    var ael = function(el, en, h) {
-        if (el.addEventListener) {
-            // As the standard
-            el.addEventListener(en, h);
-        } else {
-            // IE
-            el.attachEvent('on' + en, function() {
-                h.call(el);
-            });
-        }
-    };
-
-    ael(document, 'mousemove', handleMouseEvents);
-    ael(document, 'mouseover', handleMouseEvents);
-    ael(document, 'mousedown', handleMouseEvents);
-    ael(document, 'mouseup', handleMouseEvents);
-    ael(document, 'click', handleMouseEvents);
-
     // Mobile events
     var touchSegments = [];
     var lastTouchSegment = '';
@@ -559,9 +552,6 @@
             }));
         }
     };
-    ael(window, 'touchstart', handleTouchEvents);
-    ael(window, 'touchend', handleTouchEvents);
-    ael(window, 'touchmove', handleTouchEvents);
 
     // Handle window events
     var handleWindowEvents = function(evt) {
@@ -571,11 +561,47 @@
         }));
     };
 
-    ael(window, 'focus', handleWindowEvents);
-    ael(window, 'blur', handleWindowEvents);
+    // Add Event listener
+    var ael = function(el, en, h) {
+        if (el.addEventListener) {
+            // As the standard
+            el.addEventListener(en, h);
+        } else {
+            // IE
+            el.attachEvent('on' + en, function() {
+                h.call(el);
+            });
+        }
+    };
+
+    // https://remysharp.com/2010/07/21/throttling-function-calls
+    var debounce = function (fn, delay) {
+      var timer = null;
+      return function () {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          fn.apply(context, args);
+        }, delay);
+      };
+    }
+
+    ael(document, 'mousemove',  handleMouseEvents);
+    ael(document, 'mouseover',  handleMouseEvents);
+    ael(document, 'mousedown',  handleMouseEvents);
+    ael(document, 'mouseup',    handleMouseEvents);
+    ael(document, 'click',      handleMouseEvents);
+
+    ael(window, 'touchstart',   handleTouchEvents);
+    ael(window, 'touchend',     handleTouchEvents);
+    ael(window, 'touchmove',    handleTouchEvents);
+
+    ael(window, 'focus',        handleWindowEvents);
+    ael(window, 'blur',         handleWindowEvents);
     ael(window, 'beforeunload', handleWindowEvents);
-    ael(window, 'unload', handleWindowEvents);
-    ael(window, 'resize', handleWindowEvents);
+    ael(window, 'unload',       handleWindowEvents);
+    ael(window, 'resize',       debounce(handleWindowEvents, 200));
+    ael(window, 'scroll',       debounce(handleWindowEvents, 200));
 
     // http://snipplr.com/view/69951/
     var setExactTimeout = function(callback, duration, resolution) {
