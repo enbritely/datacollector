@@ -347,7 +347,7 @@
         }
     };
     // Initialize constants
-    var SCRIPT_VERSION = 212;
+    var SCRIPT_VERSION = 213;
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
