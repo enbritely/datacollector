@@ -558,7 +558,8 @@
         evt = evt || window.event; // global window.event for ie 6,7,8
         req({
             st: document.body.scrollTop,
-            sl: document.body.scrollLeft
+            sl: document.body.scrollLeft,
+            type: evt.type
         });
     };
 
