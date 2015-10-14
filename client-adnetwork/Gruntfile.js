@@ -48,11 +48,14 @@ module.exports = function(grunt) {
             },
         },
         jshint: {
-            files: ['src/**/*.js', '.jshintrc'],
+            files: ['src/*.js', '.jshintrc'],
             options: {
                 reporter: require('jshint-stylish'),
                 force: true,
-                jshintrc: true
+                jshintrc: true,
+                curly: true,
+                es3: true,
+                maxstatements: 5,
             }
 
         },

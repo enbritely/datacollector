@@ -1,5 +1,5 @@
 (function(w) {
-
+    "use strict";
     // Base64 encoding
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -176,9 +176,9 @@
     /* jshint ignore:end */
 
     var util = {
-        getURLSid: function (location) {
+        getURLSid: function() {
             var paramName = "enby_sid";
-            var query = location.search.split("?");
+            var query = document.location.search.split("?");
             if(query.length < 2) {
                 return undefined;
             }
@@ -196,14 +196,14 @@
                 }
             }
         },
-        fetchLinks: function (document) {
-            result = {};
-            tags = ['script','img','a','iframe']
-            for (tag in tags) {
-                l = [];
-                tag_elements = document.getElementsByTagName(tags[tag]);
+        fetchLinks: function() {
+            var result = {};
+            var tags = ['script','img','a','iframe'];
+            for (var tag in tags) {
+                var l = [];
+                var tag_elements = document.getElementsByTagName(tags[tag]);
                 console.log(tags[tag] + ": " + tag_elements.length);
-                for (e in tag_elements) {
+                for (var e in tag_elements) {
                     var cur = tag_elements[e];
                     var v = cur.src || cur.href;
                     if(v != null) {
@@ -214,9 +214,9 @@
             }
             return result;
         },
-        fetchIfIframe: function(document) {
+        fetchIfIframe: function() {
             if (util.inIframe()) {
-                return util.fetchLinks(document);
+                return util.fetchLinks();
             } else {
                 return undefined;
             }
@@ -329,6 +329,7 @@
             }
             return text;
         },
+        // Returns element dimensions in given page
         elementDimensionsByID: function(id){
             var obj = document.getElementById(id);
             var dim = obj.getBoundingClientRect();
@@ -341,6 +342,7 @@
                     curtop += obj.offsetTop;
                 } while (obj == obj.offsetParent);
             }
+            obj.background = "#f00";
             return {
                 'top': curtop,
                 'right': curleft + width,
@@ -352,8 +354,6 @@
         }
     };
 
-    console.log("Gerbil starting");
-
     // Initialize constants
     var SCRIPT_VERSION = "@@PACKAGEVERSION";
     var PAGELOAD_TIMESTAMP = util.now();
@@ -361,8 +361,14 @@
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
 
-    console.log(GERBIL_NAME, SCRIPT_VERSION);
+    console.log("OOOOO  OOOOO  OOOOO  OOOO   OOOOO  O     ");
+    console.log("O      O      O   O  O   O    O    O     ");
+    console.log("O  OO  OOOOO  OOOOO  OOOO     O    O     ");
+    console.log("O   O  O      O  O   O   O    O    O     ");
+    console.log("OOOOO  OOOOO  O   O  OOOO   OOOOO  OOOOOO");
+    console.log("v-"+SCRIPT_VERSION);
 
+    console.log(util.fetchLinks());
 
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
@@ -396,6 +402,7 @@
 
     var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
     console.log("Default collector:", default_collector);
+
     // TODO: add params collector support in request URL
     // var params_collector = params.collector && decodeURIComponent(params.collector);
 
@@ -420,7 +427,7 @@
 
     var body = document.getElementsByTagName('body')[0];
 
-    docdim = util.documentDimensions();
+    var docdim = util.documentDimensions();
     var x = {
         ts0: PAGELOAD_TIMESTAMP, // pageload timestamp (int)
         gvr: SCRIPT_VERSION, // gerbil.js script version (int)
@@ -489,6 +496,7 @@
             // for ie < 6 we don't send fucknot
             return false;
         }
+        var r;
         if (ie_version > 9) {
             // ie 10+ has standards compliant XMLHttpRequest, yaaay!
             r = new XMLHttpRequest();
@@ -533,7 +541,7 @@
             pageY = evt.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
         if (evt.type == 'mousemove') {
-            s = util.segment(pageX, pageY, SEGMENTW);
+            var s = util.segment(pageX, pageY, SEGMENTW);
             if (s != ps) co.push(s);
             ps = s;
         } else {
@@ -557,7 +565,7 @@
         if (lastTouchSegment != sg) touchSegments.push(sg);
         lastTouchSegment = sg;
         if (evt.type == 'touchmove') {
-            s = util.segment(pageX, pageY, SEGMENTW);
+            var s = util.segment(pageX, pageY, SEGMENTW);
             if (s != ps) co.push(s);
             ps = s;
         } else {
@@ -694,7 +702,7 @@
     if (params.getlinks==="1") {
         setTimeout(function(){
             req({
-                links: util.fetchIfIframe(document),
+                links: util.fetchIfIframe(),
                 type: 'links'
             });
         }, 100);
