@@ -353,14 +353,21 @@
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
 
-    // Set default impression and session identifiers
-    var default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-    console.log("SID:", default_sid);
-    var default_iid = util.randomString(16);
-    console.log("IID:", default_iid);
-
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
+
+    var usecookie = false || params.usecookie;
+    var default_iid, default_sid;
+    console.log(usecookie);
+    console.log(params);
+    if (usecookie === "1") {
+       default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+       default_iid = util.randomString(16);
+    }
+    else {
+       default_sid = util.randomString(16);
+       default_iid = default_sid;
+    }
 
     // Initialize enviroment
     // TODO: environment building
@@ -667,12 +674,14 @@
     }, 5);
 
     // Send links
-    setTimeout(function(){
-        req({
-            links: util.fetchIfIframe(document),
-            type: 'links'
-        });
-    }, 100);
+    if (params.getlinks==="1") {
+        setTimeout(function(){
+            req({
+                links: util.fetchIfIframe(document),
+                type: 'links'
+            });
+        }, 100);
+    }
 
     // Send viewed message after 1 sec delay
     setExactTimeout(function() {
