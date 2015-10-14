@@ -328,29 +328,6 @@
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
             }
             return text;
-        },
-        // Returns element dimensions in given page
-        elementDimensionsByID: function(id){
-            var obj = document.getElementById(id);
-            var dim = obj.getBoundingClientRect();
-            var width = dim.right - dim.left;
-            var height = dim.bottom - dim.top;
-            var curleft = curtop = 0;
-            if (obj.offsetParent) {
-                do {
-                    curleft += obj.offsetLeft;
-                    curtop += obj.offsetTop;
-                } while (obj == obj.offsetParent);
-            }
-            obj.background = "#f00";
-            return {
-                'top': curtop,
-                'right': curleft + width,
-                'bottom': curtop + height,
-                'left': curleft,
-                'height': height,
-                'width': width
-            };
         }
     };
 
