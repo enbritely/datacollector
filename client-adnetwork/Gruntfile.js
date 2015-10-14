@@ -8,7 +8,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['src/gerbil.js'],
+                    src: ['src/*.js'],
                     dest: 'dist'
                 }]
             },
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['src/gerbil.js'],
+                    src: ['src/*.js'],
                     dest: '<%= pkg.test_home %>'
                 }]
             }
@@ -58,7 +58,7 @@ module.exports = function(grunt) {
         },
         removelogging: {
             dist: {
-                src: "dist/**/*.js"
+                src: "dist/*.js"
             }
         },
         compress: {
@@ -77,9 +77,37 @@ module.exports = function(grunt) {
             files: ["src/*.js"],
             options: {}
         },
+        replace: {
+          main: {
+            options: {
+              patterns: [
+                {
+                  match: 'PACKAGEVERSION',
+                  replacement: '<%= pkg.version %>'
+                }
+              ]
+            },
+            files: [
+              {expand: true, flatten: true, src: ['src/gerbil.js'], dest: 'dist'}
+            ]
+          },
+          test: {
+            options: {
+              patterns: [
+                {
+                  match: 'PACKAGEVERSION',
+                  replacement: '<%= pkg.version %>'
+                }
+              ]
+            },
+            files: [
+              {expand: true, flatten: true, src: ['src/gerbil.js'], dest: '<%= pkg.test_home %>'}
+            ]
+          }
+        },
         watch: {
-            files: ['<%= jshint.files %>', "src/*.js", "enbritely/page/*.html", "enbritely/iframe/*.html"],
-            tasks: ['clean', 'copy:test_to_enbritely_dir', 'replace:test', 'copy:test']
+            files: ["src/*.js"],
+            tasks: ['clean', 'jshint', 'replace:test']
         },
     });
     require('load-grunt-tasks')(grunt, {
@@ -93,8 +121,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-cloudfront');
-    grunt.registerTask('default', ['clean', 'jshint', 'copy:main', 'removelogging:dist', 'uglify', 'compress', 'rename']);
-    grunt.registerTask('test', ['clean', 'jshint', 'copy:test']);
+    grunt.registerTask('default', ['clean', 'jshint', 'replace', 'removelogging:dist', 'uglify', 'compress', 'rename']);
+    grunt.registerTask('test', ['clean', 'jshint', 'replace:test']);
 };

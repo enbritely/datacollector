@@ -1,4 +1,5 @@
 (function(w) {
+
     // Base64 encoding
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -90,7 +91,9 @@
             return t;
         }
     };
+
     // JSON encoding support for IE6 and IE7
+
     "object" != typeof JSON && (JSON = {}),
         function() {
             "use strict";
@@ -169,6 +172,8 @@
                 throw new SyntaxError("JSON.parse")
             })
         }();
+
+    /* jshint ignore:end */
 
     var util = {
         getURLSid: function (location) {
@@ -346,20 +351,28 @@
             };
         }
     };
+
+    console.log("Gerbil starting");
+
     // Initialize constants
-    var SCRIPT_VERSION = 213;
+    var SCRIPT_VERSION = "@@PACKAGEVERSION";
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
+
+    console.log(GERBIL_NAME, SCRIPT_VERSION);
+
 
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
 
     var usecookie = false || params.usecookie;
     var default_iid, default_sid;
+
     console.log(usecookie);
     console.log(params);
+
     if (usecookie === "1") {
        default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
        default_iid = util.randomString(16);
@@ -368,6 +381,9 @@
        default_sid = util.randomString(16);
        default_iid = default_sid;
     }
+
+    console.log("Default sid: ", default_sid);
+    console.log("Default iid: ", default_iid);
 
     // Initialize enviroment
     // TODO: environment building
