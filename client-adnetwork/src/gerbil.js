@@ -661,7 +661,8 @@
             });
             touchSegments = [];
         }
-        if ( (++PING_INDEX % 60) === 0 ) {
+        if ( ((++PING_INDEX % 60) === 0) & ((util.now() - PAGELOAD_TIMESTAMP) < 5*60*1000)) {
+            console.log(util.now() - PAGELOAD_TIMESTAMP, (util.now() - PAGELOAD_TIMESTAMP) < 10000);
             req({
                 type:'ping'
             });
