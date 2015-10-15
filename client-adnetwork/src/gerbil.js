@@ -328,7 +328,151 @@
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
             }
             return text;
-        }
+        },
+        // Returns element dimensions in given page
+        elementDimensionsByID: function(id){
+            var obj = document.getElementById(id);
+            var dim = obj.getBoundingClientRect();
+            var width = dim.right - dim.left;
+            var height = dim.bottom - dim.top;
+            var curleft = 0;
+            var curtop = 0;
+            if (obj.offsetParent) {
+                do {
+                    curleft += obj.offsetLeft;
+                    curtop += obj.offsetTop;
+                } while (obj == obj.offsetParent);
+            }
+            return {
+                'top': curtop,
+                'right': curleft + width,
+                'bottom': curtop + height,
+                'left': curleft,
+                'height': height,
+                'width': width
+            };
+        },
+        hasElementFromPoint: function() { return document.elementFromPoint !== undefined },
+        hasGetComputedStyle: function() { return window.getComputedStyle !== undefined },
+        // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport/7557433#7557433
+        elementState: function (el) {
+            if (typeof jQuery === "function" && el instanceof jQuery) {
+                el = el[0];
+            }
+
+            var rect = el.getBoundingClientRect();
+            // var curleft = 0, curtop = 0;
+            // if (el.offsetParent) {
+            //     do {
+            //         curleft += el.offsetLeft;
+            //         curtop += el.offsetTop;
+            //     } while (el == el.offsetParent);
+            // }
+            var width  = rect.bottom - rect.top;
+            var height = rect.right - rect.left;
+            // var el_top = curtop;
+            // var el_right = curleft + width;
+            // var el_bottom = curtop + height;
+            // var el_left = curleft;
+
+            var offTop = (window.innerHeight || document.documentElement.clientHeight) - rect.bottom;
+            var offTop2 = Math.min(rect.top, 0);
+            var offLeft = (window.innerWidth || document.documentElement.clientWidth) - rect.right;
+            var offLeft2 = Math.min(rect.left, 0);
+            var viewablePortionVertical = Math.min(Math.max(0, width + offTop), Math.max(0, width + offTop2));
+            var viewablePortionHorizontal = Math.min(Math.max(0, height + offLeft), Math.max(0, height + offLeft2));
+            var pixelsViewable = viewablePortionVertical * viewablePortionHorizontal;
+            var pixelsAd = width * height;
+            var proportion = (pixelsViewable / pixelsAd) || 0.0;
+            var corrected_proportion = proportion;
+            var overlapArea = 0;
+
+            var viewableFlag = +(
+                width > 0 &&
+                height > 0 &&
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+
+            var checkoverlay = function (rt,rl,w,h){
+                var c = [
+                    [rl + w * 0.5, rt + h * 0.5],
+                    [rl + w * 0.25, rt + h * 0.25],[rl + w * 0.25, rt + h * 0.75],
+                    [rl + w * 0.75, rt + h * 0.25],[rl + w * 0.75, rt + h * 0.75]
+                ]
+                for (var k in c){
+                    if (c[k][0] >= 0 & c[k][1] >= 0) {
+                        var gp = document.elementFromPoint(c[k][0], c[k][1]);
+                        if (el !== gp) {
+                            // TODO: Computed style
+                            // var computed_background = window.getComputedStyle(gp, null).getPropertyValue('background');
+                            // http://jsfiddle.net/uthyZ/
+                            // http://math.stackexchange.com/questions/99565/simplest-way-to-calculate-the-intersect-area-of-two-rectangles
+                            // x_overlap = x12<x21 || x11>x22 ? 0 : Math.min(x12,x22) - Math.max(x11,x21);
+                            // y_overlap = y12<y21 || y11>y22 ? 0 : Math.min(y12,y22) - Math.max(y11,y21);
+                            // x11 = d0.left,
+                            // y11 = d0.top,
+                            // x12 = d0.left + divs.eq(0).width(),
+                            // y12 = d0.top + divs.eq(0).height(),
+                            // x21 = d1.left,
+                            // y21 = d1.top,
+                            // x22 = d1.left + divs.eq(1).width(),
+                            // y22 = d1.top + divs.eq(1).height(),
+                            // x_overlap = Math.max(0, Math.min(x12,x22) - Math.max(x11,x21));
+                            // y_overlap = Math.max(0, Math.min(y12,y22) - Math.max(y11,y21));
+
+                            var frect = gp.getBoundingClientRect();
+                            var fwidth = frect.bottom - frect.top;
+                            var fheight = frect.right - frect.left;
+                            var x_overlap = Math.max(0, Math.min(frect.right,rect.right) - Math.max(frect.left,rect.left));
+                            var y_overlap = Math.max(0, Math.min(frect.bottom,rect.bottom) - Math.max(frect.top,rect.top));
+                            var overlapArea = x_overlap * y_overlap;
+                            return overlapArea;
+                        }
+                    }
+                }
+                return 0;
+            }
+
+            if (proportion > 0.0 & util.hasElementFromPoint() & util.hasGetComputedStyle()) {
+                overlapArea = checkoverlay(rect.top, rect.left, width, height);
+                corrected_proportion = proportion * (pixelsAd - overlapArea) / pixelsAd;
+            }
+
+            // if (gp === null) {
+            //     console.log("Not viewable");
+            // }
+            // console.log(rect.top, rect.left);
+
+            return {
+                eid: el.id,
+                pview: proportion,
+                cpview: corrected_proportion,
+                overlap: overlapArea,
+                pixview: pixelsViewable,
+                pixad: pixelsAd,
+                // el_top: el_top,
+                // el_right: el_right,
+                // el_bottom: el_bottom,
+                // el_left: el_left,
+                rt: rect.top,
+                rb: rect.bottom,
+                rr: rect.right,
+                rl: rect.left,
+                // fpv50: proportionViewableGte50,
+                // fpv100: proportionViewable100,
+                flagview: viewableFlag,
+                // vpv: viewablePortionVertical,
+                // vph: viewablePortionHorizontal,
+                cwidth: width,
+                cheight: height,
+                // toString: function() {
+                //     return [this.elem_id, this.pview, this.rect_top, this.rect_bottom, this.rect_right, this.rect_left, this.flagview].join('|')
+                // }
+            };
+        },
     };
 
     // Initialize constants
@@ -338,14 +482,16 @@
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
 
-    console.log("OOOOO  OOOOO  OOOOO  OOOO   OOOOO  O     ");
-    console.log("O      O      O   O  O   O    O    O     ");
-    console.log("O  OO  OOOOO  OOOOO  OOOO     O    O     ");
-    console.log("O   O  O      O  O   O   O    O    O     ");
-    console.log("OOOOO  OOOOO  O   O  OOOO   OOOOO  OOOOOO");
+    var l = [];
+    l.push("OOOOO  OOOOO  OOOOO  OOOO   OOOOO  O     \n");
+    l.push("O      O      O   O  O   O    O    O     \n");
+    l.push("O  OO  OOOOO  OOOOO  OOOO     O    O     \n");
+    l.push("O   O  O      O  O   O   O    O    O     \n");
+    l.push("OOOOO  OOOOO  O   O  OOOO   OOOOO  OOOOOO\n");
+    console.log(l.join(''));
     console.log("v-"+SCRIPT_VERSION);
 
-    console.log(util.fetchLinks());
+    // console.log(util.fetchLinks());
 
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
@@ -353,8 +499,10 @@
     var usecookie = false || params.usecookie;
     var default_iid, default_sid;
 
-    console.log(usecookie);
-    console.log(params);
+    // console.log(usecookie);
+    // console.log(params);
+
+    var ADBOX_ID = params.adbox_id || 'testid';
 
     if (usecookie === "1") {
        default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
@@ -368,6 +516,8 @@
     console.log("Default sid: ", default_sid);
     console.log("Default iid: ", default_iid);
 
+    // console.log(util.elementDimensionsByID(ADBOX_ID));
+
     // Initialize enviroment
     // TODO: environment building
     var enviroment = window._enbrtly_ || {};
@@ -378,7 +528,7 @@
     }
 
     var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
-    console.log("Default collector:", default_collector);
+    // console.log("Default collector:", default_collector);
 
     // TODO: add params collector support in request URL
     // var params_collector = params.collector && decodeURIComponent(params.collector);
@@ -454,7 +604,7 @@
         var ts = util.now();
 
         // Attributes that should be included in all messages
-        obj.ts  = ts; // timestamp of the event (int)đ
+        obj.ts  = ts; // timestamp of the event (int)
         obj.wsid = enviroment.wsid; // webshop id (str)
         obj.sid = enviroment.sid; // session id (str)
         obj.iid = enviroment.iid; // impression id (str)
@@ -463,7 +613,7 @@
 
         if (obj.type != 'ping') { PING_INDEX = 0; }
 
-        console.log(obj);
+        // console.log(obj);
 
         var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
         // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
@@ -502,6 +652,11 @@
             obj.type = 'custom';
             req(obj);
         };
+    }
+
+    var getAdboxState = function(adbox_id){
+        var el = document.getElementById(adbox_id);
+        return util.elementState(el);
     }
 
     // Mouse event logging
@@ -647,7 +802,9 @@
     };
 
     // Periodically send segment Arrays, if segment Array length is > 0
+    var adbox_prev_corrected_proportion = -1.0;
     setInterval(function() {
+
         if (co.length > 0) {
             req({
                 co: co.join('|'),
@@ -662,13 +819,25 @@
             });
             touchSegments = [];
         }
+
+        // Send periodical pings
         if ( ((++PING_INDEX % 60) === 0) & ((util.now() - PAGELOAD_TIMESTAMP) < 5*60*1000)) {
             console.log(util.now() - PAGELOAD_TIMESTAMP, (util.now() - PAGELOAD_TIMESTAMP) < 10000);
             req({
                 type:'ping'
             });
         }
+
+        var adbox_curr_state = getAdboxState(ADBOX_ID);
+        if (adbox_curr_state.cpview != adbox_prev_corrected_proportion) {
+            console.log("ADBOX state changed", adbox_curr_state);
+            adbox_prev_corrected_proportion = adbox_curr_state.cpview;
+            adbox_curr_state['type'] = 'adboxstate';
+            req(adbox_curr_state);
+        }
+
     }, 500);
+
 
     // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
     setTimeout(function() {
