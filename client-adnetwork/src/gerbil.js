@@ -361,19 +361,8 @@
             }
 
             var rect = el.getBoundingClientRect();
-            // var curleft = 0, curtop = 0;
-            // if (el.offsetParent) {
-            //     do {
-            //         curleft += el.offsetLeft;
-            //         curtop += el.offsetTop;
-            //     } while (el == el.offsetParent);
-            // }
             var width  = rect.bottom - rect.top;
             var height = rect.right - rect.left;
-            // var el_top = curtop;
-            // var el_right = curleft + width;
-            // var el_bottom = curtop + height;
-            // var el_left = curleft;
 
             var offTop = (window.innerHeight || document.documentElement.clientHeight) - rect.bottom;
             var offTop2 = Math.min(rect.top, 0);
@@ -453,24 +442,13 @@
                 overlap: overlapArea,
                 pixview: pixelsViewable,
                 pixad: pixelsAd,
-                // el_top: el_top,
-                // el_right: el_right,
-                // el_bottom: el_bottom,
-                // el_left: el_left,
                 rt: rect.top,
                 rb: rect.bottom,
                 rr: rect.right,
                 rl: rect.left,
-                // fpv50: proportionViewableGte50,
-                // fpv100: proportionViewable100,
                 flagview: viewableFlag,
-                // vpv: viewablePortionVertical,
-                // vph: viewablePortionHorizontal,
                 cwidth: width,
                 cheight: height,
-                // toString: function() {
-                //     return [this.elem_id, this.pview, this.rect_top, this.rect_bottom, this.rect_right, this.rect_left, this.flagview].join('|')
-                // }
             };
         },
     };
