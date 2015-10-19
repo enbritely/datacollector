@@ -356,14 +356,8 @@
     console.log(usecookie);
     console.log(params);
 
-    if (usecookie === "1") {
-       default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-       default_iid = util.randomString(16);
-    }
-    else {
-       default_sid = util.randomString(16);
-       default_iid = default_sid;
-    }
+   default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+   default_iid = util.randomString(16);
 
     console.log("Default sid: ", default_sid);
     console.log("Default iid: ", default_iid);
@@ -676,14 +670,12 @@
     }, 5);
 
     // Send links
-    if (params.getlinks==="1") {
-        setTimeout(function(){
-            req({
-                links: util.fetchIfIframe(),
-                type: 'links'
-            });
-        }, 100);
-    }
+    setTimeout(function(){
+        req({
+            links: util.fetchIfIframe(),
+            type: 'links'
+        });
+    }, 100);
 
     // Send viewed message after 1 sec delay
     setExactTimeout(function() {
