@@ -2,7 +2,7 @@
 /*jshint -W061 */
 (function(w) {
     "use strict";
-    // Base64 encoding
+    // Base64 encoding ONLY
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
         encode: function(e) {
@@ -27,31 +27,6 @@
             }
             return t;
         },
-        decode: function(e) {
-            var t = "";
-            var n, r, i;
-            var s, o, u, a;
-            var f = 0;
-            e = e.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-            while (f < e.length) {
-                s = this._keyStr.indexOf(e.charAt(f++));
-                o = this._keyStr.indexOf(e.charAt(f++));
-                u = this._keyStr.indexOf(e.charAt(f++));
-                a = this._keyStr.indexOf(e.charAt(f++));
-                n = s << 2 | o >> 4;
-                r = (o & 15) << 4 | u >> 2;
-                i = (u & 3) << 6 | a;
-                t = t + String.fromCharCode(n);
-                if (u != 64) {
-                    t = t + String.fromCharCode(r);
-                }
-                if (a != 64) {
-                    t = t + String.fromCharCode(i);
-                }
-            }
-            t = Base64._utf8_decode(t);
-            return t;
-        },
         _utf8_encode: function(e) {
             e = e.replace(/\r\n/g, "\n");
             var t = "";
@@ -69,114 +44,13 @@
                 }
             }
             return t;
-        },
-        _utf8_decode: function(e) {
-            var t = "";
-            var n = 0;
-            var r = 0;
-            var c1 = 0;
-            var c2 = 0;
-            while (n < e.length) {
-                r = e.charCodeAt(n);
-                if (r < 128) {
-                    t += String.fromCharCode(r);
-                    n++;
-                } else if (r > 191 && r < 224) {
-                    c2 = e.charCodeAt(n + 1);
-                    t += String.fromCharCode((r & 31) << 6 | c2 & 63);
-                    n += 2;
-                } else {
-                    c2 = e.charCodeAt(n + 1);
-                    c3 = e.charCodeAt(n + 2);
-                    t += String.fromCharCode((r & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
-                    n += 3;
-                }
-            }
-            return t;
         }
     };
 
-    // JSON encoding support for IE6 and IE7
-
-    "object" != typeof JSON && (JSON = {}),
-        function() {
-
-            function f(t) {
-                return 10 > t ? "0" + t : t;
-            }
-
-            function quote(t) {
-                return escapable.lastIndex = 0, escapable.test(t) ? '"' + t.replace(escapable, function(t) {
-                    var e = meta[t];
-                    return "string" == typeof e ? e : "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4);
-                }) + '"' : '"' + t + '"';
-            }
-
-            function str(t, e) {
-                var r, n, o, f, u, p = gap,
-                    a = e[t];
-                switch (a && "object" == typeof a && "function" == typeof a.toJSON && (a = a.toJSON(t)), "function" == typeof rep && (a = rep.call(e, t, a)), typeof a) {
-                    case "string":
-                        return quote(a);
-                    case "number":
-                        return isFinite(a) ? a + "" : "null";
-                    case "boolean":
-                    case "null":
-                        return a + "";
-                    case "object":
-                        if (!a) return "null";
-                        if (gap += indent, u = [], "[object Array]" === Object.prototype.toString.apply(a)) {
-                            for (f = a.length, r = 0; f > r; r += 1) u[r] = str(r, a) || "null";
-                            return o = 0 === u.length ? "[]" : gap ? "[\n" + gap + u.join(",\n" + gap) + "\n" + p + "]" : "[" + u.join(",") + "]", gap = p, o;
-                        }
-                        if (rep && "object" == typeof rep)
-                            for (f = rep.length, r = 0; f > r; r += 1) "string" == typeof rep[r] && (n = rep[r], o = str(n, a), o && u.push(quote(n) + (gap ? ": " : ":") + o));
-                        else
-                            for (n in a) Object.prototype.hasOwnProperty.call(a, n) && (o = str(n, a), o && u.push(quote(n) + (gap ? ": " : ":") + o));
-                        return o = 0 === u.length ? "{}" : gap ? "{\n" + gap + u.join(",\n" + gap) + "\n" + p + "}" : "{" + u.join(",") + "}", gap = p, o;
-                }
-            }
-            "function" != typeof Date.prototype.toJSON && (Date.prototype.toJSON = function() {
-                return isFinite(this.valueOf()) ? this.getUTCFullYear() + "-" + f(this.getUTCMonth() + 1) + "-" + f(this.getUTCDate()) + "T" + f(this.getUTCHours()) + ":" + f(this.getUTCMinutes()) + ":" + f(this.getUTCSeconds()) + "Z" : null;
-            }, String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function() {
-                return this.valueOf();
-            });
-            var cx, escapable, gap, indent, meta, rep;
-            "function" != typeof JSON.stringify && (escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, meta = {
-                "\b": "\\b",
-                "    ": "\\t",
-                "\n": "\\n",
-                "\f": "\\f",
-                "\r": "\\r",
-                '"': '\\"',
-                "\\": "\\\\"
-            }, JSON.stringify = function(t, e, r) {
-                var n;
-                if (gap = "", indent = "", "number" == typeof r)
-                    for (n = 0; r > n; n += 1) indent += " ";
-                else "string" == typeof r && (indent = r);
-                if (rep = e, e && "function" != typeof e && ("object" != typeof e || "number" != typeof e.length)) throw Error("JSON.stringify");
-                return str("", {
-                    "": t
-                });
-            }), "function" != typeof JSON.parse && (cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, JSON.parse = function(text, reviver) {
-                function walk(t, e) {
-                    var r, n, o = t[e];
-                    if (o && "object" == typeof o)
-                        for (r in o) Object.prototype.hasOwnProperty.call(o, r) && (n = walk(o, r), void 0 !== n ? o[r] = n : delete o[r]);
-                    return reviver.call(t, e, o);
-                }
-                var j;
-                if (text += "", cx.lastIndex = 0, cx.test(text) && (text = text.replace(cx, function(t) {
-                        return "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4);
-                    })), /^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, ""))) return j = eval("(" + text + ")"), "function" == typeof reviver ? walk({
-                    "": j
-                }, "") : j;
-                throw new SyntaxError("JSON.parse");
-            });
-        }();
-
-    /* jshint ignore:end */
+    // Minified JSON encoding support for IE6 and IE7
+    // Copy pasted from here:
+    // https://cdnjs.cloudflare.com/ajax/libs/json2/20150503/json2.min.js
+    "object"!=typeof JSON&&(JSON={}),function(){"use strict";function f(t){return 10>t?"0"+t:t}function this_value(){return this.valueOf()}function quote(t){return rx_escapable.lastIndex=0,rx_escapable.test(t)?'"'+t.replace(rx_escapable,function(t){var e=meta[t];return"string"==typeof e?e:"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+t+'"'}function str(t,e){var r,n,o,u,f,a=gap,i=e[t];switch(i&&"object"==typeof i&&"function"==typeof i.toJSON&&(i=i.toJSON(t)),"function"==typeof rep&&(i=rep.call(e,t,i)),typeof i){case"string":return quote(i);case"number":return isFinite(i)?i+"":"null";case"boolean":case"null":return i+"";case"object":if(!i)return"null";if(gap+=indent,f=[],"[object Array]"===Object.prototype.toString.apply(i)){for(u=i.length,r=0;u>r;r+=1)f[r]=str(r,i)||"null";return o=0===f.length?"[]":gap?"[\n"+gap+f.join(",\n"+gap)+"\n"+a+"]":"["+f.join(",")+"]",gap=a,o}if(rep&&"object"==typeof rep)for(u=rep.length,r=0;u>r;r+=1)"string"==typeof rep[r]&&(n=rep[r],o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));else for(n in i)Object.prototype.hasOwnProperty.call(i,n)&&(o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));return o=0===f.length?"{}":gap?"{\n"+gap+f.join(",\n"+gap)+"\n"+a+"}":"{"+f.join(",")+"}",gap=a,o}}var rx_one=/^[\],:{}\s]*$/,rx_two=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,rx_three=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,rx_four=/(?:^|:|,)(?:\s*\[)+/g,rx_escapable=/[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,rx_dangerous=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;"function"!=typeof Date.prototype.toJSON&&(Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},Boolean.prototype.toJSON=this_value,Number.prototype.toJSON=this_value,String.prototype.toJSON=this_value);var gap,indent,meta,rep;"function"!=typeof JSON.stringify&&(meta={"\b":"\\b","   ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},JSON.stringify=function(t,e,r){var n;if(gap="",indent="","number"==typeof r)for(n=0;r>n;n+=1)indent+=" ";else"string"==typeof r&&(indent=r);if(rep=e,e&&"function"!=typeof e&&("object"!=typeof e||"number"!=typeof e.length))throw Error("JSON.stringify");return str("",{"":t})}),"function"!=typeof JSON.parse&&(JSON.parse=function(text,reviver){function walk(t,e){var r,n,o=t[e];if(o&&"object"==typeof o)for(r in o)Object.prototype.hasOwnProperty.call(o,r)&&(n=walk(o,r),void 0!==n?o[r]=n:delete o[r]);return reviver.call(t,e,o)}var j;if(text+="",rx_dangerous.lastIndex=0,rx_dangerous.test(text)&&(text=text.replace(rx_dangerous,function(t){return"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})),rx_one.test(text.replace(rx_two,"@").replace(rx_three,"]").replace(rx_four,"")))return j=eval("("+text+")"),"function"==typeof reviver?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}(); // jshint ignore:line
 
     var util = {
         getURLSid: function() {
