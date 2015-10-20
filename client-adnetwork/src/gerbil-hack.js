@@ -34,13 +34,14 @@
 	var scriptURL;
 
 	if(p.wsid==="fastb") {
-		console.log("fastb");
 		scriptURL = "https://df3a34acb7eb1321d99f-2366b89f86f9049a8d564854bcebe54e.ssl.cf5.rackcdn.com/gerbil-2.1.6.js?"+_qp;
 	}
 	else {
-		console.log("zi others");
 		scriptURL = "https://df3a34acb7eb1321d99f-2366b89f86f9049a8d564854bcebe54e.ssl.cf5.rackcdn.com/gerbil-2.0.1-old.js?"+_qp;
 	}
+
+	console.log(p.wsid);
+	console.log(scriptURL);
 
 	var b = 'script';
     var a = document.createElement(b);
