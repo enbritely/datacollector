@@ -329,31 +329,29 @@
             }
             return text;
         },
-        // Returns element dimensions in given page
-        elementDimensionsByID: function(id){
-            var obj = document.getElementById(id);
-            var dim = obj.getBoundingClientRect();
-            var width = dim.right - dim.left;
-            var height = dim.bottom - dim.top;
-            var curleft = 0;
-            var curtop = 0;
-            if (obj.offsetParent) {
-                do {
-                    curleft += obj.offsetLeft;
-                    curtop += obj.offsetTop;
-                } while (obj == obj.offsetParent);
+        hasElementFromPoint: function() { return document.elementFromPoint !== undefined; },
+        // http://jsfiddle.net/uthyZ/
+        // http://math.stackexchange.com/questions/99565/simplest-way-to-calculate-the-intersect-area-of-two-rectangles
+        checkoverlay: function(el,rt,rl,w,h) {
+            var c = [
+                [rl + w * 0.5, rt + h * 0.5],
+                [rl + w * 0.25, rt + h * 0.25],[rl + w * 0.25, rt + h * 0.75],
+                [rl + w * 0.75, rt + h * 0.25],[rl + w * 0.75, rt + h * 0.75]
+            ];
+            for (var k in c){
+                if (c[k][0] >= 0 & c[k][1] >= 0) {
+                    var gp = document.elementFromPoint(c[k][0], c[k][1]);
+                    if (el !== gp & gp !== null) {
+                        var frect = gp.getBoundingClientRect();
+                        var x_overlap = Math.max(0, Math.min(frect.right,rect.right) - Math.max(frect.left,rect.left));
+                        var y_overlap = Math.max(0, Math.min(frect.bottom,rect.bottom) - Math.max(frect.top,rect.top));
+                        var overlapArea = x_overlap * y_overlap;
+                        return overlapArea;
+                    }
+                }
             }
-            return {
-                'top': curtop,
-                'right': curleft + width,
-                'bottom': curtop + height,
-                'left': curleft,
-                'height': height,
-                'width': width
-            };
+            return 0;
         },
-        hasElementFromPoint: function() { return document.elementFromPoint !== undefined },
-        hasGetComputedStyle: function() { return window.getComputedStyle !== undefined },
         // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport/7557433#7557433
         elementState: function (el) {
             if (typeof jQuery === "function" && el instanceof jQuery) {
@@ -361,6 +359,7 @@
             }
 
             var rect = el.getBoundingClientRect();
+            // TODO: fel van cserélve a magasság s a szélesség, de báncsuk, na
             var width  = rect.bottom - rect.top;
             var height = rect.right - rect.left;
 
@@ -376,64 +375,10 @@
             var corrected_proportion = proportion;
             var overlapArea = 0;
 
-            var viewableFlag = +(
-                width > 0 &&
-                height > 0 &&
-                rect.top >= 0 &&
-                rect.left >= 0 &&
-                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
-
-            var checkoverlay = function (rt,rl,w,h){
-                var c = [
-                    [rl + w * 0.5, rt + h * 0.5],
-                    [rl + w * 0.25, rt + h * 0.25],[rl + w * 0.25, rt + h * 0.75],
-                    [rl + w * 0.75, rt + h * 0.25],[rl + w * 0.75, rt + h * 0.75]
-                ]
-                for (var k in c){
-                    if (c[k][0] >= 0 & c[k][1] >= 0) {
-                        var gp = document.elementFromPoint(c[k][0], c[k][1]);
-                        if (el !== gp) {
-                            // TODO: Computed style
-                            // var computed_background = window.getComputedStyle(gp, null).getPropertyValue('background');
-                            // http://jsfiddle.net/uthyZ/
-                            // http://math.stackexchange.com/questions/99565/simplest-way-to-calculate-the-intersect-area-of-two-rectangles
-                            // x_overlap = x12<x21 || x11>x22 ? 0 : Math.min(x12,x22) - Math.max(x11,x21);
-                            // y_overlap = y12<y21 || y11>y22 ? 0 : Math.min(y12,y22) - Math.max(y11,y21);
-                            // x11 = d0.left,
-                            // y11 = d0.top,
-                            // x12 = d0.left + divs.eq(0).width(),
-                            // y12 = d0.top + divs.eq(0).height(),
-                            // x21 = d1.left,
-                            // y21 = d1.top,
-                            // x22 = d1.left + divs.eq(1).width(),
-                            // y22 = d1.top + divs.eq(1).height(),
-                            // x_overlap = Math.max(0, Math.min(x12,x22) - Math.max(x11,x21));
-                            // y_overlap = Math.max(0, Math.min(y12,y22) - Math.max(y11,y21));
-
-                            var frect = gp.getBoundingClientRect();
-                            var fwidth = frect.bottom - frect.top;
-                            var fheight = frect.right - frect.left;
-                            var x_overlap = Math.max(0, Math.min(frect.right,rect.right) - Math.max(frect.left,rect.left));
-                            var y_overlap = Math.max(0, Math.min(frect.bottom,rect.bottom) - Math.max(frect.top,rect.top));
-                            var overlapArea = x_overlap * y_overlap;
-                            return overlapArea;
-                        }
-                    }
-                }
-                return 0;
-            }
-
-            if (proportion > 0.0 & util.hasElementFromPoint() & util.hasGetComputedStyle()) {
-                overlapArea = checkoverlay(rect.top, rect.left, width, height);
+            if (proportion > 0.0 & util.hasElementFromPoint()) {
+                overlapArea = util.checkoverlay(el, rect.top, rect.left, width, height);
                 corrected_proportion = proportion * (pixelsAd - overlapArea) / pixelsAd;
             }
-
-            // if (gp === null) {
-            //     console.log("Not viewable");
-            // }
-            // console.log(rect.top, rect.left);
 
             return {
                 eid: el.id,
@@ -446,10 +391,8 @@
                 rb: rect.bottom,
                 rr: rect.right,
                 rl: rect.left,
-                flagview: viewableFlag,
-                cwidth: width,
-                cheight: height,
             };
+
         },
     };
 
@@ -460,16 +403,7 @@
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
 
-    var l = [];
-    l.push("OOOOO  OOOOO  OOOOO  OOOO   OOOOO  O     \n");
-    l.push("O      O      O   O  O   O    O    O     \n");
-    l.push("O  OO  OOOOO  OOOOO  OOOO     O    O     \n");
-    l.push("O   O  O      O  O   O   O    O    O     \n");
-    l.push("OOOOO  OOOOO  O   O  OOOO   OOOOO  OOOOOO\n");
-    console.log(l.join(''));
-    console.log("v-"+SCRIPT_VERSION);
-
-    // console.log(util.fetchLinks());
+    console.log("GERBIL v-"+SCRIPT_VERSION);
 
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
@@ -477,24 +411,22 @@
     var usecookie = false || params.usecookie;
     var default_iid, default_sid;
 
-    // console.log(usecookie);
-    // console.log(params);
+    // TODO: default adbox creation if not found
+    var ADBOX_ID = params.adboxid || params.sid || null;
+    var adboxFound = +(document.getElementById(ADBOX_ID) !== null);
+    console.log(ADBOX_ID, "foundAdbox:", adboxFound);
 
-    var ADBOX_ID = params.adbox_id || 'testid';
-
-    if (usecookie === "1") {
-       default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-       default_iid = util.randomString(16);
-    }
-    else {
+    if (usecookie === "0") {
        default_sid = util.randomString(16);
        default_iid = default_sid;
+    }
+    else {
+       default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+       default_iid = util.randomString(16);
     }
 
     console.log("Default sid: ", default_sid);
     console.log("Default iid: ", default_iid);
-
-    // console.log(util.elementDimensionsByID(ADBOX_ID));
 
     // Initialize enviroment
     // TODO: environment building
@@ -506,7 +438,6 @@
     }
 
     var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
-    // console.log("Default collector:", default_collector);
 
     // TODO: add params collector support in request URL
     // var params_collector = params.collector && decodeURIComponent(params.collector);
@@ -526,9 +457,9 @@
     enviroment.cid  = enviroment.cid    || params.ebuy || params.cid         || 'NAN';
     enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
 
-    var dims = util.documentDimensions();
-    enviroment.banh = enviroment.banh   || params.banh || dims.height;
-    enviroment.banw = enviroment.banw   || params.banw || dims.width;
+    // var dims = util.documentDimensions();
+    enviroment.banh = enviroment.banh   || params.banh || -1;
+    enviroment.banw = enviroment.banw   || params.banw || -1;
 
     var body = document.getElementsByTagName('body')[0];
 
@@ -553,6 +484,7 @@
         adid: enviroment.adid, // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
+        abfound: adboxFound,
         lang: navigator.language,
         dw: docdim.width,
         dh: docdim.height,
@@ -621,6 +553,8 @@
         r.open('GET', url, true);
         r.send();
         r = null;
+        // console.log(obj['type']);
+        console.log(obj);
         return false;
     };
 
@@ -634,93 +568,116 @@
 
     var getAdboxState = function(adbox_id){
         var el = document.getElementById(adbox_id);
-        return util.elementState(el);
-    }
+        if (el===null) {
+            adboxFound = 0;
+            return {
+                propview: -1.0
+            };
+        }
+        else {
+            adboxFound = 1;
+            return util.elementState(el);
+        }
+    };
 
     // Mouse event logging
     var co = []; // Segment coordinate Array
+    var mouseOverBuffer = []; // Mouseover segment coordinate Array
     var ps = '';
+    var prevMouseOver = '';
     var pageX, pageY; // pageXY coordinates
     var viewed = false; // Viewed flag
+    var inad = 0;
     var handleMouseEvents = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
+        inad = ((evt.target.id == ADBOX_ID)+0) || 0;
         pageX = evt.pageX; // pageX is evt.pageX if defined
         pageY = evt.pageY;
         if (pageX === undefined) {
             pageX = evt.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
             pageY = evt.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
-        if (evt.type == 'mousemove') {
-            var s = util.segment(pageX, pageY, SEGMENTW);
-            if (s != ps) co.push(s);
-            ps = s;
-        } else {
-            req({
-                px: pageX,
-                py: pageY,
-                type: evt.type
-            });
+        pageX = Math.round(pageX);
+        pageY = Math.round(pageY);
+        var s;
+        switch (evt.type){
+            case 'mousemove':
+                s = util.segment(pageX, pageY, SEGMENTW);
+                if (s != ps) co.push(s);
+                ps = s;
+                break;
+            case 'mouseover':
+                s = pageX+':'+pageY;
+                if (s != prevMouseOver) mouseOverBuffer.push(s);
+                prevMouseOver = s;
+                break;
+            default:
+                req({
+                    coords: pageX+':'+pageY,
+                    type: evt.type
+                });
+                break;
         }
     };
 
     // Mobile events
-    var touchSegments = [];
-    var lastTouchSegment = '';
+    var touchStartSegments = [];
+    var lastTouchStartSegment = '';
     var handleTouchEvents = function(evt) {
-        // TODO: Multiple touch events
+        inad = ((evt.target.id == ADBOX_ID)+0) || 0;
         var touches = evt.changedTouches;
-        var px = touches[0].pageX;
-        var py = touches[0].pageY;
-        var sg = util.segment(px, py, SEGMENTW);
-        if (lastTouchSegment != sg) touchSegments.push(sg);
-        lastTouchSegment = sg;
-        if (evt.type == 'touchmove') {
-            var s = util.segment(pageX, pageY, SEGMENTW);
-            if (s != ps) co.push(s);
-            ps = s;
-        } else {
-            req({
-                px: px,
-                py: py,
-                type: evt.type
-            });
-        }
+        var px = Math.round(touches[0].pageX);
+        var py = Math.round(touches[0].pageY);
+        var s = px+':'+py;
+        if (s != lastTouchStartSegment) touchStartSegments.push(s);
+        lastTouchStartSegment = s;
     };
+
+    var adbox_prev_corrected_proportion = -1.0;
+    var ab_state = {
+        adboxfound: adboxFound,
+        cp0:0,
+        cp0_50:0,
+        cp50_100:0,
+        cp100:0,
+        iabview:0,
+        inad:0,
+        cpview:0,
+        pview:0,
+        eid: 'NONE',
+        overlap: 0,
+        pixview: 0,
+        pixad: 0,
+        rt: 0,
+        rb: 0,
+        rr: 0,
+        rl: 0,
+        type: 'adchange'
+    };
+    var resized = false;
+    var scrolled = false;
+    var adbox_changed = false;
 
     // Handle window events
     var handleWindowEvents = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
-        req({
-            type: evt.type
-        });
+        var p = { type:evt.type };
+        p.adboxfound = adboxFound;
+        p.cp0 = ab_state.cp0;
+        p.cp0_50 = ab_state.cp0_50;
+        p.cp50_100 = ab_state.cp50_100;
+        p.cp100 = ab_state.cp100;
+        p.iabview = ab_state.iabview;
+        p.inad = ab_state.inad;
+        req(p);
     };
 
     var handleScrollEvent = function(evt) {
-        evt = evt || window.event; // global window.event for ie 6,7,8
-        req({
-            st: document.body.scrollTop,
-            sl: document.body.scrollLeft,
-            type: evt.type
-        });
+        scrolled = true;
     };
 
     var handleResizeEvent = function(evt){
-        evt = evt || window.event; // global window.event for ie 6,7,8
-        req({
-            dw: docdim.width,
-            dh: docdim.height,
-            eh: document.documentElement.clientHeight, // Read-only property: the root element's height (int)
-            ew: document.documentElement.clientWidth,  // Read-only property from the root element's width (int)
-            bh: body.clientHeight, // Read-only property from the body element's height (int)
-            bw: body.clientWidth, // Read-only property from the body element's width   (int)
-            iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
-            ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
-            avw: screen.availWidth, // Available screen width in pixels (int)
-            avh: screen.availHeight, // Available screen height in pixels (int)
-            sh: screen.height, // Height of screen in pixels (int)
-            sw: screen.width, // Width of screen in pixels (int)
-            type: evt.type
-        });
+        resized = true;
     };
 
     // Add Event listener
@@ -759,13 +716,15 @@
     ael(window, 'touchend',     handleTouchEvents);
     ael(window, 'touchmove',    handleTouchEvents);
 
+    ael(window, 'resize',       handleResizeEvent);
+
+    ael(window, 'scroll',       handleScrollEvent);
+
     ael(window, 'focus',        handleWindowEvents);
     ael(window, 'blur',         handleWindowEvents);
     ael(window, 'beforeunload', handleWindowEvents);
     ael(window, 'load',         handleWindowEvents);
     ael(window, 'unload',       handleWindowEvents);
-    ael(window, 'resize',       debounce(handleResizeEvent, 200));
-    ael(window, 'scroll',       debounce(handleScrollEvent, 200));
 
     // http://snipplr.com/view/69951/
     var setExactTimeout = function(callback, duration, resolution) {
@@ -779,42 +738,120 @@
         return timeout;
     };
 
-    // Periodically send segment Arrays, if segment Array length is > 0
-    var adbox_prev_corrected_proportion = -1.0;
     setInterval(function() {
 
+        var obj = {
+            type:'heartbeat'
+        };
+        var changed = false;
+
         if (co.length > 0) {
-            req({
-                co: co.join('|'),
-                type: 'heartbeat'
-            });
+            obj.co = co.join('|');
+            obj.co_heartbeat = co.length;
             co = [];
+            changed = true;
+            console.log('Added mousemove coords', obj.co_heartbeat);
         }
-        if (touchSegments.length > 0) {
-            req({
-                co: touchSegments.join('|'),
-                type: 'theartbeat'
-            });
-            touchSegments = [];
+
+        if (mouseOverBuffer.length > 0) {
+            obj.mouseover_coords = mouseOverBuffer.join('|');
+            obj.mouseover_heartbeat = mouseOverBuffer.length;
+            mouseOverBuffer = [];
+            changed = true;
+            console.log('Added mouseover coords', obj.mouseover_heartbeat);
+        }
+
+        if (touchStartSegments.length > 0) {
+            obj.touch_coords = touchStartSegments.join('|');
+            obj.touch_heartbeat = touchStartSegments.length;
+            touchStartSegments = [];
+            changed = true;
+            console.log('Added touch coords', obj.touch_heartbeat);
+        }
+
+        if (resized) {
+            obj.dw = docdim.width;
+            obj.dh = docdim.height;
+            obj.eh = document.documentElement.clientHeight; // Read-only property = the root element's height (int)
+            obj.ew = document.documentElement.clientWidth;  // Read-only property from the root element's width (int)
+            obj.bh = body.clientHeight; // Read-only property from the body element's height (int)
+            obj.bw = body.clientWidth; // Read-only property from the body element's width   (int)
+            obj.iw = w.innerWidth || document.documentElement.clientWidth; // Most unrelieable writeable width property  (int)
+            obj.ih = w.innerHeight || document.documentElement.clientWidth; // Most unrelieable writeable height property (int)
+            obj.avw = screen.availWidth; // Available screen width in pixels (int)
+            obj.avh = screen.availHeight; // Available screen height in pixels (int)
+            obj.sh = screen.height; // Height of screen in pixels (int)
+            obj.sw = screen.width; // Width of screen in pixels (int)
+            obj.resize_heartbeat = 1;
+            changed = true;
+            resized = false;
+            console.log('Added resize dimensions');
+        }
+
+        if (scrolled) {
+            obj.st = document.body.scrollTop;
+            obj.sl = document.body.scrollLeft;
+            obj.scroll_heartbeat = 1;
+            changed = true;
+            scrolled = false;
+            console.log('Added scrolled dimensions');
+        }
+
+        if (changed) {
+            obj.adboxfound = adboxFound;
+            obj.cp0 = ab_state.cp0;
+            obj.cp0_50 = ab_state.cp0_50;
+            obj.cp50_100 = ab_state.cp50_100;
+            obj.cp100 = ab_state.cp100;
+            obj.iabview = ab_state.iabview;
+            obj.inad = ab_state.inad;
+            req(obj);
         }
 
         // Send periodical pings
         if ( ((++PING_INDEX % 60) === 0) & ((util.now() - PAGELOAD_TIMESTAMP) < 5*60*1000)) {
-            console.log(util.now() - PAGELOAD_TIMESTAMP, (util.now() - PAGELOAD_TIMESTAMP) < 10000);
-            req({
-                type:'ping'
-            });
+            var evt = { type:'ping' };
+            handleWindowEvents(evt);
         }
 
-        var adbox_curr_state = getAdboxState(ADBOX_ID);
-        if (adbox_curr_state.cpview != adbox_prev_corrected_proportion) {
-            console.log("ADBOX state changed", adbox_curr_state);
-            adbox_prev_corrected_proportion = adbox_curr_state.cpview;
-            adbox_curr_state['type'] = 'adboxstate';
-            req(adbox_curr_state);
-        }
+        //console.log('ADBOX state', ab_state.cp0, ab_state.cp0_50, ab_state.cp50_100, ab_state.cp100, ab_state.inad, ab_state.iabview, ab_state.cpview, ab_state.pview);
 
     }, 500);
+
+    // Periodically send segment updates for viewability
+    var sfreq = 10;
+    var pt = PAGELOAD_TIMESTAMP;
+    var abto = setInterval(function(){
+        var adbox_curr_state = getAdboxState(ADBOX_ID);
+        var t = util.now();
+        var dt = t - pt;
+        pt = t;
+
+        ab_state.cp0 += (adbox_curr_state.cpview === 0.0)*dt;
+        ab_state.cp0_50 += ((adbox_curr_state.cpview > 0.0) & (adbox_curr_state.cpview < 0.5))*dt;
+        ab_state.cp50_100 += (adbox_curr_state.cpview >= 0.5)*dt;
+        ab_state.cp100 += (adbox_curr_state.cpview == 1.0)*dt;
+        ab_state.inad += inad*dt;
+        ab_state.iabview = (ab_state.cp50_100 >= 1000.0)+0;
+
+        // Adbox state akkor érdekes, ha változott
+        ab_state.adboxfound = adboxFound;
+        ab_state.cpview = adbox_curr_state.cpview;
+        ab_state.pview = adbox_curr_state.pview;
+        ab_state.eid = adbox_curr_state.eid;
+        ab_state.overlap = adbox_curr_state.overlap;
+        ab_state.pixview = adbox_curr_state.pixview;
+        ab_state.pixad = adbox_curr_state.pixad;
+        ab_state.rt = adbox_curr_state.rt;
+        ab_state.rb = adbox_curr_state.rb;
+        ab_state.rr = adbox_curr_state.rr;
+        ab_state.rl = adbox_curr_state.rl;
+        // console.log(adbox_curr_state.cpview != adbox_prev_corrected_proportion);
+        if (adbox_curr_state.cpview != adbox_prev_corrected_proportion) {
+            adbox_prev_corrected_proportion = adbox_curr_state.cpview;
+            req(ab_state);
+        }
+    }, 1000/sfreq);
 
 
     // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
