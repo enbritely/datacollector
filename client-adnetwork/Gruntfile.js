@@ -91,7 +91,7 @@ module.exports = function(grunt) {
               ]
             },
             files: [
-              {expand: true, flatten: true, src: ['src/gerbil.js'], dest: 'dist'}
+              {expand: true, flatten: true, src: ['src/*.js'], dest: 'dist'}
             ]
           },
           test: {
