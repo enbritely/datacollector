@@ -22,13 +22,13 @@ module.exports = function(grunt) {
             }
         },
         rename: {
-            gerbil_js_gz: {
-                src: 'dist/gerbil.js.gz',
-                dest: 'dist/gerbil-<%= pkg.version %>.js.gz'
+            js_gz: {
+                src: 'dist/ferret.js.gz',
+                dest: 'dist/ferret-<%= pkg.version %>.js.gz'
             },
-            gerbil_js: {
-                src: 'dist/gerbil.js',
-                dest: 'dist/gerbil-<%= pkg.version %>.js'
+            js: {
+                src: 'dist/ferret.js',
+                dest: 'dist/ferret-<%= pkg.version %>.js'
             }
         },
         uglify: {

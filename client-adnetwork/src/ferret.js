@@ -281,7 +281,7 @@
     var SCRIPT_VERSION = "@@PACKAGEVERSION";
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
-    var GERBIL_NAME = "gerbil";
+    var GERBIL_NAME = "ferret";
     var PING_INDEX = 0;
 
     console.log("GERBIL v-"+SCRIPT_VERSION);
