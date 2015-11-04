@@ -41,8 +41,8 @@
           <select name="version" size="4" style="width: 98%">
             <option selected="selected" value="gerbil-2.1.6">gerbil-2.1.6 (Latest stable)</option>
             <option value="gerbil-2.1.6.1">gerbil-2.1.6.1</option>
-            <option value="gerbil-2.0.1">gerbil-2.0.1</option>
             <option value="ferret-2.2.2">ferret-2.2.2</option>
+            <option value="gerbil-2.0.1">gerbil-2.0.1</option>
           </select>
           <hr>
           <h2 class="cover-heading">Macro Templates</h2>
@@ -133,6 +133,21 @@
                 </tr>
               </tbody>
             </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Versions</h2>
+          <h3>gerbil-2.1.6 (default latest)</h3>
+          <p>Sitebar ready</p>
+          <p>Custom variable passing: any custom variable can be added in the following format _custommacro1, _custommacro2, _anymacro. Whenever there are non-fixed size creatives (eg. sitebar) use this code. The format of creative, defining which creatives are non fixed needs to be in a variable (eg.: _format=[FORMAT_MACRO])</p>
+          <h3>gerbil-2.1.6.1</h3>
+          <p>NO COOKIE version of 2.1.6. Otherwise exectly the same. No cookie means Session ID MUST COME FROM MACRO, the sid field is mandatory, otherwise only impressions can be measured with a random identifier.</p>
+          <h3>ferret-2.2.2</h3>
+          <p>Experimental, faux-IAB-viewability version. This version measures IAB like viewability, for which it needs a defined container ID (html element containing the ad). By default the element ID goes to 'adboxid' variable, if no adboxid is defined it will look for an HTML element with the id that matches the sid (session id). </p>
+          <h3>gerbil-2.0.1</h3>
+          <p>Legacy code DO NOT use</p>
+          <p>This code is a simple redirecter workaround used on teamred and fastbridge, loads v2.1.6 (unless wsid is fastbridge or teamred in which case loads original 2.0.1)</p>
         </div>
       </div>
     </div>
