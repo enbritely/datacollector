@@ -1,4 +1,5 @@
 (function(w) {
+    "use strict";
     // Base64 encoding
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -90,7 +91,9 @@
             return t;
         }
     };
+
     // JSON encoding support for IE6 and IE7
+
     "object" != typeof JSON && (JSON = {}),
         function() {
             "use strict";
@@ -170,10 +173,12 @@
             })
         }();
 
+    /* jshint ignore:end */
+
     var util = {
-        getURLSid: function (location) {
+        getURLSid: function() {
             var paramName = "enby_sid";
-            var query = location.search.split("?");
+            var query = document.location.search.split("?");
             if(query.length < 2) {
                 return undefined;
             }
@@ -191,14 +196,14 @@
                 }
             }
         },
-        fetchLinks: function (document) {
-            result = {};
-            tags = ['script','img','a','iframe']
-            for (tag in tags) {
-                l = [];
-                tag_elements = document.getElementsByTagName(tags[tag]);
+        fetchLinks: function() {
+            var result = {};
+            var tags = ['script','img','a','iframe'];
+            for (var tag in tags) {
+                var l = [];
+                var tag_elements = document.getElementsByTagName(tags[tag]);
                 console.log(tags[tag] + ": " + tag_elements.length);
-                for (e in tag_elements) {
+                for (var e in tag_elements) {
                     var cur = tag_elements[e];
                     var v = cur.src || cur.href;
                     if(v != null) {
@@ -209,14 +214,13 @@
             }
             return result;
         },
-        fetchIfIframe: function(docuemnt) {
+        fetchIfIframe: function() {
             if (util.inIframe()) {
-                return util.fetchLinks(document);
+                return util.fetchLinks();
             } else {
                 return undefined;
             }
         },
-
         // IE version detection
         detectIEVersion: function(ua) {
             var msie = ua.indexOf('msie ');
@@ -293,23 +297,6 @@
                 )
             };
         },
-        // Browser sniffing function
-        browser: function() {
-            var n = navigator.userAgent.toLowerCase();
-            var b = {
-                webkit:  +(/webkit/.test(n)),
-                mozilla: +((/mozilla/.test(n)) && (!/(compatible|webkit)/.test(n))),
-                chrome:  +((/chrome/.test(n) || /crios/.test(n))),
-                msie:    +((/msie/.test(n)) && (!/opera/.test(n))),
-                firefox: +(/firefox/.test(n)),
-                safari:  +((/safari/.test(n) && !(/chrome/.test(n)) && !(/crios/.test(n)))),
-                opera:   +(/opera/.test(n)),
-                mobile:  +((/android|webos|iphone|ipad|ipod|blackberry|iemobile|mobi|opera mini/i.test(n)))
-            };
-            b.version     = (b.safari) ? (n.match(/.+(?:ri)[\/: ]([\d.]+)/) || [])[1] : (n.match(/.+(?:ox|me|ra|rv|ie|crios)[\/: ]([\d.]+)/) || [])[1];
-            b.mainVersion = parseInt(b.version);
-            return b;
-        },
         // Cookie handling functionality
         cookie: {
           prefix: '__nbrtl-',
@@ -341,41 +328,39 @@
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
             }
             return text;
-        },
-        elementDimensionsByID: function(id){
-            var obj = document.getElementById(id);
-            var dim = obj.getBoundingClientRect();
-            var width = dim.right - dim.left;
-            var height = dim.bottom - dim.top;
-            var curleft = curtop = 0;
-            if (obj.offsetParent) {
-                do {
-                    curleft += obj.offsetLeft;
-                    curtop += obj.offsetTop;
-                } while (obj == obj.offsetParent);
-            }
-            return {
-                'top': curtop,
-                'right': curleft + width,
-                'bottom': curtop + height,
-                'left': curleft,
-                'height': height,
-                'width': width
-            };
         }
     };
+
     // Initialize constants
-    var SCRIPT_VERSION = 211;
+    var SCRIPT_VERSION = "@@PACKAGEVERSION";
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
+    var PING_INDEX = 0;
 
-    // Set default impression and session identifiers
-    var default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-    var default_iid = util.randomString(16);
+    console.log("OOOOO  OOOOO  OOOOO  OOOO   OOOOO  O     ");
+    console.log("O      O      O   O  O   O    O    O     ");
+    console.log("O  OO  OOOOO  OOOOO  OOOO     O    O     ");
+    console.log("O   O  O      O  O   O   O    O    O     ");
+    console.log("OOOOO  OOOOO  O   O  OOOO   OOOOO  OOOOOO");
+    console.log("v-"+SCRIPT_VERSION);
+
+    console.log(util.fetchLinks());
 
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
+
+    var usecookie = false || params.usecookie;
+    var default_iid, default_sid;
+
+    console.log(usecookie);
+    console.log(params);
+
+   default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+   default_iid = util.randomString(16);
+
+    console.log("Default sid: ", default_sid);
+    console.log("Default iid: ", default_iid);
 
     // Initialize enviroment
     // TODO: environment building
@@ -386,15 +371,14 @@
         throw('No WSID. Aborting.');
     }
 
-    console.log(location.protocol);
-
     var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
+    console.log("Default collector:", default_collector);
 
     // TODO: add params collector support in request URL
     // var params_collector = params.collector && decodeURIComponent(params.collector);
 
     var LOGGER_URL = enviroment.collector || default_collector;
-    var urlSid = util.getURLSid(location)
+    var urlSid = util.getURLSid(location);
 
     // TODO: try-catch connection error, and abort if host is not reachable
 
@@ -409,27 +393,22 @@
     enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
 
     var dims = util.documentDimensions();
-    // TODO:
     enviroment.banh = enviroment.banh   || params.banh || dims.height;
     enviroment.banw = enviroment.banw   || params.banw || dims.width;
 
-    // TODO: browser function check for ie_versions
-    var b = util.browser();
-
     var body = document.getElementsByTagName('body')[0];
-    var e = document.documentElement; // The Element that is the root element of the document (for example, the <html> element for HTML documents). - Read-only
-    var n = navigator;
-    var s = screen;
-    var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
 
+    var docdim = util.documentDimensions();
     var x = {
+        ts0: PAGELOAD_TIMESTAMP, // pageload timestamp (int)
+        gvr: SCRIPT_VERSION, // gerbil.js script version (int)
         ref: document.referrer, // document.referrer (str) - Returns the URI of the page that linked to this page.
         domain: document.domain, // document.domain (str) -  The domain portion of the origin of the current document, as used by the same origin policy
         url: document.URL, // document.URL (str)
         base_uri: w.location.pathname, // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
         ua: navigator.userAgent, // User agent string (str)
         plat: navigator.platform, // platform of the browser (str)
-        iev: ie_version, // ineternet explorer version, 0="not ie" (int)
+        iev: util.detectIEVersion(navigator.userAgent.toLowerCase()), // internet explorer version, 0="not ie" (int)
         inif: util.inIframe(), // 1 if page is in iframe else 0
         cid: enviroment.cid, // client id (str)
         curl: enviroment.curl, // client url (str)
@@ -441,11 +420,46 @@
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
         lang: navigator.language,
+        dw: docdim.width,
+        dh: docdim.height,
+        eh: document.documentElement.clientHeight, // Read-only property: the root element's height (int)
+        ew: document.documentElement.clientWidth,  // Read-only property from the root element's width (int)
+        bh: body.clientHeight, // Read-only property from the body element's height (int)
+        bw: body.clientWidth, // Read-only property from the body element's width   (int)
+        iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
+        ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
+        avw: screen.availWidth, // Available screen width in pixels (int)
+        avh: screen.availHeight, // Available screen height in pixels (int)
+        sh: screen.height, // Height of screen in pixels (int)
+        sw: screen.width, // Width of screen in pixels (int)
         type: 'ready'
     };
 
-    // Makes a CORS AJAX request to logging server
-    var req = function(url) {
+    // Add custom macros
+    for (var key in params){
+        if (key[0] == '_') {
+            x[key] = params[key];
+        }
+    }
+
+    // Makes a CORS AJAX request to logging server from an object
+    var req = function(obj) {
+
+        var ts = util.now();
+
+        // Attributes that should be included in all messages
+        obj.ts  = ts; // timestamp of the event (int)đ
+        obj.wsid = enviroment.wsid; // webshop id (str)
+        obj.sid = enviroment.sid; // session id (str)
+        obj.iid = enviroment.iid; // impression id (str)
+
+        var url = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
+
+        if (obj.type != 'ping') { PING_INDEX = 0; }
+
+        console.log(obj);
+
+        var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
         // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
         // https://msdn.microsoft.com/en-us/library/ie/cc288060%28v=vs.85%29.aspx
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Browser_compatibility
@@ -453,61 +467,34 @@
             // for ie < 6 we don't send fucknot
             return false;
         }
+        var r;
         if (ie_version > 9) {
             // ie 10+ has standards compliant XMLHttpRequest, yaaay!
-            request = new XMLHttpRequest();
+            r = new XMLHttpRequest();
         }
         if (ie_version === 8 || ie_version === 9) {
             // ie 8, 9 has microsoft specific XDomainRequest, booo!
-            request = new XDomainRequest();
+            r = new XDomainRequest();
         }
         if (ie_version === 6 || ie_version === 7) {
             // ie 6, 7 has ActiveXObjects!
-            request = new window.ActiveXObject('Microsoft.XMLHTTP');
+            r = new window.ActiveXObject('Microsoft.XMLHTTP');
         }
         if (ie_version === 0) {
             // if it is not ie, it just works
-            request = new XMLHttpRequest();
+            r = new XMLHttpRequest();
         }
-        request.open('GET', url, true);
-        request.send();
-        request = null;
+        r.open('GET', url, true);
+        r.send();
+        r = null;
         return false;
-    };
-
-    // Builds a query URL from event object
-    var xurl = function(obj) {
-        ts = util.now();
-        docdim = util.documentDimensions();
-        // Attributes that should be included in all messages
-        obj.ts0 = PAGELOAD_TIMESTAMP; // pageload timestamp (int)
-        obj.ts  = ts; // timestamp of the event (int)đ
-        obj.gvr = SCRIPT_VERSION; // gerbil.js script version (int)
-        obj.wsid = enviroment.wsid; // webshop id (str)
-        obj.sid = enviroment.sid; // session id (str)
-        obj.iid = enviroment.iid; // impression id (str)
-        obj.dw = docdim.width;
-        obj.dh = docdim.height;
-        obj.eh = document.documentElement.clientHeight; // Read-only property = the root element's height (int)
-        obj.ew = document.documentElement.clientWidth;  // Read-only property from the root element's width (int)
-        obj.bh = body.clientHeight; // Read-only property from the body element's height (int)
-        obj.bw = body.clientWidth; // Read-only property from the body element's width   (int)
-        obj.avw = screen.availWidth; // Available screen width in pixels (int)
-        obj.avh = screen.availHeight; // Available screen height in pixels (int)
-        obj.sh = screen.height; // Height of screen in pixels (int)
-        obj.sw = screen.width; // Width of screen in pixels (int)
-        obj.iw = w.innerWidth || document.documentElement.clientWidth; // Most unrelieable writeable width property  (int)
-        obj.ih = w.innerHeight || document.documentElement.clientWidth; // Most unrelieable writeable height property (int)
-        var qurl = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
-        console.log(qurl);
-        return qurl;
     };
 
     // Attach custom_event function to _enbrtly_ window object to call externally and send custom objects
     if (w._enbrtly_) {
         w._enbrtly_.custom_event = function(obj) {
             obj.type = 'custom';
-            req(xurl(obj));
+            req(obj);
         };
     }
 
@@ -525,16 +512,76 @@
             pageY = evt.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
         if (evt.type == 'mousemove') {
-            s = util.segment(pageX, pageY, SEGMENTW);
+            var s = util.segment(pageX, pageY, SEGMENTW);
             if (s != ps) co.push(s);
             ps = s;
         } else {
-            req(xurl({
+            req({
                 px: pageX,
                 py: pageY,
                 type: evt.type
-            }));
+            });
         }
+    };
+
+    // Mobile events
+    var touchSegments = [];
+    var lastTouchSegment = '';
+    var handleTouchEvents = function(evt) {
+        // TODO: Multiple touch events
+        var touches = evt.changedTouches;
+        var px = touches[0].pageX;
+        var py = touches[0].pageY;
+        var sg = util.segment(px, py, SEGMENTW);
+        if (lastTouchSegment != sg) touchSegments.push(sg);
+        lastTouchSegment = sg;
+        if (evt.type == 'touchmove') {
+            var s = util.segment(pageX, pageY, SEGMENTW);
+            if (s != ps) co.push(s);
+            ps = s;
+        } else {
+            req({
+                px: px,
+                py: py,
+                type: evt.type
+            });
+        }
+    };
+
+    // Handle window events
+    var handleWindowEvents = function(evt) {
+        evt = evt || window.event; // global window.event for ie 6,7,8
+        req({
+            type: evt.type
+        });
+    };
+
+    var handleScrollEvent = function(evt) {
+        evt = evt || window.event; // global window.event for ie 6,7,8
+        req({
+            st: document.body.scrollTop,
+            sl: document.body.scrollLeft,
+            type: evt.type
+        });
+    };
+
+    var handleResizeEvent = function(evt){
+        evt = evt || window.event; // global window.event for ie 6,7,8
+        req({
+            dw: docdim.width,
+            dh: docdim.height,
+            eh: document.documentElement.clientHeight, // Read-only property: the root element's height (int)
+            ew: document.documentElement.clientWidth,  // Read-only property from the root element's width (int)
+            bh: body.clientHeight, // Read-only property from the body element's height (int)
+            bw: body.clientWidth, // Read-only property from the body element's width   (int)
+            iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
+            ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
+            avw: screen.availWidth, // Available screen width in pixels (int)
+            avh: screen.availHeight, // Available screen height in pixels (int)
+            sh: screen.height, // Height of screen in pixels (int)
+            sw: screen.width, // Width of screen in pixels (int)
+            type: evt.type
+        });
     };
 
     // Add Event listener
@@ -550,50 +597,36 @@
         }
     };
 
-    ael(document, 'mousemove', handleMouseEvents);
-    ael(document, 'mouseover', handleMouseEvents);
-    ael(document, 'mousedown', handleMouseEvents);
-    ael(document, 'mouseup', handleMouseEvents);
-    ael(document, 'click', handleMouseEvents);
-
-    // Mobile events
-    var touchSegments = [];
-    var lastTouchSegment = '';
-    var handleTouchEvents = function(evt) {
-        // TODO: Multiple touch events
-        var touches = evt.changedTouches;
-        var px = touches[0].pageX;
-        var py = touches[0].pageY;
-        var sg = util.segment(px, py, SEGMENTW);
-        if (lastTouchSegment != sg) touchSegments.push(sg);
-        lastTouchSegment = sg;
-        if (evt.type == 'touchmove') {
-            s = util.segment(pageX, pageY, SEGMENTW);
-            if (s != ps) co.push(s);
-            ps = s;
-        } else {
-            req(xurl({
-                px: px,
-                py: py,
-                type: evt.type
-            }));
-        }
+    // https://remysharp.com/2010/07/21/throttling-function-calls
+    var debounce = function (fn, delay) {
+      var timer = null;
+      return function () {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          fn.apply(context, args);
+        }, delay);
+      };
     };
-    ael(window, 'touchstart', handleTouchEvents);
-    ael(window, 'touchend', handleTouchEvents);
-    ael(window, 'touchmove', handleTouchEvents);
 
-    // Handle window events
-    var handleWindowEvents = function(evt) {
-        evt = evt || window.event; // global window.event for ie 6,7,8
-        req(xurl({
-            type: evt.type
-        }));
-    };
-    ael(window, 'focus', handleWindowEvents);
-    ael(window, 'blur', handleWindowEvents);
+    // Add event listeners
+    ael(document, 'mousemove',  handleMouseEvents);
+    ael(document, 'mouseover',  handleMouseEvents);
+    ael(document, 'mousedown',  handleMouseEvents);
+    ael(document, 'mouseup',    handleMouseEvents);
+    ael(document, 'click',      handleMouseEvents);
+
+    ael(window, 'touchstart',   handleTouchEvents);
+    ael(window, 'touchend',     handleTouchEvents);
+    ael(window, 'touchmove',    handleTouchEvents);
+
+    ael(window, 'focus',        handleWindowEvents);
+    ael(window, 'blur',         handleWindowEvents);
     ael(window, 'beforeunload', handleWindowEvents);
-    ael(window, 'unload', handleWindowEvents);
+    ael(window, 'load',         handleWindowEvents);
+    ael(window, 'unload',       handleWindowEvents);
+    ael(window, 'resize',       debounce(handleResizeEvent, 200));
+    ael(window, 'scroll',       debounce(handleScrollEvent, 200));
 
     // http://snipplr.com/view/69951/
     var setExactTimeout = function(callback, duration, resolution) {
@@ -610,40 +643,46 @@
     // Periodically send segment Arrays, if segment Array length is > 0
     setInterval(function() {
         if (co.length > 0) {
-            req(xurl({
+            req({
                 co: co.join('|'),
                 type: 'heartbeat'
-            }));
+            });
             co = [];
         }
         if (touchSegments.length > 0) {
-            req(xurl({
+            req({
                 co: touchSegments.join('|'),
                 type: 'theartbeat'
-            }));
+            });
             touchSegments = [];
+        }
+        if ( ((++PING_INDEX % 60) === 0) & ((util.now() - PAGELOAD_TIMESTAMP) < 5*60*1000)) {
+            console.log(util.now() - PAGELOAD_TIMESTAMP, (util.now() - PAGELOAD_TIMESTAMP) < 10000);
+            req({
+                type:'ping'
+            });
         }
     }, 500);
 
     // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
     setTimeout(function() {
-        req(xurl(x));
+        req(x);
     }, 5);
 
+    // Send links
     setTimeout(function(){
-        var msg = {
-            links: util.fetchIfIframe(document),
+        req({
+            links: util.fetchIfIframe(),
             type: 'links'
-        };
-        req(xurl(msg));
+        });
     }, 100);
 
     // Send viewed message after 1 sec delay
     setExactTimeout(function() {
         if (!viewed) {
-            req(xurl({
+            req({
                 type: 'viewed'
-            }));
+            });
             viewed = true;
         }
     }, 1000, 100);
