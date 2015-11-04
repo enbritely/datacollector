@@ -30,7 +30,7 @@
 
       <div class="page-header">
         <h1 class="cover-heading">Gerbil Assembler</h1>
-        <p class="lead">This page helps You assemble the data collector script for the clients and lets You test it on this page. If the server backend is already up and runing with the given wsid, the requests are collected </p>
+        <p class="lead">This page helps You assemble the data collector script for the clients and lets You test it on this page. If the server backend is already up and runing with the given wsid, the requests are collected.</p>
         <h4>Gerbil URL</h4>
         <textarea name="gerbilurl" value="sdfasdf" style="width: 100%; height: 80px;" onclick="this.focus();this.select()" readonly="readonly"></textarea>
       </div>
@@ -39,8 +39,10 @@
         <div class="col-md-3">
           <h2 class="cover-heading">Gerbil Version</h2>
           <select name="version" size="4" style="width: 98%">
-          <option selected="selected" value="2.1.6">v2.1.6 (Latest)</option>
-            <option value="2.0.1">v2.0.1</option>
+            <option selected="selected" value="gerbil-2.1.6">gerbil-2.1.6 (Latest stable)</option>
+            <option value="gerbil-2.1.6.1">gerbil-2.1.6.1</option>
+            <option value="gerbil-2.0.1">gerbil-2.0.1</option>
+            <option value="ferret-2.2.2">ferret-2.2.2</option>
           </select>
           <hr>
           <h2 class="cover-heading">Macro Templates</h2>
@@ -152,7 +154,7 @@
         function assemble(){
           console.log($("input[name=wsid]").val());
           if ($("input[name=wsid]").val() != "") {
-            var RACKCDN_URL = "https://df3a34acb7eb1321d99f-2366b89f86f9049a8d564854bcebe54e.ssl.cf5.rackcdn.com/gerbil-";
+            var RACKCDN_URL = "https://df3a34acb7eb1321d99f-2366b89f86f9049a8d564854bcebe54e.ssl.cf5.rackcdn.com/";
             var gerbil_version = $("select[name=version]").val();
             var gerbil_url = RACKCDN_URL + gerbil_version + ".js?";
             var query_string = [];
