@@ -242,16 +242,6 @@
         now: function() {
             return new Date().getTime();
         },
-        parseQueryParams: function(url) {
-            var pa = url.split("?").pop().split("&");
-            // Split each key=value into array, the construct js object
-            var p = {};
-            for (var j = 0; j < pa.length; j++) {
-                var kv = pa[j].split("=");
-                p[kv[0]] = kv[1];
-            }
-            return p;
-        },
         // Returns an object from query string of the gerbil.js
         getQueryParams: function(script_url) {
             // Find all script tags for our collector if any
@@ -374,51 +364,6 @@
             };
         }
     };
-
-    var adtag = function(){
-        var adtagExtractors = {
-            "pubmatic": function (document) {
-                var scripts = document.getElementsByTagName("script");
-                for (var i = 0; i < scripts.length; i++) {
-                    if (scripts[i].src.indexOf("pubId=") > -1) {
-                        var params = util.parseQueryParams(scripts[i].src);
-                        return {
-                                siteid: params.siteId,
-                                adid: params.adId,
-                                banw: params.kadwidth,
-                                banh: params.kadheight,
-                                pageurl: params.pageURL,
-                                inif: params.inIframe,
-                                adpage: params.kadpageurl,
-                                visib: params.operId,
-                                adpos: params.adPosition,
-                        };
-                    }
-                }
-                return {};
-            }
-        };
-        return {
-            adtagHeuristics: function(window) {
-                var scripts = document.getElementsByTagName("script");
-                for (var i = 0; i < scripts.length; i++) {
-                    if (scripts[i].src.indexOf("showads.pubmatic.com/AdServer/AdServerServlet") > -1) {
-                        return "pubmatic";
-                    }
-                }
-                return "";
-            },
-            get: function(document, window) {
-                var heuristics = this.adtagHeuristics(window);
-                if(heuristics !== "" && heuristics !== undefined) {
-                    return adtagExtractors[heuristics](document);
-                } else {
-                    return {};
-                }
-            }
-        };
-    }();
-
     // Initialize constants
     var SCRIPT_VERSION = 211;
     var PAGELOAD_TIMESTAMP = util.now();
@@ -436,6 +381,7 @@
     // TODO: environment building
     var enviroment = window._enbrtly_ || {};
     enviroment.wsid = enviroment.wsid || params.wsid;
+
     if (enviroment.wsid === undefined) {
         throw('No WSID. Aborting.');
     }
@@ -448,7 +394,7 @@
     // var params_collector = params.collector && decodeURIComponent(params.collector);
 
     var LOGGER_URL = enviroment.collector || default_collector;
-    var urlSid = util.getURLSid(location);
+    var urlSid = util.getURLSid(location)
 
     // TODO: try-catch connection error, and abort if host is not reachable
 
@@ -495,15 +441,8 @@
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
         lang: navigator.language,
-        at_heur: adtag.adtagHeuristics(window),
         type: 'ready'
     };
-   
-    var adtagFetched = adtag.get(document, window);
-    for (var k in adtagFetched){
-        x['at_'+k] = adtagFetched[k];
-    }
-
 
     // Makes a CORS AJAX request to logging server
     var req = function(url) {
