@@ -365,7 +365,7 @@
         adid: enviroment.adid, // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
-        abfound: adboxFound,
+        adboxfound: adboxFound,
         lang: navigator.language,
         dw: docdim.width,
         dh: docdim.height,
@@ -374,7 +374,7 @@
         bh: body.clientHeight, // Read-only property from the body element's height (int)
         bw: body.clientWidth, // Read-only property from the body element's width   (int)
         iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
-        ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
+        ih: w.innerHeight || document.documentElement.clientHeight, // Most unrelieable writeable height property (int)
         avw: screen.availWidth, // Available screen width in pixels (int)
         avh: screen.availHeight, // Available screen height in pixels (int)
         sh: screen.height, // Height of screen in pixels (int)
