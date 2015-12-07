@@ -176,8 +176,8 @@
         },
         // Cookie handling functionality
         cookie: {
-          prefix: '__nbrtl-',
-          set: function(name, value, days) {
+            prefix: '__nbrtl-',
+            set: function(name, value, days) {
                 var expires;
                 if (days) {
                     var date = new Date();
@@ -189,8 +189,8 @@
                 }
               document.cookie = this.prefix + name + "=" + value + expires + "; path=/";
               return value;
-          },
-          get: function (name) {
+            },
+            get: function (name) {
               var nameEQ = this.prefix + name + "=";
               var ca = document.cookie.split(';');
               for (var i = 0; i < ca.length; i++) {
@@ -199,7 +199,7 @@
                   if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
               }
               return null;
-          }
+            }
         },
         // Returns a random string of length len
         randomString: function(len) {
@@ -289,28 +289,18 @@
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
 
-    var usecookie = false || params.usecookie;
-    var default_iid, default_sid;
+    // Setting up default sid if it is omitted from params
+    var default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+    var default_iid = util.randomString(16);
+    console.log("Default sid: ", default_sid);
+    console.log("Default iid: ", default_iid);
 
     // TODO: default adbox creation if not found
     var ADBOX_ID = params.adboxid || params.sid || null;
     var adboxFound = +(document.getElementById(ADBOX_ID) !== null);
     console.log(ADBOX_ID, "foundAdbox:", adboxFound);
 
-    if (usecookie === "0") {
-       default_sid = util.randomString(16);
-       default_iid = default_sid;
-    }
-    else {
-       default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-       default_iid = util.randomString(16);
-    }
-
-    console.log("Default sid: ", default_sid);
-    console.log("Default iid: ", default_iid);
-
     // Initialize enviroment
-    // TODO: environment building
     var enviroment = window._enbrtly_ || {};
     enviroment.wsid = enviroment.wsid || params.wsid;
 
@@ -320,31 +310,29 @@
 
     var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
 
-    // TODO: add params collector support in request URL
-    // var params_collector = params.collector && decodeURIComponent(params.collector);
-
     var LOGGER_URL = enviroment.collector || default_collector;
     var urlSid = util.getURLSid(location);
 
     // TODO: try-catch connection error, and abort if host is not reachable
 
-    enviroment.sid  = urlSid || enviroment.sid || params.n || params.sid || default_sid;
-    enviroment.iid  = enviroment.iid    || params.n    || params.iid         || default_iid;
-    enviroment.pid  = enviroment.pid    || params.esid || params.pid         || 'NAN';
-    enviroment.purl = enviroment.purl   || params.s    || params.purl        || 'NAN';
-    enviroment.aid  = enviroment.aid    || params.eiad || params.aid         || 'NAN';
-    enviroment.adid = enviroment.adid   || params.eadv || params.adid        || 'NAN';
-    enviroment.zid  = enviroment.zid    || params.epid || params.zid         || 'NAN';
-    enviroment.cid  = enviroment.cid    || params.ebuy || params.cid         || 'NAN';
-    enviroment.curl = enviroment.curl   || params.eenv || params.curl        || 'NAN';
+    enviroment.sid  = urlSid || enviroment.sid  || params.n || params.sid || default_sid;
+    enviroment.iid  =           enviroment.iid  || params.n || params.iid || default_iid;
 
-    // var dims = util.documentDimensions();
+    enviroment.pid  = enviroment.pid    || params.esid || params.pid   || 'NAN';
+    enviroment.purl = enviroment.purl   || params.s    || params.purl  || 'NAN';
+    enviroment.aid  = enviroment.aid    || params.eiad || params.aid   || 'NAN';
+    enviroment.adid = enviroment.adid   || params.eadv || params.adid  || 'NAN';
+    enviroment.zid  = enviroment.zid    || params.epid || params.zid   || 'NAN';
+    enviroment.cid  = enviroment.cid    || params.ebuy || params.cid   || 'NAN';
+    enviroment.curl = enviroment.curl   || params.eenv || params.curl  || 'NAN';
     enviroment.banh = enviroment.banh   || params.banh || -1;
     enviroment.banw = enviroment.banw   || params.banw || -1;
 
     var body = document.getElementsByTagName('body')[0];
-
     var docdim = util.documentDimensions();
+
+    var tzoHours = (new Date()).getTimezoneOffset() / 60;
+
     var x = {
         ts0: PAGELOAD_TIMESTAMP, // pageload timestamp (int)
         gvr: SCRIPT_VERSION, // gerbil.js script version (int)
@@ -365,8 +353,10 @@
         adid: enviroment.adid, // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
+        eid: ADBOX_ID,
         adboxfound: adboxFound,
         lang: navigator.language,
+        tzo: tzoHours,
         dw: docdim.width,
         dh: docdim.height,
         eh: document.documentElement.clientHeight, // Read-only property: the root element's height (int)
@@ -389,7 +379,7 @@
         }
     }
 
-    // Makes a CORS AJAX request to logging server from an object
+    // Makes a CORS AJAX request to logging server with an object
     var req = function(obj) {
 
         var ts = util.now();
@@ -404,8 +394,6 @@
 
         if (obj.type != 'ping') { PING_INDEX = 0; }
 
-        // console.log(obj);
-
         var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
         // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
         // https://msdn.microsoft.com/en-us/library/ie/cc288060%28v=vs.85%29.aspx
@@ -414,28 +402,27 @@
             // for ie < 6 we don't send fucknot
             return false;
         }
-        var r;
         if (ie_version > 9) {
             // ie 10+ has standards compliant XMLHttpRequest, yaaay!
-            r = new XMLHttpRequest();
+            var r = new XMLHttpRequest();
         }
         if (ie_version === 8 || ie_version === 9) {
             // ie 8, 9 has microsoft specific XDomainRequest, booo!
-            r = new XDomainRequest();
+            var r = new XDomainRequest();
         }
         if (ie_version === 6 || ie_version === 7) {
             // ie 6, 7 has ActiveXObjects!
-            r = new window.ActiveXObject('Microsoft.XMLHTTP');
+            var r = new window.ActiveXObject('Microsoft.XMLHTTP');
         }
         if (ie_version === 0) {
             // if it is not ie, it just works
-            r = new XMLHttpRequest();
+            var r = new XMLHttpRequest();
         }
         r.open('GET', url, true);
         r.send();
         r = null;
         // console.log(obj['type']);
-        console.log(obj);
+        // console.log(obj);
         return false;
     };
 
@@ -462,18 +449,17 @@
     };
 
     // Mouse event logging
-    var co = []; // Segment coordinate Array
+    var mousemoveCoordinatesBuffer = []; // Segment coordinate Array
     var mouseOverBuffer = []; // Mouseover segment coordinate Array
-    var ps = '';
+    var prevMouseMove = '';
     var prevMouseOver = '';
-    var pageX, pageY; // pageXY coordinates
     var viewed = false; // Viewed flag
     var inad = 0;
     var handleMouseEvents = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
         inad = ((evt.target.id == ADBOX_ID)+0) || 0;
-        pageX = evt.pageX; // pageX is evt.pageX if defined
-        pageY = evt.pageY;
+        var pageX = evt.pageX;
+        var pageY = evt.pageY;
         if (pageX === undefined) {
             pageX = evt.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
             pageY = evt.clientY + document.body.scrollTop + document.documentElement.scrollTop;
@@ -484,8 +470,8 @@
         switch (evt.type){
             case 'mousemove':
                 s = util.segment(pageX, pageY, SEGMENTW);
-                if (s != ps) co.push(s);
-                ps = s;
+                if (s != prevMouseMove) mousemoveCoordinatesBuffer.push(s);
+                prevMouseMove = s;
                 break;
             case 'mouseover':
                 s = pageX+':'+pageY;
@@ -517,14 +503,14 @@
     var adbox_prev_corrected_proportion = -1.0;
     var ab_state = {
         adboxfound: adboxFound,
-        cp0:0,
-        cp0_50:0,
-        cp50_100:0,
-        cp100:0,
-        iabview:0,
-        inad:0,
-        cpview:0,
-        pview:0,
+        cp0: 0,
+        cp0_50: 0,
+        cp50_100: 0,
+        cp100: 0,
+        iabview: 0,
+        inad: 0,
+        cpview: 0,
+        pview: 0,
         eid: 'NONE',
         overlap: 0,
         pixview: 0,
@@ -535,9 +521,9 @@
         rl: 0,
         type: 'adchange'
     };
+
     var resized = false;
     var scrolled = false;
-    var adbox_changed = false;
 
     // Handle window events
     var handleWindowEvents = function(evt) {
@@ -621,17 +607,15 @@
 
     setInterval(function() {
 
-        var obj = {
-            type:'heartbeat'
-        };
+        var obj = { type:'heartbeat' };
         var changed = false;
 
-        if (co.length > 0) {
-            obj.co = co.join('|');
-            obj.co_heartbeat = co.length;
-            co = [];
+        if (mousemoveCoordinatesBuffer.length > 0) {
+            obj.mousemove_coords = mousemoveCoordinatesBuffer.join('|');
+            obj.mousemove_heartbeat = mousemoveCoordinatesBuffer.length;
+            mousemoveCoordinatesBuffer = [];
             changed = true;
-            console.log('Added mousemove coords', obj.co_heartbeat);
+            console.log('Mousemove', obj.mousemove_heartbeat);
         }
 
         if (mouseOverBuffer.length > 0) {
@@ -639,7 +623,7 @@
             obj.mouseover_heartbeat = mouseOverBuffer.length;
             mouseOverBuffer = [];
             changed = true;
-            console.log('Added mouseover coords', obj.mouseover_heartbeat);
+            console.log('Mouseover', obj.mouseover_heartbeat);
         }
 
         if (touchStartSegments.length > 0) {
@@ -647,7 +631,7 @@
             obj.touch_heartbeat = touchStartSegments.length;
             touchStartSegments = [];
             changed = true;
-            console.log('Added touch coords', obj.touch_heartbeat);
+            console.log('Touched', obj.touch_heartbeat);
         }
 
         if (resized) {
@@ -658,7 +642,7 @@
             obj.bh = body.clientHeight; // Read-only property from the body element's height (int)
             obj.bw = body.clientWidth; // Read-only property from the body element's width   (int)
             obj.iw = w.innerWidth || document.documentElement.clientWidth; // Most unrelieable writeable width property  (int)
-            obj.ih = w.innerHeight || document.documentElement.clientWidth; // Most unrelieable writeable height property (int)
+            obj.ih = w.innerHeight || document.documentElement.clientHeight; // Most unrelieable writeable height property (int)
             obj.avw = screen.availWidth; // Available screen width in pixels (int)
             obj.avh = screen.availHeight; // Available screen height in pixels (int)
             obj.sh = screen.height; // Height of screen in pixels (int)
@@ -666,7 +650,7 @@
             obj.resize_heartbeat = 1;
             changed = true;
             resized = false;
-            console.log('Added resize dimensions');
+            console.log('Resized');
         }
 
         if (scrolled) {
@@ -675,7 +659,7 @@
             obj.scroll_heartbeat = 1;
             changed = true;
             scrolled = false;
-            console.log('Added scrolled dimensions');
+            console.log('Scrolled');
         }
 
         if (changed) {
@@ -695,15 +679,15 @@
             handleWindowEvents(evt);
         }
 
-        //console.log('ADBOX state', ab_state.cp0, ab_state.cp0_50, ab_state.cp50_100, ab_state.cp100, ab_state.inad, ab_state.iabview, ab_state.cpview, ab_state.pview);
-
     }, 500);
 
     // Periodically send segment updates for viewability
-    var sfreq = 10;
     var pt = PAGELOAD_TIMESTAMP;
     var abto = setInterval(function(){
+
         var adbox_curr_state = getAdboxState(ADBOX_ID);
+        if (adboxFound===0) return;
+
         var t = util.now();
         var dt = t - pt;
         pt = t;
@@ -715,7 +699,6 @@
         ab_state.inad += inad*dt;
         ab_state.iabview = (ab_state.cp50_100 >= 1000.0)+0;
 
-        // Adbox state akkor érdekes, ha változott
         ab_state.adboxfound = adboxFound;
         ab_state.cpview = adbox_curr_state.cpview;
         ab_state.pview = adbox_curr_state.pview;
@@ -727,12 +710,13 @@
         ab_state.rb = adbox_curr_state.rb;
         ab_state.rr = adbox_curr_state.rr;
         ab_state.rl = adbox_curr_state.rl;
-        // console.log(adbox_curr_state.cpview != adbox_prev_corrected_proportion);
+
         if (adbox_curr_state.cpview != adbox_prev_corrected_proportion) {
             adbox_prev_corrected_proportion = adbox_curr_state.cpview;
             req(ab_state);
         }
-    }, 1000/sfreq);
+
+    }, 100);
 
 
     // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
