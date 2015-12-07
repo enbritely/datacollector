@@ -315,25 +315,43 @@
     var AdBox = function(adboxid){
 
         var adboxElement = document.getElementById(adboxid);
-        var hasAdbox = function(){
-            return adboxElement !== null;
-        }
+        var hasAdbox = function(){ return adboxElement !== null; };
         var adboxFound = 0;
 
         var getAdboxState = function(){
             if (hasAdbox()) {
                 adboxFound = 1;
-                return elementState(el);
+                return elementState(adboxElement);
             }
             else {
                 adboxFound = 0;
-                return {
-                    propview: -1.0
-                };
+                return false;
             }
         };
 
-        var hasElementFromPoint = function() { return document.elementFromPoint !== undefined; },
+        var state = {
+            pt: util.now(),
+            ntick: 0,
+            adboxfound: function(){ return hasAdbox(adboxid)+0; },
+            cp0: 0,
+            cp0_50: 0,
+            cp50_100: 0,
+            cp100: 0,
+            iabview: 0,
+            inad: 0,
+            cpview: 0,
+            pview: 0,
+            adboxid: adboxid,
+            overlap: 0,
+            pixview: 0,
+            pixad: 0,
+            rt: 0,
+            rb: 0,
+            rr: 0,
+            rl: 0,
+        };
+
+        var hasElementFromPoint = function() { return document.elementFromPoint !== undefined; };
         // http://jsfiddle.net/uthyZ/
         // http://math.stackexchange.com/questions/99565/simplest-way-to-calculate-the-intersect-area-of-two-rectangles
         var checkoverlay = function(rt,rl,w,h) {
@@ -394,31 +412,9 @@
                 rl: rect.left,
             };
 
-        },
-
-        // Periodically measure updates for ad viewability
-        var state = {
-            ps: util.now();
-            adboxfound: hasAdbox(adboxid)+0,
-            cp0: 0,
-            cp0_50: 0,
-            cp50_100: 0,
-            cp100: 0,
-            iabview: 0,
-            inad: 0,
-            cpview: 0,
-            pview: 0,
-            eid: adboxid,
-            overlap: 0,
-            pixview: 0,
-            pixad: 0,
-            rt: 0,
-            rb: 0,
-            rr: 0,
-            rl: 0,
         };
 
-        var update = function(){
+        var tick = function(){
 
             var currentState = getAdboxState();
             if (!hasAdbox) {
@@ -427,10 +423,9 @@
             else {
                 var t = util.now();
                 var dt = t - state.pt;
-                stat.pt = t;
+                state.pt = t;
 
-                var sendUpdate = state.cpview != currentState.cpview
-
+                state.ntick += 1;
                 state.cp0 += (currentState.cpview === 0.0)*dt;
                 state.cp0_50 += ((currentState.cpview > 0.0) & (currentState.cpview < 0.5))*dt;
                 state.cp50_100 += (currentState.cpview >= 0.5)*dt;
@@ -438,7 +433,7 @@
                 state.inad += inad*dt;
                 state.iabview = (state.cp50_100 >= 1000.0)+0;
 
-                state.adboxfound = adboxFound;
+                state.adboxfound = state.adboxfound;
                 state.cpview = currentState.cpview;
                 state.pview = currentState.pview;
                 state.overlap = currentState.overlap;
@@ -448,13 +443,16 @@
                 state.rb = currentState.rb;
                 state.rr = currentState.rr;
                 state.rl = currentState.rl;
+                // console.log(state);
+                return true;
 
-                if (sendUpdate) {
-                    util.req(ab_state, env);
-                }
             }
 
         }; // 100-as delay
+        return {
+            tick: tick,
+            getState: function() {return state;}
+        };
     };
 
     var Buffer = function(){
@@ -508,8 +506,8 @@
     }
 
     // Init colector
-    // var default_collector = (document.location.protocol === "https:") ? "https://dc-"+env.wsid+".enbrite.ly" : "http://dc-"+env.wsid+".enbrite.ly";
-    var default_collector = "https://dc-"+env.wsid+".enbrite.ly";
+    var default_collector = (document.location.protocol === "https:") ? "https://dc-"+env.wsid+".enbrite.ly" : "http://dc-"+env.wsid+".enbrite.ly";
+    // var default_collector = "https://dc-"+env.wsid+".enbrite.ly";
     env.collector = env.collector || default_collector;
 
     // TODO: try-catch connection error, and abort if host is not reachable
@@ -570,12 +568,9 @@
     // Init adbox if present in params
     // TODO: default adbox creation if not found
     env.adboxid = params.adboxid || params.sid || null;
-    var adboxState = new AdboxState(env.adboxid);
+    var adbox = new AdBox(env.adboxid);
 
-    env.adboxFound = +(document.getElementById(env.adboxid) !== null);
-
-    console.log("Adbox ID:", env.adboxid);
-    console.log("Adbox found:", env.adboxFound);
+    console.log("Adbox:", adbox.getstate);
 
     env.body = document.getElementsByTagName('body')[0];
     env.docElem = document.documentElement;
@@ -697,15 +692,17 @@
 
     var windowEventHandler = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
-        var p = { type:evt.type };
-        p.adboxfound = env.adboxFound;
-        p.cp0 = ab_state.cp0;
-        p.cp0_50 = ab_state.cp0_50;
-        p.cp50_100 = ab_state.cp50_100;
-        p.cp100 = ab_state.cp100;
-        p.iabview = ab_state.iabview;
-        p.inad = ab_state.inad;
-        util.req(p, env);
+        var obj = { type:evt.type };
+        var adboxState = adbox.getState();
+        obj.adboxfound = adboxState.adboxfound;
+        obj.cp0 = adboxState.cp0;
+        obj.cp0_50 = adboxState.cp0_50;
+        obj.cp50_100 = adboxState.cp50_100;
+        obj.cp100 = adboxState.cp100;
+        obj.iabview = adboxState.iabview;
+        obj.inad = adboxState.inad;
+        obj.ntick = adboxState.ntick;
+        util.req(obj, env);
     };
 
     var scrollEventHandler = function(evt) {
@@ -806,12 +803,14 @@
 
         if (changed) {
             obj.adboxfound = env.adboxFound;
+            var adboxState = adbox.getState();
             obj.cp0 = adboxState.cp0;
             obj.cp0_50 = adboxState.cp0_50;
             obj.cp50_100 = adboxState.cp50_100;
             obj.cp100 = adboxState.cp100;
             obj.iabview = adboxState.iabview;
             obj.inad = adboxState.inad;
+            obj.ntick = adboxState.ntick;
             util.req(obj, env);
         }
 
@@ -822,6 +821,8 @@
         }
 
     }, 500);
+
+    setInterval(adbox.tick, 1000);
 
     // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
     setTimeout(function() {
