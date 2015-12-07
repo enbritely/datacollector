@@ -370,7 +370,7 @@
         throw('No WSID. Aborting.');
     }
 
-    var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
+    var default_collector = "https://dc-"+enviroment.wsid+".enbrite.ly";
     console.log("Default collector:", default_collector);
 
     // TODO: add params collector support in request URL
