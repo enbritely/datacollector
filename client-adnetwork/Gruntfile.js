@@ -23,19 +23,19 @@ module.exports = function(grunt) {
         },
         rename: {
             js_gz: {
-                src: 'dist/ferret.js.gz',
-                dest: 'dist/ferret-<%= pkg.version %>.js.gz'
+                src: 'dist/marten.js.gz',
+                dest: 'dist/marten-<%= pkg.version %>.js.gz'
             },
             js: {
-                src: 'dist/ferret.js',
-                dest: 'dist/ferret-<%= pkg.version %>.js'
+                src: 'dist/marten.js',
+                dest: 'dist/marten-<%= pkg.version %>.js'
             }
         },
         uglify: {
             options: {
                 report: 'min',
                 squeeze: {
-                    dead_code: true
+                    dead_code: true,
                 },
                 mangle: true,
             },

@@ -3,6 +3,7 @@
 (function(undefined) {
     "use strict";
     // Base64 encoding ONLY
+
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
         encode: function(e) {
@@ -53,7 +54,7 @@
     // "object"!=typeof JSON&&(JSON={}),function(){"use strict";function f(t){return 10>t?"0"+t:t}function this_value(){return this.valueOf()}function quote(t){return rx_escapable.lastIndex=0,rx_escapable.test(t)?'"'+t.replace(rx_escapable,function(t){var e=meta[t];return"string"==typeof e?e:"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+t+'"'}function str(t,e){var r,n,o,u,f,a=gap,i=e[t];switch(i&&"object"==typeof i&&"function"==typeof i.toJSON&&(i=i.toJSON(t)),"function"==typeof rep&&(i=rep.call(e,t,i)),typeof i){case"string":return quote(i);case"number":return isFinite(i)?i+"":"null";case"boolean":case"null":return i+"";case"object":if(!i)return"null";if(gap+=indent,f=[],"[object Array]"===Object.prototype.toString.apply(i)){for(u=i.length,r=0;u>r;r+=1)f[r]=str(r,i)||"null";return o=0===f.length?"[]":gap?"[\n"+gap+f.join(",\n"+gap)+"\n"+a+"]":"["+f.join(",")+"]",gap=a,o}if(rep&&"object"==typeof rep)for(u=rep.length,r=0;u>r;r+=1)"string"==typeof rep[r]&&(n=rep[r],o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));else for(n in i)Object.prototype.hasOwnProperty.call(i,n)&&(o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));return o=0===f.length?"{}":gap?"{\n"+gap+f.join(",\n"+gap)+"\n"+a+"}":"{"+f.join(",")+"}",gap=a,o}}var rx_one=/^[\],:{}\s]*$/,rx_two=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,rx_three=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,rx_four=/(?:^|:|,)(?:\s*\[)+/g,rx_escapable=/[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,rx_dangerous=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;"function"!=typeof Date.prototype.toJSON&&(Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},Boolean.prototype.toJSON=this_value,Number.prototype.toJSON=this_value,String.prototype.toJSON=this_value);var gap,indent,meta,rep;"function"!=typeof JSON.stringify&&(meta={"\b":"\\b","   ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},JSON.stringify=function(t,e,r){var n;if(gap="",indent="","number"==typeof r)for(n=0;r>n;n+=1)indent+=" ";else"string"==typeof r&&(indent=r);if(rep=e,e&&"function"!=typeof e&&("object"!=typeof e||"number"!=typeof e.length))throw Error("JSON.stringify");return str("",{"":t})}),"function"!=typeof JSON.parse&&(JSON.parse=function(text,reviver){function walk(t,e){var r,n,o=t[e];if(o&&"object"==typeof o)for(r in o)Object.prototype.hasOwnProperty.call(o,r)&&(n=walk(o,r),void 0!==n?o[r]=n:delete o[r]);return reviver.call(t,e,o)}var j;if(text+="",rx_dangerous.lastIndex=0,rx_dangerous.test(text)&&(text=text.replace(rx_dangerous,function(t){return"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})),rx_one.test(text.replace(rx_two,"@").replace(rx_three,"]").replace(rx_four,"")))return j=eval("("+text+")"),"function"==typeof reviver?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}(); // jshint ignore:line
     "object"!=typeof JSON&&(JSON={}),function(){function f(t){return 10>t?"0"+t:t}function this_value(){return this.valueOf()}function quote(t){return rx_escapable.lastIndex=0,rx_escapable.test(t)?'"'+t.replace(rx_escapable,function(t){var e=meta[t];return"string"==typeof e?e:"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+t+'"'}function str(t,e){var r,n,o,u,f,a=gap,i=e[t];switch(i&&"object"==typeof i&&"function"==typeof i.toJSON&&(i=i.toJSON(t)),"function"==typeof rep&&(i=rep.call(e,t,i)),typeof i){case"string":return quote(i);case"number":return isFinite(i)?i+"":"null";case"boolean":case"null":return i+"";case"object":if(!i)return"null";if(gap+=indent,f=[],"[object Array]"===Object.prototype.toString.apply(i)){for(u=i.length,r=0;u>r;r+=1)f[r]=str(r,i)||"null";return o=0===f.length?"[]":gap?"[\n"+gap+f.join(",\n"+gap)+"\n"+a+"]":"["+f.join(",")+"]",gap=a,o}if(rep&&"object"==typeof rep)for(u=rep.length,r=0;u>r;r+=1)"string"==typeof rep[r]&&(n=rep[r],o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));else for(n in i)Object.prototype.hasOwnProperty.call(i,n)&&(o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));return o=0===f.length?"{}":gap?"{\n"+gap+f.join(",\n"+gap)+"\n"+a+"}":"{"+f.join(",")+"}",gap=a,o}}var rx_one=/^[\],:{}\s]*$/,rx_two=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,rx_three=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,rx_four=/(?:^|:|,)(?:\s*\[)+/g,rx_escapable=/[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,rx_dangerous=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;"function"!=typeof Date.prototype.toJSON&&(Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},Boolean.prototype.toJSON=this_value,Number.prototype.toJSON=this_value,String.prototype.toJSON=this_value);var gap,indent,meta,rep;"function"!=typeof JSON.stringify&&(meta={"\b":"\\b","   ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},JSON.stringify=function(t,e,r){var n;if(gap="",indent="","number"==typeof r)for(n=0;r>n;n+=1)indent+=" ";else"string"==typeof r&&(indent=r);if(rep=e,e&&"function"!=typeof e&&("object"!=typeof e||"number"!=typeof e.length))throw Error("JSON.stringify");return str("",{"":t})}),"function"!=typeof JSON.parse&&(JSON.parse=function(text,reviver){function walk(t,e){var r,n,o=t[e];if(o&&"object"==typeof o)for(r in o)Object.prototype.hasOwnProperty.call(o,r)&&(n=walk(o,r),void 0!==n?o[r]=n:delete o[r]);return reviver.call(t,e,o)}var j;if(text+="",rx_dangerous.lastIndex=0,rx_dangerous.test(text)&&(text=text.replace(rx_dangerous,function(t){return"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})),rx_one.test(text.replace(rx_two,"@").replace(rx_three,"]").replace(rx_four,"")))return j=eval("("+text+")"),"function"==typeof reviver?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}(); // jshint ignore:line
 
-    // TODO: globals checck or return
+    // TODO: globals check or return
 
     var util = {
         // Makes a CORS AJAX request to logging server with an object
@@ -68,8 +69,6 @@
             obj.iid = env.iid;
 
             var url = env.collector + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
-
-            if (obj.type != 'ping') { PING_INDEX = 0; }
 
             var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
             // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
@@ -96,11 +95,14 @@
                 // if it is not ie, it just works
                 r = new XMLHttpRequest();
             }
+
+            // async request
             r.open('GET', url, true);
-            r.send();
+
+            r.send(null);
             r = null;
-            // console.log(obj['type']);
-            console.log(obj);
+            console.log(obj.type);
+            // console.log(obj);
             return false;
         },
         getURLSid: function() {
@@ -174,7 +176,7 @@
             return new Date().getTime();
         },
         // Returns an object from query string of the gerbil.js
-        getQueryParams: function(script_url) {
+        getScriptParameters: function(script_url) {
             // Find all script tags for our collector if any
             var scripts = document.getElementsByTagName("script");
             // Look through them trying to find ourselves
@@ -339,6 +341,7 @@
             cp100: 0,
             iabview: 0,
             inad: 0,
+            overadbox: false,
             cpview: 0,
             pview: 0,
             adboxid: adboxid,
@@ -414,23 +417,33 @@
 
         };
 
+        if (hasAdbox()) {
+            util.ael(adboxElement, 'mouseover', function(){
+                state.overadbox = true;
+                console.log(state.overadbox);
+                console.log(state.inad);
+            });
+            util.ael(adboxElement, 'mouseout', function(){
+                state.overadbox = false;
+                console.log(state.overadbox);
+                console.log(state.inad);
+            });
+        }
+
         var tick = function(){
 
             var currentState = getAdboxState();
-            if (!hasAdbox) {
-                return false;
-            }
-            else {
+            if (hasAdbox) {
                 var t = util.now();
                 var dt = t - state.pt;
                 state.pt = t;
 
                 state.ntick += 1;
-                state.cp0 += (currentState.cpview === 0.0)*dt;
-                state.cp0_50 += ((currentState.cpview > 0.0) & (currentState.cpview < 0.5))*dt;
-                state.cp50_100 += (currentState.cpview >= 0.5)*dt;
-                state.cp100 += (currentState.cpview == 1.0)*dt;
-                state.inad += inad*dt;
+                state.cp0 += (currentState.cpview === 0.0) * dt;
+                state.cp0_50 += ((currentState.cpview > 0.0) & (currentState.cpview < 0.5)) * dt;
+                state.cp50_100 += (currentState.cpview >= 0.5) * dt;
+                state.cp100 += (currentState.cpview == 1.0) * dt;
+                state.inad += +(state.overadbox) * dt;
                 state.iabview = (state.cp50_100 >= 1000.0)+0;
 
                 state.adboxfound = state.adboxfound;
@@ -443,10 +456,10 @@
                 state.rb = currentState.rb;
                 state.rr = currentState.rr;
                 state.rl = currentState.rl;
-                // console.log(state);
-                return true;
-
             }
+            // console.log('adbox state update', util.now());
+            var timeout = setTimeout(tick, 100);
+
 
         }; // 100-as delay
         return {
@@ -454,6 +467,75 @@
             getState: function() {return state;}
         };
     };
+
+    var Performance = (function() {
+
+        // Init performance if exists in browser
+        var _wp = window.performance || {},
+            _p = _wp.timing || {},
+            _m = _wp.memory || {},
+            _n = _wp.navigation || {},
+            p = {};
+
+        p.type = 'performance';
+        p.jsHeapSizeLimit = _m.jsHeapSizeLimit || -1;
+        p.totalJSHeapSize = _m.totalJSHeapSize || -1;
+        p.usedJSHeapSize = _m.usedJSHeapSize || -1;
+
+        p.redirectCount = _n.redirectCount || -1;
+
+        p.connectEnd = _p.connectEnd || -1;
+        p.connectStart = _p.connectStart || -1;
+        p.domComplete = _p.domComplete || -1;
+        p.domContentLoadedEventEnd = _p.domContentLoadedEventEnd || -1;
+        p.domContentLoadedEventStart = _p.domContentLoadedEventStart || -1;
+        p.domInteractive = _p.domInteractive || -1;
+        p.domLoading = _p.domLoading || -1;
+        p.domainLookupEnd = _p.domainLookupEnd || -1;
+        p.domainLookupStart = _p.domainLookupStart || -1;
+        p.fetchStart = _p.fetchStart || -1;
+        p.loadEventEnd = _p.loadEventEnd || -1;
+        p.loadEventStart = _p.loadEventStart || -1;
+        p.navigationStart = _p.navigationStart || -1;
+        p.redirectEnd = _p.redirectEnd || -1;
+        p.redirectStart = _p.redirectStart || -1;
+        p.requestStart = _p.requestStart || -1;
+        p.responseEnd = _p.responseEnd || -1;
+        p.responseStart = _p.responseStart || -1;
+        p.secureConnectionStart = _p.secureConnectionStart || -1;
+        p.unloadEventEnd = _p.unloadEventEnd || -1;
+        p.unloadEventStart = _p.unloadEventStart || -1;
+
+        return {
+            get: function() {return p;}
+        };
+
+    })();
+
+    var Ping = (function(){
+        var pingIntervals = [1,5,10,30,60,120,300];
+        var k = 0;
+        var timeout = null;
+        var tick = function(){
+            if (k < pingIntervals.length) {
+                var evt = { type:'ping' };
+                windowEventHandler(evt);
+                k += 1;
+                // console.log("ping", k);
+                timeout = setTimeout(tick, pingIntervals[k] * 1000);
+            }
+        };
+        var reset = function(){
+            k = 0;
+            clearTimeout(timeout);
+            timeout = setTimeout(tick, pingIntervals[k] * 1000);
+            // console.log("reset ping");
+        };
+        return {
+            tick: tick,
+            reset: reset
+        };
+    })();
 
     var Buffer = function(){
         var list = [];
@@ -492,12 +574,10 @@
     // TODO generate random hash for name
     env.scriptName = "marten";
 
-    var PING_INDEX = 0;
-
     console.log("GERBIL v-"+env.scriptVersion);
 
     // Extract parameters from script
-    var params = util.getQueryParams(env.scriptName);
+    var params = util.getScriptParameters(env.scriptName);
 
     // Init wsid, abort if not present
     env.wsid = env.wsid || params.wsid;
@@ -530,52 +610,15 @@
     env.banh = env.banh   || params.banh || 'NAN';
     env.banw = env.banw   || params.banw || 'NAN';
 
-    // Init performance if exists in browser
-    var _wp = window.performance || {};
-    var _p = _wp.timing || {};
-    var _m = _wp.memory || {};
-    var _n = _wp.navigation || {};
-
-    env.jsHeapSizeLimit = _m.jsHeapSizeLi;
-    env.jsHeapSizeLimit = _m.jsHeapSizeLimit;
-    env.totalJSHeapSize = _m.totalJSHeapSize;
-    env.usedJSHeapSize = _m.usedJSHeapSize;
-
-    env.redirectCount = _n.redirectCount;
-
-    env.connectEnd = _p.connectEnd;
-    env.connectStart = _p.connectStart;
-    env.domComplete = _p.domComplete;
-    env.domContentLoadedEventEnd = _p.domContentLoadedEventEnd;
-    env.domContentLoadedEventStart = _p.domContentLoadedEventStart;
-    env.domInteractive = _p.domInteractive;
-    env.domLoading = _p.domLoading;
-    env.domainLookupEnd = _p.domainLookupEnd;
-    env.domainLookupStart = _p.domainLookupStart;
-    env.fetchStart = _p.fetchStart;
-    env.loadEventEnd = _p.loadEventEnd;
-    env.loadEventStart = _p.loadEventStart;
-    env.navigationStart = _p.navigationStart;
-    env.redirectEnd = _p.redirectEnd;
-    env.redirectStart = _p.redirectStart;
-    env.requestStart = _p.requestStart;
-    env.responseEnd = _p.responseEnd;
-    env.responseStart = _p.responseStart;
-    env.secureConnectionStart = _p.secureConnectionStart;
-    env.unloadEventEnd = _p.unloadEventEnd;
-    env.unloadEventStart = _p.unloadEventStart;
-
     // Init adbox if present in params
     // TODO: default adbox creation if not found
     env.adboxid = params.adboxid || params.sid || null;
     var adbox = new AdBox(env.adboxid);
 
-    console.log("Adbox:", adbox.getstate);
+    console.log("Adbox:", adbox.getState());
 
     env.body = document.getElementsByTagName('body')[0];
     env.docElem = document.documentElement;
-
-    // TODO: dynamic document width updates
 
     env.inIFrame = util.inIframe();
     env.ua = navigator.userAgent; // User agent string (str)
@@ -588,6 +631,8 @@
 
     env.plat = navigator.platform; // platform of the browser (str)
     env.tzoHours = (new Date()).getTimezoneOffset() / 60;
+
+    console.log(env);
 
     var x = {
         ts0:            env.pageload_timestamp, // pageload timestamp (int)
@@ -649,12 +694,8 @@
         mouseoverBuffer = new Buffer(),
         touchBuffer = new Buffer();
 
-    var viewed = false; // Viewed flag
-    var inad = 0;
-
     var mouseEventHandler = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
-        inad = ((evt.target.id == env.adboxid)+0) || 0;
         var pageX = evt.pageX;
         var pageY = evt.pageY;
         if (pageX === undefined) {
@@ -680,15 +721,12 @@
     };
 
     var touchEventHandler = function(evt) {
-        inad = ((evt.target.id == env.adboxid)+0) || 0;
         var touches = evt.changedTouches;
         var px = Math.round(touches[0].pageX);
         var py = Math.round(touches[0].pageY);
         var s = px+':'+py;
         touchBuffer.push(s);
     };
-
-    var adbox_prev_corrected_proportion = -1.0;
 
     var windowEventHandler = function(evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
@@ -702,6 +740,10 @@
         obj.iabview = adboxState.iabview;
         obj.inad = adboxState.inad;
         obj.ntick = adboxState.ntick;
+        obj.rt = adboxState.rt;
+        obj.rb = adboxState.rb;
+        obj.rl = adboxState.rl;
+        obj.rr = adboxState.rr;
         util.req(obj, env);
     };
 
@@ -735,17 +777,6 @@
     util.ael(window, 'load',         windowEventHandler);
     util.ael(window, 'unload',       windowEventHandler);
 
-    // http://snipplr.com/view/69951/
-    var setExactTimeout = function(callback, duration, resolution) {
-        var start = (new Date()).getTime();
-        var timeout = setInterval(function(){
-            if ((new Date()).getTime() - start > duration) {
-                callback();
-                clearInterval(timeout);
-            }
-        }, resolution);
-        return timeout;
-    };
 
     setInterval(function() {
 
@@ -756,21 +787,18 @@
             obj.mousemove_heartbeat = mousemoveBuffer.length();
             obj.mousemove_coords = mousemoveBuffer.empty();
             changed = true;
-            console.log('Mousemove');
         }
 
         if (mouseoverBuffer.length() > 0) {
             obj.mouseover_heartbeat = mouseoverBuffer.length();
             obj.mouseover_coords = mouseoverBuffer.empty();
             changed = true;
-            console.log('Mouseover');
         }
 
         if (touchBuffer.length() > 0) {
             obj.touch_heartbeat = touchBuffer.length();
             obj.touch_coords = touchBuffer.empty();
             changed = true;
-            console.log('Touch');
         }
 
         if (DocumentDimensions.resized) {
@@ -798,7 +826,6 @@
             obj.scroll_heartbeat = 1;
             changed = true;
             ScrollState.scrolled = false;
-            console.log('Scrolled');
         }
 
         if (changed) {
@@ -811,23 +838,27 @@
             obj.iabview = adboxState.iabview;
             obj.inad = adboxState.inad;
             obj.ntick = adboxState.ntick;
+            obj.rt = adboxState.rt;
+            obj.rb = adboxState.rb;
+            obj.rl = adboxState.rl;
+            obj.rr = adboxState.rr;
             util.req(obj, env);
-        }
-
-        // Send periodical pings
-        if ( ((++PING_INDEX % 60) === 0) & ((util.now() - env.pageload_timestamp) < 5*60*1000)) {
-            var evt = { type:'ping' };
-            windowEventHandler(evt);
+            Ping.reset();
         }
 
     }, 500);
 
-    setInterval(adbox.tick, 1000);
+    adbox.tick();
+    Ping.tick();
 
     // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
     setTimeout(function() {
         util.req(x, env);
     }, 5);
+
+    setTimeout(function() {
+        util.req(Performance.get(), env);
+    }, 1000);
 
     // Send links
     if (params.getlinks==="1") {
@@ -838,15 +869,5 @@
             }, env);
         }, 100);
     }
-
-    // Send viewed message after 1 sec delay
-    setExactTimeout(function() {
-        if (!viewed) {
-            util.req({
-                type: 'viewed'
-            }, env);
-            viewed = true;
-        }
-    }, 1000, 100);
 
 }());
