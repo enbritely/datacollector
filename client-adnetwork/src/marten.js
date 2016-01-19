@@ -319,11 +319,46 @@
         var adboxElement = document.getElementById(adboxid);
         var hasAdbox = function(){ return adboxElement !== null; };
         var adboxFound = 0;
+        var timeout = null;
 
         var getAdboxState = function(){
             if (hasAdbox()) {
                 adboxFound = 1;
-                return elementState(adboxElement);
+                // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport/7557433#7557433
+                if (typeof jQuery === "function" && adboxElement instanceof jQuery) {
+                    adboxElement = adboxElement[0];
+                }
+                var rect = adboxElement.getBoundingClientRect(),
+                    width  = rect.bottom - rect.top,
+                    height = rect.right - rect.left,
+                    offTop = (window.innerHeight || document.documentElement.clientHeight) - rect.bottom,
+                    offTop2 = Math.min(rect.top, 0),
+                    offLeft = (window.innerWidth || document.documentElement.clientWidth) - rect.right,
+                    offLeft2 = Math.min(rect.left, 0),
+                    viewablePortionVertical = Math.min(Math.max(0, height + offTop), Math.max(0, height + offTop2)),
+                    viewablePortionHorizontal = Math.min(Math.max(0, width + offLeft), Math.max(0, width + offLeft2)),
+                    pixelsViewable = viewablePortionVertical * viewablePortionHorizontal,
+                    pixelsAd = width * height,
+                    proportion = (pixelsViewable / pixelsAd) || 0.0,
+                    corrected_proportion = proportion,
+                    overlapArea = 0;
+
+                if (proportion > 0.0 & hasElementFromPoint()) {
+                    overlapArea = checkoverlay(rect.top, rect.left, width, height);
+                    corrected_proportion = proportion * (pixelsAd - overlapArea) / pixelsAd;
+                }
+
+                return {
+                    pview: proportion,
+                    cpview: corrected_proportion,
+                    overlap: overlapArea,
+                    pixview: pixelsViewable,
+                    pixad: pixelsAd,
+                    rt: rect.top,
+                    rb: rect.bottom,
+                    rr: rect.right,
+                    rl: rect.left,
+                };
             }
             else {
                 adboxFound = 0;
@@ -335,6 +370,8 @@
             pt: util.now(),
             ntick: 0,
             adboxfound: function(){ return hasAdbox(adboxid)+0; },
+            sum_dt: 0,
+            mean_dt: 0,
             cp0: 0,
             cp0_50: 0,
             cp50_100: 0,
@@ -377,75 +414,32 @@
             }
             return 0;
         };
-        // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport/7557433#7557433
-        var elementState = function () {
-            if (typeof jQuery === "function" && adboxElement instanceof jQuery) {
-                adboxElement = adboxElement[0];
-            }
-
-            var rect = adboxElement.getBoundingClientRect(),
-                width  = rect.bottom - rect.top,
-                height = rect.right - rect.left,
-                offTop = (window.innerHeight || document.documentElement.clientHeight) - rect.bottom,
-                offTop2 = Math.min(rect.top, 0),
-                offLeft = (window.innerWidth || document.documentElement.clientWidth) - rect.right,
-                offLeft2 = Math.min(rect.left, 0),
-                viewablePortionVertical = Math.min(Math.max(0, height + offTop), Math.max(0, height + offTop2)),
-                viewablePortionHorizontal = Math.min(Math.max(0, width + offLeft), Math.max(0, width + offLeft2)),
-                pixelsViewable = viewablePortionVertical * viewablePortionHorizontal,
-                pixelsAd = width * height,
-                proportion = (pixelsViewable / pixelsAd) || 0.0,
-                corrected_proportion = proportion,
-                overlapArea = 0;
-
-            if (proportion > 0.0 & hasElementFromPoint()) {
-                overlapArea = checkoverlay(rect.top, rect.left, width, height);
-                corrected_proportion = proportion * (pixelsAd - overlapArea) / pixelsAd;
-            }
-
-            return {
-                pview: proportion,
-                cpview: corrected_proportion,
-                overlap: overlapArea,
-                pixview: pixelsViewable,
-                pixad: pixelsAd,
-                rt: rect.top,
-                rb: rect.bottom,
-                rr: rect.right,
-                rl: rect.left,
-            };
-
-        };
 
         if (hasAdbox()) {
             util.ael(adboxElement, 'mouseover', function(){
                 state.overadbox = true;
-                console.log(state.overadbox);
-                console.log(state.inad);
             });
             util.ael(adboxElement, 'mouseout', function(){
                 state.overadbox = false;
-                console.log(state.overadbox);
-                console.log(state.inad);
             });
+            console.log(state.overadbox), state.inad;
         }
 
         var tick = function(){
-
             var currentState = getAdboxState();
             if (hasAdbox) {
                 var t = util.now();
                 var dt = t - state.pt;
                 state.pt = t;
-
                 state.ntick += 1;
+                state.sum_dt += dt;
+                state.mean_dt = state.sum_dt / state.ntick;
                 state.cp0 += (currentState.cpview === 0.0) * dt;
                 state.cp0_50 += ((currentState.cpview > 0.0) & (currentState.cpview < 0.5)) * dt;
                 state.cp50_100 += (currentState.cpview >= 0.5) * dt;
                 state.cp100 += (currentState.cpview == 1.0) * dt;
                 state.inad += +(state.overadbox) * dt;
                 state.iabview = (state.cp50_100 >= 1000.0)+0;
-
                 state.adboxfound = state.adboxfound;
                 state.cpview = currentState.cpview;
                 state.pview = currentState.pview;
@@ -457,11 +451,8 @@
                 state.rr = currentState.rr;
                 state.rl = currentState.rl;
             }
-            // console.log('adbox state update', util.now());
-            var timeout = setTimeout(tick, 100);
-
-
-        }; // 100-as delay
+            timeout = setTimeout(tick, 25);
+        };
         return {
             tick: tick,
             getState: function() {return state;}
@@ -755,28 +746,24 @@
         DocumentDimensions.resized = true;
     };
 
-
     // Add event listeners
+    var adboxState = adbox.getState();
     util.ael(document, 'mousemove',  mouseEventHandler);
-    util.ael(document, 'mouseover',  mouseEventHandler);
+    // util.ael(document, 'mouseover',  mouseEventHandler);
     util.ael(document, 'mousedown',  mouseEventHandler);
     util.ael(document, 'mouseup',    mouseEventHandler);
     util.ael(document, 'click',      mouseEventHandler);
-
-    util.ael(window, 'touchstart',   touchEventHandler);
-    util.ael(window, 'touchend',     touchEventHandler);
-    util.ael(window, 'touchmove',    touchEventHandler);
+    util.ael(window,   'touchstart', touchEventHandler);
+    util.ael(window,   'touchend',   touchEventHandler);
+    util.ael(window,   'touchmove',  touchEventHandler);
 
     util.ael(window, 'resize',       resizeEventHandler);
-
     util.ael(window, 'scroll',       scrollEventHandler);
-
     util.ael(window, 'focus',        windowEventHandler);
     util.ael(window, 'blur',         windowEventHandler);
     util.ael(window, 'beforeunload', windowEventHandler);
     util.ael(window, 'load',         windowEventHandler);
     util.ael(window, 'unload',       windowEventHandler);
-
 
     setInterval(function() {
 
@@ -829,8 +816,8 @@
         }
 
         if (changed) {
-            obj.adboxfound = env.adboxFound;
             var adboxState = adbox.getState();
+            obj.adboxfound = adboxState.adboxFound;
             obj.cp0 = adboxState.cp0;
             obj.cp0_50 = adboxState.cp0_50;
             obj.cp50_100 = adboxState.cp50_100;
@@ -842,14 +829,18 @@
             obj.rb = adboxState.rb;
             obj.rl = adboxState.rl;
             obj.rr = adboxState.rr;
+            console.log(adboxState);
             util.req(obj, env);
-            Ping.reset();
+            // Ping.reset();
         }
 
-    }, 500);
+    }, 1000);
 
     adbox.tick();
-    Ping.tick();
+
+    if (env.inif == 1) {
+        Ping.tick();
+    }
 
     // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
     setTimeout(function() {
