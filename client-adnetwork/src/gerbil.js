@@ -1,5 +1,4 @@
 (function(w) {
-    "use strict";
     // Base64 encoding
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -188,7 +187,7 @@
             }
             var params = paramPart.split("&");
             for (var i = 0; i < params.length; i++) {
-                kv = params[i].split("=");
+                var kv = params[i].split("=");
                 if (kv.length < 2 || kv[0].toLowerCase() !== paramName) {
                     continue;
                 } else {
@@ -371,7 +370,7 @@
         throw('No WSID. Aborting.');
     }
 
-    var default_collector = (location.protocol === "https:") ? "https://dc-"+enviroment.wsid+".enbrite.ly" : "http://dc-"+enviroment.wsid+".enbrite.ly";
+    var default_collector = "https://dc-"+enviroment.wsid+".enbrite.ly";
     console.log("Default collector:", default_collector);
 
     // TODO: add params collector support in request URL
