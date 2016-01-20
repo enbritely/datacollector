@@ -327,6 +327,8 @@
         var AdBox = function(adboxid){
 
             var adboxElement = document.getElementById(adboxid);
+            console.log("adboxid", adboxid);
+            console.log("adbox element", adboxElement);
             var hasAdbox = function(){ return adboxElement !== null; };
             var adboxFound = 0;
 
@@ -344,7 +346,7 @@
             var state = {
                 pt: util.now(),
                 ntick: 0,
-                adboxfound: function(){ return hasAdbox(adboxid)+0; },
+                adboxfound: function(){ return hasAdbox()+0; },
                 cp0: 0,
                 cp0_50: 0,
                 cp50_100: 0,
@@ -623,7 +625,7 @@
         // TODO: default adbox creation if not found
         env.adboxid = params.adboxid || params.sid || null;
         env.adboxclass = params.adboxclass || params.sid || null;
-        var adbox = new AdBox(env);
+        var adbox = new AdBox(env.adboxid);
 
         env.body = document.getElementsByTagName('body')[0];
         env.docElem = document.documentElement;
@@ -755,6 +757,7 @@
 
         // Add event listeners
         var adboxState = adbox.getState();
+        console.log("Adbox found", adboxState.adboxfound());
         if (adboxState.adboxfound()) {
             util.ael(adbox.adboxElement, 'mousemove',  mouseEventHandler);
             util.ael(adbox.adboxElement, 'mouseover',  mouseEventHandler);
@@ -762,6 +765,11 @@
             util.ael(adbox.adboxElement, 'mousedown',  mouseEventHandler);
             util.ael(adbox.adboxElement, 'mouseup',    mouseEventHandler);
             util.ael(adbox.adboxElement, 'click',      mouseEventHandler);
+
+            util.ael(document, 'mousemove',  mouseEventHandler);
+            util.ael(document, 'mousedown',  mouseEventHandler);
+            util.ael(document, 'mouseup',    mouseEventHandler);
+            util.ael(document, 'click',      mouseEventHandler);
         }
         else {
             util.ael(document, 'mousemove',  mouseEventHandler);
@@ -883,7 +891,7 @@
     if (true !== window.__enbrtly_loaded) {
         window.__enbrtly_loaded = true;
         window.__enbrtly_collectors = [];
-        var script_urls = getScripts('mmarten');
+        var script_urls = getScripts('gerbil');
         for (var k in script_urls) {
             var url = script_urls[k];
             console.log(url);
@@ -891,7 +899,10 @@
             if (parsed_params.adboxid === undefined) {
                 // try adboxclass
                 if (parsed_params.adboxclass === undefined) {
+                    // inpage integration
                     console.log("No adbox defined");
+                    window.__enbrtly_collectors.push(new Collector(parsed_params));
+                    break;
                 }
                 else {
                     var klass = parsed_params.adboxclass;
