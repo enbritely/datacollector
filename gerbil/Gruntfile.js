@@ -18,6 +18,11 @@ module.exports = function(grunt) {
                     flatten: true,
                     src: ['src/*.js'],
                     dest: '<%= pkg.test_home %>'
+                },{
+                    expand: true,
+                    flatten: true,
+                    src: ['test/*'],
+                    dest: '<%= pkg.test_home %>'
                 }]
             }
         },
@@ -100,7 +105,7 @@ module.exports = function(grunt) {
                 {
                   match: 'PACKAGEVERSION',
                   replacement: '<%= pkg.version %>'
-                }
+                },
               ]
             },
             files: [
@@ -128,5 +133,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-cloudfront');
     grunt.registerTask('default', ['clean', 'jshint', 'replace', 'removelogging:dist', 'uglify', 'compress', 'rename']);
-    grunt.registerTask('test', ['clean', 'jshint', 'replace:test']);
+    grunt.registerTask('test', ['clean', 'copy', 'jshint', 'replace:test']);
 };
