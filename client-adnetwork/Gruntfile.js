@@ -37,7 +37,7 @@ module.exports = function(grunt) {
                 squeeze: {
                     dead_code: true
                 },
-                mangle: false
+                mangle: true
             },
             all: {
                 files: [{
