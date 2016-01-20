@@ -23,12 +23,12 @@ module.exports = function(grunt) {
         },
         rename: {
             js_gz: {
-                src: 'dist/marten.js.gz',
-                dest: 'dist/marten-<%= pkg.version %>.js.gz'
+                src: 'dist/gerbil.js.gz',
+                dest: 'dist/gerbil-<%= pkg.version %>.js.gz'
             },
             js: {
-                src: 'dist/marten.js',
-                dest: 'dist/marten-<%= pkg.version %>.js'
+                src: 'dist/gerbil.js',
+                dest: 'dist/gerbil-<%= pkg.version %>.js'
             }
         },
         uglify: {
