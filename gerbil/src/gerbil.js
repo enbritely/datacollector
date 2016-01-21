@@ -296,29 +296,6 @@
                 )
             };
         },
-        // Cookie handling functionality
-        cookie: {
-          prefix: '__nbrtl-',
-          set: function(name, value, days) {
-              if (days) {
-                  var date = new Date();
-                  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                  var expires = "; expires=" + date.toGMTString();
-              } else var expires = "";
-              document.cookie = this.prefix + name + "=" + value + expires + "; path=/";
-              return value;
-          },
-          get: function (name) {
-              var nameEQ = this.prefix + name + "=";
-              var ca = document.cookie.split(';');
-              for (var i = 0; i < ca.length; i++) {
-                  var c = ca[i];
-                  while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                  if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-              }
-              return null;
-          }
-        },
         // Returns a random string of length len
         randomString: function(len) {
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -355,8 +332,8 @@
     console.log(usecookie);
     console.log(params);
 
-   default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-   default_iid = util.randomString(16);
+   default_sid = util.randomString(16);
+   default_iid = default_sid;
 
     console.log("Default sid: ", default_sid);
     console.log("Default iid: ", default_iid);
