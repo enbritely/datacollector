@@ -327,15 +327,16 @@
         var AdBox = function(adboxid){
 
             var adboxElement = document.getElementById(adboxid);
-            console.log("adboxid", adboxid);
-            console.log("adbox element", adboxElement);
-            var hasAdbox = function(){ return adboxElement !== null; };
+            var hasAdbox = function(){
+            	adboxElement = document.getElementById(adboxid);
+            	return adboxElement !== null;
+            };
             var adboxFound = 0;
 
             var getAdboxState = function(){
                 if (hasAdbox()) {
                     adboxFound = 1;
-                    return elementState(adboxElement);
+                    return elementState();
                 }
                 else {
                     adboxFound = 0;
@@ -432,18 +433,16 @@
             if (hasAdbox()) {
                 util.ael(adboxElement, 'mouseover', function(){
                     state.overadbox = true;
-                    console.log(state.overadbox, state.inad, state.adboxid);
                 });
                 util.ael(adboxElement, 'mouseout', function(){
                     state.overadbox = false;
-                    console.log(state.overadbox, state.inad, state.adboxid);
                 });
             }
 
             var tick = function(){
 
                 var currentState = getAdboxState();
-                if (hasAdbox) {
+                if (hasAdbox()) {
                     var t = util.now();
                     var dt = t - state.pt;
                     state.pt = t;
@@ -467,8 +466,8 @@
                     state.rr = currentState.rr;
                     state.rl = currentState.rl;
                 }
-                // console.log('adbox state update', util.now());
-                var timeout = setTimeout(tick, 100);
+                console.log('adbox state update', util.now(), state);
+                var timeout = setTimeout(tick, 1000);
 
 
             }; // 100-as delay
