@@ -1,15 +1,34 @@
 # Datacollector
-Client side data collecting script.
+Client side data collector script.
 
-## Install
+## Installation
+1. Clone git repo. 
+2. cd datacollector/gerbil
+3. npm install (install dependenicies)
+
+## Build 
 Build it with `grunt`.
-Deployment: `grunt deploy`
 
-## Gerbil Assembler
-The gerbil-assembler is a standalon utility to assemble the datacollector for the clients.
+## Testing
+
+### Prerequisits
+1. Gerbil is tested manually at the moment with a local webserver. Any webserver serving that can serve static HTML files and listen on 2 ports will do the job. The webserver have to listen on two ports to simulate cross-domain iframes: the standard 80 and 8880 for the iframes.
+2. Set the root of the local webserver in `package.json` `"test_home"` key. 
+3. The directory `gerbil/test` holds some test pages, that are automatically copied to the root directory set in `package.json`. One can test with browserstack if remote connections are enabled to the webserver. 
+4. Test gerbil with `grunt test`. Open a webbrowser and see the magic.
+
+## Deploy
+TBD
 
 ## Versions
-### gerbil-2.1.6 (Latest stable)
+
+### gerbil-2.1.7 (Latest stable)
+Removed support for HTTP protocol. Now sending data over HTTPS ONLY.
+
+### gerbil-2.1.7.1
+Removed support for HTTP protocol. Now sending data over HTTPS ONLY. Same as 2.1.7, but has no cookie support.
+
+### gerbil-2.1.6
 Developed in connection with sitebar measureablity for Fastbrdige. (sitebar branch)
 Features 
 - Uses "use strict" declaration in head for optimization
