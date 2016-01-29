@@ -33,6 +33,17 @@
         // No scripts match
         return {};
     };
+    // getElementsByClassName shim
+    if( typeof document.getElementsByClassName !== "function"){
+        document.getElementsByClassName= function( className, nodeName ){
+            var a = [];
+            var re = new RegExp('(^| )'+className+'( |$)');
+            var els = nodeName.getElementsByTagName("*");
+            for(var i=0,j=els.length; i<j; i++)
+                if(re.test(els[i].className))a.push(els[i]);
+            return a;
+        };
+    }
     var Collector = function(parsed_params){
         // Base64 encoding ONLY
         var Base64 = {
@@ -82,7 +93,6 @@
         // Minified JSON encoding support for IE6 and IE7
         // Copy pasted from here:
         // https://cdnjs.cloudflare.com/ajax/libs/json2/20150503/json2.min.js
-        // "object"!=typeof JSON&&(JSON={}),function(){"use strict";function f(t){return 10>t?"0"+t:t}function this_value(){return this.valueOf()}function quote(t){return rx_escapable.lastIndex=0,rx_escapable.test(t)?'"'+t.replace(rx_escapable,function(t){var e=meta[t];return"string"==typeof e?e:"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+t+'"'}function str(t,e){var r,n,o,u,f,a=gap,i=e[t];switch(i&&"object"==typeof i&&"function"==typeof i.toJSON&&(i=i.toJSON(t)),"function"==typeof rep&&(i=rep.call(e,t,i)),typeof i){case"string":return quote(i);case"number":return isFinite(i)?i+"":"null";case"boolean":case"null":return i+"";case"object":if(!i)return"null";if(gap+=indent,f=[],"[object Array]"===Object.prototype.toString.apply(i)){for(u=i.length,r=0;u>r;r+=1)f[r]=str(r,i)||"null";return o=0===f.length?"[]":gap?"[\n"+gap+f.join(",\n"+gap)+"\n"+a+"]":"["+f.join(",")+"]",gap=a,o}if(rep&&"object"==typeof rep)for(u=rep.length,r=0;u>r;r+=1)"string"==typeof rep[r]&&(n=rep[r],o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));else for(n in i)Object.prototype.hasOwnProperty.call(i,n)&&(o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));return o=0===f.length?"{}":gap?"{\n"+gap+f.join(",\n"+gap)+"\n"+a+"}":"{"+f.join(",")+"}",gap=a,o}}var rx_one=/^[\],:{}\s]*$/,rx_two=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,rx_three=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,rx_four=/(?:^|:|,)(?:\s*\[)+/g,rx_escapable=/[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,rx_dangerous=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;"function"!=typeof Date.prototype.toJSON&&(Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},Boolean.prototype.toJSON=this_value,Number.prototype.toJSON=this_value,String.prototype.toJSON=this_value);var gap,indent,meta,rep;"function"!=typeof JSON.stringify&&(meta={"\b":"\\b","   ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},JSON.stringify=function(t,e,r){var n;if(gap="",indent="","number"==typeof r)for(n=0;r>n;n+=1)indent+=" ";else"string"==typeof r&&(indent=r);if(rep=e,e&&"function"!=typeof e&&("object"!=typeof e||"number"!=typeof e.length))throw Error("JSON.stringify");return str("",{"":t})}),"function"!=typeof JSON.parse&&(JSON.parse=function(text,reviver){function walk(t,e){var r,n,o=t[e];if(o&&"object"==typeof o)for(r in o)Object.prototype.hasOwnProperty.call(o,r)&&(n=walk(o,r),void 0!==n?o[r]=n:delete o[r]);return reviver.call(t,e,o)}var j;if(text+="",rx_dangerous.lastIndex=0,rx_dangerous.test(text)&&(text=text.replace(rx_dangerous,function(t){return"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})),rx_one.test(text.replace(rx_two,"@").replace(rx_three,"]").replace(rx_four,"")))return j=eval("("+text+")"),"function"==typeof reviver?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}(); // jshint ignore:line
         "object"!=typeof JSON&&(JSON={}),function(){function f(t){return 10>t?"0"+t:t}function this_value(){return this.valueOf()}function quote(t){return rx_escapable.lastIndex=0,rx_escapable.test(t)?'"'+t.replace(rx_escapable,function(t){var e=meta[t];return"string"==typeof e?e:"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+t+'"'}function str(t,e){var r,n,o,u,f,a=gap,i=e[t];switch(i&&"object"==typeof i&&"function"==typeof i.toJSON&&(i=i.toJSON(t)),"function"==typeof rep&&(i=rep.call(e,t,i)),typeof i){case"string":return quote(i);case"number":return isFinite(i)?i+"":"null";case"boolean":case"null":return i+"";case"object":if(!i)return"null";if(gap+=indent,f=[],"[object Array]"===Object.prototype.toString.apply(i)){for(u=i.length,r=0;u>r;r+=1)f[r]=str(r,i)||"null";return o=0===f.length?"[]":gap?"[\n"+gap+f.join(",\n"+gap)+"\n"+a+"]":"["+f.join(",")+"]",gap=a,o}if(rep&&"object"==typeof rep)for(u=rep.length,r=0;u>r;r+=1)"string"==typeof rep[r]&&(n=rep[r],o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));else for(n in i)Object.prototype.hasOwnProperty.call(i,n)&&(o=str(n,i),o&&f.push(quote(n)+(gap?": ":":")+o));return o=0===f.length?"{}":gap?"{\n"+gap+f.join(",\n"+gap)+"\n"+a+"}":"{"+f.join(",")+"}",gap=a,o}}var rx_one=/^[\],:{}\s]*$/,rx_two=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,rx_three=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,rx_four=/(?:^|:|,)(?:\s*\[)+/g,rx_escapable=/[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,rx_dangerous=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;"function"!=typeof Date.prototype.toJSON&&(Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},Boolean.prototype.toJSON=this_value,Number.prototype.toJSON=this_value,String.prototype.toJSON=this_value);var gap,indent,meta,rep;"function"!=typeof JSON.stringify&&(meta={"\b":"\\b","   ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},JSON.stringify=function(t,e,r){var n;if(gap="",indent="","number"==typeof r)for(n=0;r>n;n+=1)indent+=" ";else"string"==typeof r&&(indent=r);if(rep=e,e&&"function"!=typeof e&&("object"!=typeof e||"number"!=typeof e.length))throw Error("JSON.stringify");return str("",{"":t})}),"function"!=typeof JSON.parse&&(JSON.parse=function(text,reviver){function walk(t,e){var r,n,o=t[e];if(o&&"object"==typeof o)for(r in o)Object.prototype.hasOwnProperty.call(o,r)&&(n=walk(o,r),void 0!==n?o[r]=n:delete o[r]);return reviver.call(t,e,o)}var j;if(text+="",rx_dangerous.lastIndex=0,rx_dangerous.test(text)&&(text=text.replace(rx_dangerous,function(t){return"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})),rx_one.test(text.replace(rx_two,"@").replace(rx_three,"]").replace(rx_four,"")))return j=eval("("+text+")"),"function"==typeof reviver?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}(); // jshint ignore:line
 
         // TODO: globals check or return
@@ -324,13 +334,31 @@
             };
         })();
 
-        var AdBox = function(adboxid){
+        var AdBox = function(adboxid, identifyByClass){
 
-            var adboxElement = document.getElementById(adboxid);
-            var hasAdbox = function(){
-            	adboxElement = document.getElementById(adboxid);
-            	return adboxElement !== null;
+            var adboxElement = null;
+            var getAdbox = function(adboxid, identifyByClass) {
+                if (identifyByClass===false) {
+                    adboxElement = document.getElementById(adboxid);
+                }
+                else {
+                    adboxElement = document.getElementsByClassName(adboxid)[0];
+                }
+                return adboxElement;
             };
+
+            // dynamikus adboxfound
+            var hasAdbox = function(){
+                if (identifyByClass===false) {
+                	adboxElement = document.getElementById(adboxid);
+                	return adboxElement !== null;
+                }
+                else {
+                    adboxElement = document.getElementsByClassName(adboxid)[0];
+                    return adboxElement !== null;
+                }
+            };
+
             var adboxFound = 0;
 
             var getAdboxState = function(){
@@ -392,9 +420,6 @@
             };
             // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport/7557433#7557433
             var elementState = function () {
-                if (typeof jQuery === "function" && adboxElement instanceof jQuery) {
-                    adboxElement = adboxElement[0];
-                }
 
                 var rect = adboxElement.getBoundingClientRect(),
                     width  = rect.bottom - rect.top,
@@ -437,24 +462,42 @@
                 util.ael(adboxElement, 'mouseout', function(){
                     state.overadbox = false;
                 });
+
+                var checkTouchState = function(evt) {
+                    var touches = evt.changedTouches;
+                    var px = Math.round(touches[0].pageX);
+                    var py = Math.round(touches[0].pageY);
+                    var rect = adboxElement.getBoundingClientRect();
+                    if ((px >= rect.left) & (px <= rect.right) & (py <= rect.bottom) & (py >= rect.top)) {
+                        state.overadbox = true;
+                    }
+                    else {
+                        state.overadbox = false;
+                    }
+                };
+
+                util.ael(adboxElement, 'touchstart', checkTouchState);
+                util.ael(adboxElement, 'touchmove', checkTouchState);
+                util.ael(adboxElement, 'touchend', function(){
+                    state.overadbox = false;
+                });
+
             }
 
             var tick = function(){
 
-                var currentState = getAdboxState();
                 if (hasAdbox()) {
+                    var currentState = getAdboxState();
                     var t = util.now();
                     var dt = t - state.pt;
                     state.pt = t;
-
                     state.ntick += 1;
                     state.cp0 += (currentState.cpview === 0.0) * dt;
                     state.cp0_50 += ((currentState.cpview > 0.0) & (currentState.cpview < 0.5)) * dt;
                     state.cp50_100 += (currentState.cpview >= 0.5) * dt;
                     state.cp100 += (currentState.cpview == 1.0) * dt;
                     state.inad += +(state.overadbox) * dt;
-                    state.iabview = (state.cp50_100 >= 1000.0)+0;
-
+                    state.iabview = Math.max(state.iabview, (state.cp50_100 >= 1000.0)+0);
                     state.adboxfound = state.adboxfound;
                     state.cpview = currentState.cpview;
                     state.pview = currentState.pview;
@@ -466,16 +509,19 @@
                     state.rr = currentState.rr;
                     state.rl = currentState.rl;
                 }
-                console.log('adbox state update', util.now(), state);
-                var timeout = setTimeout(tick, 1000);
 
+                // 100-as delay
+                var timeout = setTimeout(tick, 100);
 
-            }; // 100-as delay
+            };
+
             return {
                 tick: tick,
                 adboxElement: adboxElement,
+                adboxFound: adboxFound,
                 getState: function() {return state;}
             };
+
         };
 
         var Performance = (function() {
@@ -607,6 +653,7 @@
         var default_iid = util.randomString(16);
         env.sid  = util.getURLSid() || env.sid  || params.n || params.sid || default_sid;
         env.iid  =                     env.iid  || params.n || params.iid || default_iid;
+
         util.debug("(sid: "+env.sid+' iid:'+env.iid+')');
 
         // Init impression and page identifiers
@@ -623,8 +670,7 @@
         // Init adbox if present in params
         // TODO: default adbox creation if not found
         env.adboxid = params.adboxid || params.sid || null;
-        env.adboxclass = params.adboxclass || params.sid || null;
-        var adbox = new AdBox(env.adboxid);
+        var adbox = new AdBox(params.adboxid, params.identifyByClass);
 
         env.body = document.getElementsByTagName('body')[0];
         env.docElem = document.documentElement;
@@ -633,7 +679,7 @@
         env.ua = navigator.userAgent; // User agent string (str)
         env.iev = util.detectIEVersion(env.ua.toLowerCase());
         env.ref = document.referrer || ''; // document.referrer (str) - Returns the URI of the page that linked to this page.
-        env.domain =  document.domain; // document.domain (str) -  The domain portion of the origin of the current document, as used by the same origin policy
+        env.domain = document.domain; // document.domain (str) -  The domain portion of the origin of the current document, as used by the same origin policy
         env.url = document.URL; // document.URL (str)
         env.base_uri = window.location.pathname; // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
         env.lang = navigator.language;
@@ -661,8 +707,10 @@
             adid:           env.adid, // ad id (str)
             banw:           env.banw, // banner width (int)
             banh:           env.banh, // banner height (int)
+            // TODO: adbox class implementáció
             eid:            env.adboxid,
-            adboxfound:     env.adboxFound,
+            // TODO: adboxfound implementáció
+            adboxfound:     adbox.adboxFound,
             lang:           env.lang,
             tzo:            env.tzoHours,
             dw:             DocumentDimensions.dw(),
@@ -757,42 +805,44 @@
         // Add event listeners
         var adboxState = adbox.getState();
         console.log("Adbox found", adboxState.adboxfound());
+
         if (adboxState.adboxfound()) {
-            util.ael(adbox.adboxElement, 'mousemove',  mouseEventHandler);
-            util.ael(adbox.adboxElement, 'mouseover',  mouseEventHandler);
-            util.ael(adbox.adboxElement, 'mouseout',   mouseEventHandler);
+            // util.ael(adbox.adboxElement, 'mousemove',  mouseEventHandler);
+            // util.ael(adbox.adboxElement, 'mouseover',  mouseEventHandler);
+            // util.ael(adbox.adboxElement, 'mouseout',   mouseEventHandler);
             util.ael(adbox.adboxElement, 'mousedown',  mouseEventHandler);
             util.ael(adbox.adboxElement, 'mouseup',    mouseEventHandler);
             util.ael(adbox.adboxElement, 'click',      mouseEventHandler);
-
+            // util.ael(adbox.adboxElement, 'touchstart', touchEventHandler);
+            // util.ael(adbox.adboxElement, 'touchend',   touchEventHandler);
+            // util.ael(adbox.adboxElement, 'touchmove',  touchEventHandler);
             util.ael(document, 'mousemove',  mouseEventHandler);
             util.ael(document, 'mousedown',  mouseEventHandler);
             util.ael(document, 'mouseup',    mouseEventHandler);
             util.ael(document, 'click',      mouseEventHandler);
+            util.ael(window, 'touchstart',   touchEventHandler);
+            util.ael(window, 'touchend',     touchEventHandler);
+            util.ael(window, 'touchmove',    touchEventHandler);
         }
         else {
             util.ael(document, 'mousemove',  mouseEventHandler);
-            util.ael(document, 'mouseover',  mouseEventHandler);
-            util.ael(document, 'mouseout',   mouseEventHandler);
+            // util.ael(document, 'mouseover',  mouseEventHandler);
+            // util.ael(document, 'mouseout',   mouseEventHandler);
             util.ael(document, 'mousedown',  mouseEventHandler);
             util.ael(document, 'mouseup',    mouseEventHandler);
             util.ael(document, 'click',      mouseEventHandler);
+            util.ael(window, 'touchstart',   touchEventHandler);
+            util.ael(window, 'touchend',     touchEventHandler);
+            util.ael(window, 'touchmove',    touchEventHandler);
         }
 
-        util.ael(window, 'touchstart',   touchEventHandler);
-        util.ael(window, 'touchend',     touchEventHandler);
-        util.ael(window, 'touchmove',    touchEventHandler);
-
         util.ael(window, 'resize',       resizeEventHandler);
-
         util.ael(window, 'scroll',       scrollEventHandler);
-
         util.ael(window, 'focus',        windowEventHandler);
         util.ael(window, 'blur',         windowEventHandler);
         util.ael(window, 'beforeunload', windowEventHandler);
         util.ael(window, 'load',         windowEventHandler);
         util.ael(window, 'unload',       windowEventHandler);
-
 
         setInterval(function() {
 
@@ -844,8 +894,8 @@
             }
 
             if (changed) {
-                obj.adboxfound = env.adboxFound;
                 var adboxState = adbox.getState();
+                obj.adboxfound = adboxState.adboxfound;
                 obj.cp0 = adboxState.cp0;
                 obj.cp0_50 = adboxState.cp0_50;
                 obj.cp50_100 = adboxState.cp50_100;
@@ -859,6 +909,7 @@
                 obj.rr = adboxState.rr;
                 util.req(obj, env);
                 Ping.reset();
+                console.log(adboxState);
             }
 
         }, 500);
@@ -895,6 +946,7 @@
             var url = script_urls[k];
             console.log(url);
             var parsed_params = getScriptParameters(url);
+            parsed_params.identifyByClass = false;
             if (parsed_params.adboxid === undefined) {
                 // try adboxclass
                 if (parsed_params.adboxclass === undefined) {
@@ -910,7 +962,8 @@
                     for (var j=0; j<els.length; j++) {
                         els[j].className += ' '+klass+'-'+j;
                         console.log(j, els[j].className);
-                        parsed_params.adboxclass = klass+'-'+j;
+                        parsed_params.adboxid = klass+'-'+j;
+                        parsed_params.identifyByClass = true;
                         window.__enbrtly_collectors.push(new Collector(parsed_params));
                     }
                     break;
