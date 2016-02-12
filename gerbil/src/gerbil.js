@@ -376,6 +376,10 @@
                 pt: util.now(),
                 ntick: 0,
                 adboxfound: function(){ return hasAdbox()+0; },
+                p0: 0,
+                p0_50: 0,
+                p50_100: 0,
+                p100: 0,
                 cp0: 0,
                 cp0_50: 0,
                 cp50_100: 0,
@@ -409,8 +413,8 @@
                         var gp = document.elementFromPoint(c[k][0], c[k][1]);
                         if (adboxElement !== gp & gp !== null) {
                             var frect = gp.getBoundingClientRect();
-                            var x_overlap = Math.max(0, Math.min(frect.right,rect.right) - Math.max(frect.left,rect.left));
-                            var y_overlap = Math.max(0, Math.min(frect.bottom,rect.bottom) - Math.max(frect.top,rect.top));
+                            var x_overlap = Math.max(0, Math.min(frect.right,frect.right) - Math.max(frect.left,frect.left));
+                            var y_overlap = Math.max(0, Math.min(frect.bottom,frect.bottom) - Math.max(frect.top,frect.top));
                             var overlapArea = x_overlap * y_overlap;
                             return overlapArea;
                         }
@@ -496,6 +500,10 @@
                     state.cp0_50 += ((currentState.cpview > 0.0) & (currentState.cpview < 0.5)) * dt;
                     state.cp50_100 += (currentState.cpview >= 0.5) * dt;
                     state.cp100 += (currentState.cpview == 1.0) * dt;
+                    state.p0 += (currentState.pview === 0.0) * dt;
+                    state.p0_50 += ((currentState.pview > 0.0) & (currentState.pview < 0.5)) * dt;
+                    state.p50_100 += (currentState.pview >= 0.5) * dt;
+                    state.p100 += (currentState.pview == 1.0) * dt;
                     state.inad += +(state.overadbox) * dt;
                     state.iabview = Math.max(state.iabview, (state.cp50_100 >= 1000.0)+0);
                     state.adboxfound = state.adboxfound;
@@ -784,6 +792,10 @@
             obj.cp0_50 = adboxState.cp0_50;
             obj.cp50_100 = adboxState.cp50_100;
             obj.cp100 = adboxState.cp100;
+            obj.p0 = adboxState.p0;
+            obj.p0_50 = adboxState.p0_50;
+            obj.p50_100 = adboxState.p50_100;
+            obj.p100 = adboxState.p100;
             obj.iabview = adboxState.iabview;
             obj.inad = adboxState.inad;
             obj.ntick = adboxState.ntick;
@@ -900,6 +912,10 @@
                 obj.cp0_50 = adboxState.cp0_50;
                 obj.cp50_100 = adboxState.cp50_100;
                 obj.cp100 = adboxState.cp100;
+                obj.p0 = adboxState.p0;
+                obj.p0_50 = adboxState.p0_50;
+                obj.p50_100 = adboxState.p50_100;
+                obj.p100 = adboxState.p100;
                 obj.iabview = adboxState.iabview;
                 obj.inad = adboxState.inad;
                 obj.ntick = adboxState.ntick;
