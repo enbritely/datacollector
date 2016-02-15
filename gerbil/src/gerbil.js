@@ -806,6 +806,7 @@
             obj.p50_100 = adboxState.p50_100;
             obj.p100 = adboxState.p100;
             obj.iabview = adboxState.iabview;
+            obj.ciabview = adboxState.ciabview;
             obj.inad = adboxState.inad;
             obj.ntick = adboxState.ntick;
             obj.rt = adboxState.rt;
@@ -918,6 +919,7 @@
                 obj.p50_100 = adboxState.p50_100;
                 obj.p100 = adboxState.p100;
                 obj.iabview = adboxState.iabview;
+                obj.ciabview = adboxState.ciabview;
                 obj.inad = adboxState.inad;
                 obj.ntick = adboxState.ntick;
                 obj.rt = adboxState.rt;
