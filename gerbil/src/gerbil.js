@@ -299,7 +299,7 @@
                         documentElement.scrollWidth,
                         documentElement.offsetWidth,
                         documentElement.clientWidth
-                    );
+                    ) || 0;
                 },
                 dh: function() {
                     return Math.max(
@@ -308,7 +308,7 @@
                         documentElement.scrollHeight,
                         documentElement.offsetHeight,
                         documentElement.clientHeight
-                    );
+                    ) || 0;
                 },
                 eh:  function(){ return documentElement.clientHeight || 0; },
                 ew:  function(){ return documentElement.clientWidth || 0; },
@@ -347,7 +347,7 @@
                 return adboxElement;
             };
 
-            // dynamikus adboxfound
+            // dinamikus adboxfound
             var hasAdbox = function(){
                 if (identifyByClass===false) {
                 	adboxElement = document.getElementById(adboxid);
@@ -376,11 +376,16 @@
                 pt: util.now(),
                 ntick: 0,
                 adboxfound: function(){ return hasAdbox()+0; },
+                p0: 0,
+                p0_50: 0,
+                p50_100: 0,
+                p100: 0,
                 cp0: 0,
                 cp0_50: 0,
                 cp50_100: 0,
                 cp100: 0,
                 iabview: 0,
+                ciabview: 0,
                 inad: 0,
                 overadbox: false,
                 cpview: 0,
@@ -404,13 +409,15 @@
                     [rl + w * 0.25, rt + h * 0.25],[rl + w * 0.25, rt + h * 0.75],
                     [rl + w * 0.75, rt + h * 0.25],[rl + w * 0.75, rt + h * 0.75]
                 ];
+                var rb = rt + h;
+                var rr = rl + w;
                 for (var k in c){
                     if (c[k][0] >= 0 & c[k][1] >= 0) {
                         var gp = document.elementFromPoint(c[k][0], c[k][1]);
                         if (adboxElement !== gp & gp !== null) {
                             var frect = gp.getBoundingClientRect();
-                            var x_overlap = Math.max(0, Math.min(frect.right,rect.right) - Math.max(frect.left,rect.left));
-                            var y_overlap = Math.max(0, Math.min(frect.bottom,rect.bottom) - Math.max(frect.top,rect.top));
+                            var x_overlap = Math.max(0, Math.min(frect.right, rr) - Math.max(frect.left, rl));
+                            var y_overlap = Math.max(0, Math.min(frect.bottom, rb) - Math.max(frect.top, rt));
                             var overlapArea = x_overlap * y_overlap;
                             return overlapArea;
                         }
@@ -487,20 +494,30 @@
             var tick = function(){
 
                 if (hasAdbox()) {
+
                     var currentState = getAdboxState();
                     var t = util.now();
                     var dt = t - state.pt;
                     state.pt = t;
                     state.ntick += 1;
+
                     state.cp0 += (currentState.cpview === 0.0) * dt;
                     state.cp0_50 += ((currentState.cpview > 0.0) & (currentState.cpview < 0.5)) * dt;
                     state.cp50_100 += (currentState.cpview >= 0.5) * dt;
                     state.cp100 += (currentState.cpview == 1.0) * dt;
+                    state.ciabview = Math.max(state.ciabview, (state.cp50_100 >= 1000.0)+0);
+
+                    state.p0 += (currentState.pview === 0.0) * dt;
+                    state.p0_50 += ((currentState.pview > 0.0) & (currentState.pview < 0.5)) * dt;
+                    state.p50_100 += (currentState.pview >= 0.5) * dt;
+                    state.p100 += (currentState.pview == 1.0) * dt;
                     state.inad += +(state.overadbox) * dt;
-                    state.iabview = Math.max(state.iabview, (state.cp50_100 >= 1000.0)+0);
-                    state.adboxfound = state.adboxfound;
+                    state.iabview = Math.max(state.iabview, (state.p50_100 >= 1000.0)+0);
+
                     state.cpview = currentState.cpview;
                     state.pview = currentState.pview;
+
+                    state.adboxfound = state.adboxfound;
                     state.overlap = currentState.overlap;
                     state.pixview = currentState.pixview;
                     state.pixad = currentState.pixad;
@@ -784,7 +801,12 @@
             obj.cp0_50 = adboxState.cp0_50;
             obj.cp50_100 = adboxState.cp50_100;
             obj.cp100 = adboxState.cp100;
+            obj.p0 = adboxState.p0;
+            obj.p0_50 = adboxState.p0_50;
+            obj.p50_100 = adboxState.p50_100;
+            obj.p100 = adboxState.p100;
             obj.iabview = adboxState.iabview;
+            obj.ciabview = adboxState.ciabview;
             obj.inad = adboxState.inad;
             obj.ntick = adboxState.ntick;
             obj.rt = adboxState.rt;
@@ -807,15 +829,9 @@
         console.log("Adbox found", adboxState.adboxfound());
 
         if (adboxState.adboxfound()) {
-            // util.ael(adbox.adboxElement, 'mousemove',  mouseEventHandler);
-            // util.ael(adbox.adboxElement, 'mouseover',  mouseEventHandler);
-            // util.ael(adbox.adboxElement, 'mouseout',   mouseEventHandler);
             util.ael(adbox.adboxElement, 'mousedown',  mouseEventHandler);
             util.ael(adbox.adboxElement, 'mouseup',    mouseEventHandler);
             util.ael(adbox.adboxElement, 'click',      mouseEventHandler);
-            // util.ael(adbox.adboxElement, 'touchstart', touchEventHandler);
-            // util.ael(adbox.adboxElement, 'touchend',   touchEventHandler);
-            // util.ael(adbox.adboxElement, 'touchmove',  touchEventHandler);
             util.ael(document, 'mousemove',  mouseEventHandler);
             util.ael(document, 'mousedown',  mouseEventHandler);
             util.ael(document, 'mouseup',    mouseEventHandler);
@@ -826,8 +842,6 @@
         }
         else {
             util.ael(document, 'mousemove',  mouseEventHandler);
-            // util.ael(document, 'mouseover',  mouseEventHandler);
-            // util.ael(document, 'mouseout',   mouseEventHandler);
             util.ael(document, 'mousedown',  mouseEventHandler);
             util.ael(document, 'mouseup',    mouseEventHandler);
             util.ael(document, 'click',      mouseEventHandler);
@@ -900,7 +914,12 @@
                 obj.cp0_50 = adboxState.cp0_50;
                 obj.cp50_100 = adboxState.cp50_100;
                 obj.cp100 = adboxState.cp100;
+                obj.p0 = adboxState.p0;
+                obj.p0_50 = adboxState.p0_50;
+                obj.p50_100 = adboxState.p50_100;
+                obj.p100 = adboxState.p100;
                 obj.iabview = adboxState.iabview;
+                obj.ciabview = adboxState.ciabview;
                 obj.inad = adboxState.inad;
                 obj.ntick = adboxState.ntick;
                 obj.rt = adboxState.rt;
