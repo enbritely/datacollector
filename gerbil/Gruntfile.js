@@ -18,15 +18,20 @@ module.exports = function(grunt) {
                     flatten: true,
                     src: ['src/*.js'],
                     dest: '<%= pkg.test_home %>'
+                },{
+                    expand: true,
+                    flatten: true,
+                    src: ['test/*'],
+                    dest: '<%= pkg.test_home %>'
                 }]
             }
         },
         rename: {
-            gerbil_js_gz: {
+            js_gz: {
                 src: 'dist/gerbil.js.gz',
                 dest: 'dist/gerbil-<%= pkg.version %>.js.gz'
             },
-            gerbil_js: {
+            js: {
                 src: 'dist/gerbil.js',
                 dest: 'dist/gerbil-<%= pkg.version %>.js'
             }
@@ -35,9 +40,9 @@ module.exports = function(grunt) {
             options: {
                 report: 'min',
                 squeeze: {
-                    dead_code: true
+                    dead_code: true,
                 },
-                mangle: true
+                mangle: true,
             },
             all: {
                 files: [{
@@ -100,7 +105,7 @@ module.exports = function(grunt) {
                 {
                   match: 'PACKAGEVERSION',
                   replacement: '<%= pkg.version %>'
-                }
+                },
               ]
             },
             files: [
@@ -109,8 +114,8 @@ module.exports = function(grunt) {
           }
         },
         watch: {
-            files: ["src/*.js"],
-            tasks: ['clean', 'jshint', 'replace:test']
+            files: ["src/*.js", "test/*.*"],
+            tasks: ['clean', 'copy', 'jshint', 'replace:test']
         },
     });
     require('load-grunt-tasks')(grunt, {
@@ -128,5 +133,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-cloudfront');
     grunt.registerTask('default', ['clean', 'jshint', 'replace', 'removelogging:dist', 'uglify', 'compress', 'rename']);
-    grunt.registerTask('test', ['clean', 'jshint', 'replace:test']);
+    grunt.registerTask('test', ['clean', 'copy', 'jshint', 'replace:test']);
 };
