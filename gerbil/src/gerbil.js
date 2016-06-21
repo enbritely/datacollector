@@ -51,7 +51,7 @@
                 for (var e in tag_elements) {
                     var cur = tag_elements[e];
                     var v = cur.src || cur.href;
-                    if(v != null) {
+                    if(v !== null) {
                         l.push(v);
                     }
                 }
@@ -98,7 +98,7 @@
         // Segments the page by wxw pixel squares and returns the segments coordinate as a string
         // Top left corner = 0:0
         segment: function(x, y, w) {
-            return  Math.floor(x / w) + ':' +  Math.floor(y / w);
+            return Math.floor(x / w) + ':' +  Math.floor(y / w);
         },
         // Generate document dimension object based on various width metrics
         documentDimensions: function() {
@@ -140,7 +140,7 @@
               for (var i = 0; i < ca.length; i++) {
                   var c = ca[i];
                   while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                  if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                  if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
               }
               return null;
           }
@@ -156,7 +156,7 @@
         }
     };
 
-    var Collector = function(parsed_params){
+    var Collector = function(params){
         // Base64 encoding
         var Base64 = {
             _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -337,32 +337,20 @@
         var SEGMENTW = 10;
         var PING_INDEX = 0;
 
-        // Try extracting parameters from the URL
-        var params = parsed_params;
-
-        console.log("Gerbil", SCRIPT_VERSION, params.gerbilid);
-        console.log(util.fetchLinks());
-
-        var usecookie = false || params.usecookie;
-        var default_iid, default_sid;
-
-        console.log("Use cookie", usecookie);
-        console.log("Params:", params);
-
-        default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-        default_iid = util.randomString(16);
-
-        console.log("Default sid: ", default_sid);
-        console.log("Default iid: ", default_iid);
+        var default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+        var default_iid = util.randomString(16);
 
         var enviroment = window._enbrtly_ || {};
         enviroment.wsid = enviroment.wsid || params.wsid;
+
+        console.log("gerbil", SCRIPT_VERSION, params.gerbilid, "[sid:", default_sid,'iid:', default_iid,']');
+        console.log("params:", params);
 
         if (enviroment.wsid === undefined) {
             throw('No WSID. Aborting.');
         }
 
-        var default_collector = "https://dc-"+enviroment.wsid+".enbrite.ly";
+        var default_collector = "https://dc-"+enviroment.wsid+".enbrite.ly/a.gif";
         console.log("Default collector:", default_collector);
 
         var LOGGER_URL = enviroment.collector || default_collector;
@@ -434,16 +422,27 @@
             var ts = util.now();
 
             // Attributes that should be included in all messages
-            obj.ts  = ts; // timestamp of the event (int)đ
+            obj.ts  = ts; // timestamp of the event (int)
             obj.wsid = enviroment.wsid; // webshop id (str)
             obj.sid = enviroment.sid; // session id (str)
             obj.iid = enviroment.iid; // impression id (str)
 
-            var url = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
+            var encoded_json = Base64.encode(JSON.stringify(obj));
+            var encoded_json_length = encoded_json.length;
+
+            var url = LOGGER_URL +'?'
+            url += '&wsid=' + obj.wsid;
+            url += '&t=' + obj.type;
+            url += '&s=' + obj.sid;
+            url += '&i=' + obj.iid;
+            url += '&data=' + encoded_json;
+            url += '&ts=' + ts;
+
+            var url_length = url.length;
 
             if (obj.type != 'ping') { PING_INDEX = 0; }
 
-            console.log(obj);
+            console.log(obj.type, encoded_json_length, url_length);
 
             var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
             // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
@@ -476,55 +475,116 @@
             return false;
         };
 
-        // Attach custom_event function to _enbrtly_ window object to call externally and send custom objects
-        if (w._enbrtly_) {
-            w._enbrtly_.custom_event = function(obj) {
-                obj.type = 'custom';
-                req(obj);
+        // var Ping = (function(){
+        //     var pingIntervals = [1,5,10,30,60,120,300];
+        //     var k = 0;
+        //     var timeout = null;
+        //     var tick = function(){
+        //         if (k < pingIntervals.length) {
+        //             var evt = { type:'ping' };
+        //             windowEventHandler(evt);
+        //             k += 1;
+        //             timeout = setTimeout(tick, pingIntervals[k] * 1000);
+        //         }
+        //     };
+        //     var reset = function(){
+        //         k = 0;
+        //         clearTimeout(timeout);
+        //         timeout = setTimeout(tick, pingIntervals[k] * 1000);
+        //     };
+        //     return {
+        //         tick: tick,
+        //         reset: reset
+        //     };
+        // })();
+
+        // Ping.tick();
+
+        var Buffer = function(buffer_name, type, freq, max_requests){
+            var list = [],
+                last = '',
+                freq = freq,
+                buffer_name = buffer_name,
+                type = type,
+                max_requests = max_requests,
+                n_requests = 0;
+            var flush = function(){
+                if (list.length > 0) {
+                    var r = {};
+                    r[buffer_name] = list.join('|');
+                    r.type = type;
+                    console.log(list);
+                    req(r);
+                    n_requests += 1;
+                    list = [];
+                    last = '';
+                }
             };
-        }
+            var tick = function(){
+                flush();
+                var timeout = setTimeout(tick, freq);
+            };
+            tick();
+            return {
+                push: function(e){
+                    if (e !== last && n_requests < max_requests) {
+                        list.push(e);
+                        last = e;
+                        if (list.length > 128){
+                            flush();
+                        }
+                    }
+                }
+            };
+        };
+
+        var mousemoveBuffer = new Buffer('mousemove_coords', 'heartbeat', 5000, 64),
+            mouseoverBuffer = new Buffer('mouseover_coords', 'heartbeat', 5000, 64),
+            touchBuffer = new Buffer('touchmove_coords', 'theartbeat', 5000, 64);
+
+        // mousemoveBuffer.tick();
+        // mouseoverBuffer.tick();
+        // touchBuffer.tick();
 
         // Mouse event logging
-        var co = []; // Segment coordinate Array
-        var ps = '';
-        var pageX, pageY; // pageXY coordinates
         var viewed = false; // Viewed flag
-        var handleMouseEvents = function(evt) {
+
+        var mouseEventHandler = function(evt) {
             evt = evt || window.event; // global window.event for ie 6,7,8
-            pageX = evt.pageX; // pageX is evt.pageX if defined
-            pageY = evt.pageY;
+            var pageX = evt.pageX; // pageX is evt.pageX if defined
+            var pageY = evt.pageY;
             if (pageX === undefined) {
                 pageX = evt.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                 pageY = evt.clientY + document.body.scrollTop + document.documentElement.scrollTop;
             }
-            if (evt.type == 'mousemove') {
-                var s = util.segment(pageX, pageY, SEGMENTW);
-                if (s != ps) co.push(s);
-                ps = s;
-            } else {
-                req({
-                    px: pageX,
-                    py: pageY,
-                    type: evt.type
-                });
+            pageX = Math.round(pageX);
+            pageY = Math.round(pageY);
+            switch (evt.type){
+                case 'mousemove':
+                    mousemoveBuffer.push(util.segment(pageX, pageY, SEGMENTW));
+                    break;
+                case 'mouseover':
+                    mouseoverBuffer.push(pageX+':'+pageY);
+                    break;
+                default:
+                    req({
+                        px: pageX,
+                        py: pageY,
+                        type: evt.type
+                    });
+                    break;
             }
         };
 
         // Mobile events
-        var touchSegments = [];
-        var lastTouchSegment = '';
-        var handleTouchEvents = function(evt) {
+        var touchEventHandler = function(evt) {
             // TODO: Multiple touch events
             var touches = evt.changedTouches;
             var px = touches[0].pageX;
             var py = touches[0].pageY;
             var sg = util.segment(px, py, SEGMENTW);
-            if (lastTouchSegment != sg) touchSegments.push(sg);
-            lastTouchSegment = sg;
             if (evt.type == 'touchmove') {
-                var s = util.segment(pageX, pageY, SEGMENTW);
-                if (s != ps) co.push(s);
-                ps = s;
+                touchBuffer.push(sg);
             } else {
                 req({
                     px: px,
@@ -535,7 +595,7 @@
         };
 
         // Handle window events
-        var handleWindowEvents = function(evt) {
+        var windowEventHandler = function(evt) {
             evt = evt || window.event; // global window.event for ie 6,7,8
             req({
                 type: evt.type
@@ -596,21 +656,21 @@
         };
 
         // Add event listeners
-        ael(document, 'mousemove',  handleMouseEvents);
-        ael(document, 'mouseover',  handleMouseEvents);
-        ael(document, 'mousedown',  handleMouseEvents);
-        ael(document, 'mouseup',    handleMouseEvents);
-        ael(document, 'click',      handleMouseEvents);
+        ael(document, 'mousemove',  mouseEventHandler);
+        // ael(document, 'mouseover',  mouseEventHandler);
+        ael(document, 'mousedown',  mouseEventHandler);
+        ael(document, 'mouseup',    mouseEventHandler);
+        ael(document, 'click',      mouseEventHandler);
 
-        ael(window, 'touchstart',   handleTouchEvents);
-        ael(window, 'touchend',     handleTouchEvents);
-        ael(window, 'touchmove',    handleTouchEvents);
+        ael(window, 'touchstart',   touchEventHandler);
+        ael(window, 'touchend',     touchEventHandler);
+        ael(window, 'touchmove',    touchEventHandler);
 
-        ael(window, 'focus',        handleWindowEvents);
-        ael(window, 'blur',         handleWindowEvents);
-        ael(window, 'beforeunload', handleWindowEvents);
-        ael(window, 'load',         handleWindowEvents);
-        ael(window, 'unload',       handleWindowEvents);
+        ael(window, 'focus',        windowEventHandler);
+        ael(window, 'blur',         windowEventHandler);
+        ael(window, 'beforeunload', windowEventHandler);
+        ael(window, 'load',         windowEventHandler);
+        ael(window, 'unload',       windowEventHandler);
         ael(window, 'resize',       debounce(handleResizeEvent, 200));
         ael(window, 'scroll',       debounce(handleScrollEvent, 200));
 
@@ -628,20 +688,6 @@
 
         // Periodically send segment Arrays, if segment Array length is > 0
         setInterval(function() {
-            if (co.length > 0) {
-                req({
-                    co: co.join('|'),
-                    type: 'heartbeat'
-                });
-                co = [];
-            }
-            if (touchSegments.length > 0) {
-                req({
-                    co: touchSegments.join('|'),
-                    type: 'theartbeat'
-                });
-                touchSegments = [];
-            }
             if ( ((++PING_INDEX % 60) === 0) & ((util.now() - PAGELOAD_TIMESTAMP) < 5*60*1000)) {
                 console.log(util.now() - PAGELOAD_TIMESTAMP, (util.now() - PAGELOAD_TIMESTAMP) < 10000);
                 req({
