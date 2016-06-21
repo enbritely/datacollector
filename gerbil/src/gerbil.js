@@ -345,6 +345,8 @@
 
         console.log("gerbil", SCRIPT_VERSION, params.gerbilid, "[sid:", default_sid,'iid:', default_iid,']');
         console.log("params:", params);
+        var MOUSETRACKING_ENABLED = params.mt || false;
+        console.log("Mousetracking enabled:", MOUSETRACKING_ENABLED);
 
         if (enviroment.wsid === undefined) {
             throw('No WSID. Aborting.');
@@ -513,7 +515,6 @@
                     var r = {};
                     r[buffer_name] = list.join('|');
                     r.type = type;
-                    console.log(list);
                     req(r);
                     n_requests += 1;
                     list = [];
@@ -529,26 +530,24 @@
                 push: function(e){
                     if (e !== last && n_requests < max_requests) {
                         list.push(e);
-                        last = e;
+                        last = ''+e;
                         if (list.length > 128){
                             flush();
                         }
                     }
-                }
+                },
+                flush: flush
             };
         };
 
         var mousemoveBuffer = new Buffer('mousemove_coords', 'heartbeat', 5000, 64),
             mouseoverBuffer = new Buffer('mouseover_coords', 'heartbeat', 5000, 64),
-            touchBuffer = new Buffer('touchmove_coords', 'theartbeat', 5000, 64);
+            touchBuffer = new Buffer('touchmove_coords', 'theartbeat', 5000, 64),
+            scrollBuffer = new Buffer('st', 'scroll', 5000, 64);
 
-        // mousemoveBuffer.tick();
-        // mouseoverBuffer.tick();
-        // touchBuffer.tick();
-
-        // Mouse event logging
         var viewed = false; // Viewed flag
 
+        // Mouse event logging
         var mouseEventHandler = function(evt) {
             evt = evt || window.event; // global window.event for ie 6,7,8
             var pageX = evt.pageX; // pageX is evt.pageX if defined
@@ -600,15 +599,16 @@
             req({
                 type: evt.type
             });
+            if (evt.type == 'unload' || evt.type  == 'beforeunload') {
+                mousemoveBuffer.flush();
+                touchBuffer.flush();
+                scrollBuffer.flush();
+            }
         };
 
         var handleScrollEvent = function(evt) {
             evt = evt || window.event; // global window.event for ie 6,7,8
-            req({
-                st: document.body.scrollTop,
-                sl: document.body.scrollLeft,
-                type: evt.type
-            });
+            scrollBuffer.push(document.body.scrollTop+':'+document.body.scrollLeft);
         };
 
         var handleResizeEvent = function(evt){
@@ -633,7 +633,7 @@
         // Add Event listener
         var ael = function(el, en, h) {
             if (el.addEventListener) {
-                // As the standard
+                // Standard
                 el.addEventListener(en, h);
             } else {
                 // IE
@@ -656,23 +656,26 @@
         };
 
         // Add event listeners
-        ael(document, 'mousemove',  mouseEventHandler);
-        // ael(document, 'mouseover',  mouseEventHandler);
+        if (MOUSETRACKING_ENABLED) {
+            ael(document, 'mousemove',  mouseEventHandler);
+            ael(document, 'mouseover',  mouseEventHandler);
+            ael(window, 'touchstart',   touchEventHandler);
+            ael(window, 'touchend',     touchEventHandler);
+            ael(window, 'touchmove',    touchEventHandler);
+            ael(window, 'scroll',       handleScrollEvent);
+        }
+
         ael(document, 'mousedown',  mouseEventHandler);
         ael(document, 'mouseup',    mouseEventHandler);
         ael(document, 'click',      mouseEventHandler);
-
-        ael(window, 'touchstart',   touchEventHandler);
-        ael(window, 'touchend',     touchEventHandler);
-        ael(window, 'touchmove',    touchEventHandler);
 
         ael(window, 'focus',        windowEventHandler);
         ael(window, 'blur',         windowEventHandler);
         ael(window, 'beforeunload', windowEventHandler);
         ael(window, 'load',         windowEventHandler);
         ael(window, 'unload',       windowEventHandler);
-        ael(window, 'resize',       debounce(handleResizeEvent, 200));
-        ael(window, 'scroll',       debounce(handleScrollEvent, 200));
+        ael(window, 'resize',       handleResizeEvent);
+
 
         // http://snipplr.com/view/69951/
         var setExactTimeout = function(callback, duration, resolution) {
@@ -686,15 +689,8 @@
             return timeout;
         };
 
-        // Periodically send segment Arrays, if segment Array length is > 0
-        setInterval(function() {
-            if ( ((++PING_INDEX % 60) === 0) & ((util.now() - PAGELOAD_TIMESTAMP) < 5*60*1000)) {
-                console.log(util.now() - PAGELOAD_TIMESTAMP, (util.now() - PAGELOAD_TIMESTAMP) < 10000);
-                req({
-                    type:'ping'
-                });
-            }
-        }, 500);
+
+        //TODO: implement PING if necessery
 
         // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
         setTimeout(function() {
