@@ -2,7 +2,7 @@
   "name": "enbrtly-adnw-dc",
   "asset_name": "en",
   "description": "Enbritely adnetwork data collector package with IAB viewability",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "collectorEndpoint": "http%3A%2F%2F172.31.12.236%2F",
   "title": "client",
   "test_home": "/usr/share/nginx/html",
