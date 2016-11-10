@@ -97,7 +97,7 @@ module.exports = function(grunt) {
               ]
             },
             files: [
-              {expand: true, flatten: true, src: ['src/*.js'], dest: 'dist'}
+              {expand: true, flatten: true, src: ['src/*.js', 'test/*.html', 'test/iframe/*.html'], dest: 'dist'}
             ]
           },
           test: {
@@ -107,10 +107,14 @@ module.exports = function(grunt) {
                   match: 'PACKAGEVERSION',
                   replacement: '<%= pkg.version %>'
                 },
+                {
+                  match: 'COLLECTORENDPOINT',
+                  replacement: '<%= pkg.collectorEndpoint %>'
+                }
               ]
             },
             files: [
-              {expand: true, flatten: true, src: ['src/*.js'], dest: '<%= pkg.test_home %>'}
+              {expand: true, flatten: true, src: ['src/*.js', 'test/*.html', 'test/iframe/*.html'], dest: '<%= pkg.test_home %>'}
             ]
           }
         },
