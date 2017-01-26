@@ -691,7 +691,8 @@
             }
         };
 
-        var hb = new Heartbeat(state).tick();
+        var hb = new Heartbeat(state);
+        hb.tick();
         Ping.tick();
 
         // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
