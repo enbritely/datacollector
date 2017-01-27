@@ -51,6 +51,7 @@ module.exports = function(grunt) {
             files: ['src/*.js', '.jshintrc'],
             options: {
                 reporter: require('jshint-stylish'),
+                reporterOutput: "",
                 force: true,
                 jshintrc: true,
                 curly: true,
