@@ -302,7 +302,7 @@
         cookie: {
           prefix: '__nbrtl-',
           set: function(name, value, days) {
-          	  var expires;
+              var expires;
               if (days) {
                   var date = new Date();
                   date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -335,18 +335,14 @@
 
     // Initialize constants
     var SCRIPT_VERSION = "@@PACKAGEVERSION";
+    var SEND_REQUESTS = "@@SEND_REQUESTS";
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
 
-    console.log("OOOOO  OOOOO  OOOOO  OOOO   OOOOO  O     ");
-    console.log("O      O      O   O  O   O    O    O     ");
-    console.log("O  OO  OOOOO  OOOOO  OOOO     O    O     ");
-    console.log("O   O  O      O  O   O   O    O    O     ");
-    console.log("OOOOO  OOOOO  O   O  OOOO   OOOOO  OOOOOO");
-    console.log("v-"+SCRIPT_VERSION);
-
+    console.log(GERBIL_NAME + " v-" + SCRIPT_VERSION);
+    console.log("send requests", SEND_REQUESTS);
     console.log(util.fetchLinks());
 
     // Try extracting parameters from the URL
@@ -358,8 +354,8 @@
     console.log(usecookie);
     console.log(params);
 
-   default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-   default_iid = util.randomString(16);
+    default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
+    default_iid = util.randomString(16);
 
     console.log("Default sid: ", default_sid);
     console.log("Default iid: ", default_iid);
@@ -461,34 +457,36 @@
 
         console.log(obj);
 
-        var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
-        // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
-        // https://msdn.microsoft.com/en-us/library/ie/cc288060%28v=vs.85%29.aspx
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Browser_compatibility
-        if (ie_version < 6 && ie_version > 0) {
-            // for ie < 6 we don't send fucknot
-            return false;
+        if (SEND_REQUESTS === true) {
+            var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
+            // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
+            // https://msdn.microsoft.com/en-us/library/ie/cc288060%28v=vs.85%29.aspx
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Browser_compatibility
+            if (ie_version < 6 && ie_version > 0) {
+                // for ie < 6 we don't send fucknot
+                return false;
+            }
+            var r;
+            if (ie_version > 9) {
+                // ie 10+ has standards compliant XMLHttpRequest, yaaay!
+                r = new XMLHttpRequest();
+            }
+            if (ie_version === 8 || ie_version === 9) {
+                // ie 8, 9 has microsoft specific XDomainRequest, booo!
+                r = new XDomainRequest();
+            }
+            if (ie_version === 6 || ie_version === 7) {
+                // ie 6, 7 has ActiveXObjects!
+                r = new window.ActiveXObject('Microsoft.XMLHTTP');
+            }
+            if (ie_version === 0) {
+                // if it is not ie, it just works
+                r = new XMLHttpRequest();
+            }
+            r.open('GET', url, true);
+            r.send();
+            r = null;
         }
-        var r;
-        if (ie_version > 9) {
-            // ie 10+ has standards compliant XMLHttpRequest, yaaay!
-            r = new XMLHttpRequest();
-        }
-        if (ie_version === 8 || ie_version === 9) {
-            // ie 8, 9 has microsoft specific XDomainRequest, booo!
-            r = new XDomainRequest();
-        }
-        if (ie_version === 6 || ie_version === 7) {
-            // ie 6, 7 has ActiveXObjects!
-            r = new window.ActiveXObject('Microsoft.XMLHTTP');
-        }
-        if (ie_version === 0) {
-            // if it is not ie, it just works
-            r = new XMLHttpRequest();
-        }
-        r.open('GET', url, true);
-        r.send();
-        r = null;
         return false;
     };
 

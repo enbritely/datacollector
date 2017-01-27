@@ -88,7 +88,11 @@ module.exports = function(grunt) {
                 {
                   match: 'PACKAGEVERSION',
                   replacement: '<%= pkg.version %>'
-                }
+                },
+                {
+                  match: 'SEND_REQUESTS',
+                  replacement: true
+                },
               ]
             },
             files: [
@@ -101,7 +105,11 @@ module.exports = function(grunt) {
                 {
                   match: 'PACKAGEVERSION',
                   replacement: '<%= pkg.version %>'
-                }
+                },
+                {
+                  match: 'SEND_REQUESTS',
+                  replacement: false
+                },
               ]
             },
             files: [
