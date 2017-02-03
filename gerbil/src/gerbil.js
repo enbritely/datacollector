@@ -71,7 +71,7 @@
             }
             return t;
         },
-        _utf8_encode: function (e) {
+        _utf8_encode: function(e) {
             e = e.replace(/\r\n/g, "\n");
             var t = "";
             for (var n = 0; n < e.length; n++) {
@@ -91,6 +91,8 @@
         },
     };
 
+    // Utility functions
+
     var util = {
         getCurrentScript: function(script_name) {
             var scripts = document.getElementsByTagName("SCRIPT");
@@ -103,27 +105,37 @@
                 }
             }
         },
-        getURLSid: function () {
-            var paramName = "enby_sid";
-            var query = document.location.search.split("?");
-            if (query.length < 2) {
-                return undefined;
+        parseURLParameters: function(URL) {
+          var result = {};
+          var query = URL.split("?").pop().split("&");
+          for (var i=0; i<query.length; i++){
+            var part = query[i];
+            part = part.split("+").join(" "); // replace every + with space, regexp-free version
+            var eq = part.indexOf("=");
+            var key = eq > -1 ? part.substr(0,eq) : part;
+            var val = eq > -1 ? decodeURIComponent(part.substr(eq+1)) : "";
+            var from = key.indexOf("[");
+            if(from == -1) {
+                result[decodeURIComponent(key)] = val;
             }
-            var paramPart = query[1];
-            if (paramPart.indexOf("?") === 0) {
-                paramPart = paramPart.substr(1);
-            }
-            var params = paramPart.split("&");
-            for (var i = 0; i < params.length; i++) {
-                var kv = params[i].split("=");
-                if (kv.length < 2 || kv[0].toLowerCase() !== paramName) {
-                    continue;
-                } else {
-                    return kv[1];
+            else {
+                var to = key.indexOf("]");
+                var index = decodeURIComponent(key.substring(from+1,to));
+                key = decodeURIComponent(key.substring(0,from));
+                if(!result[key]) {
+                    result[key] = [];
+                }
+                if(!index) {
+                    result[key].push(val);
+                }
+                else {
+                    result[key][index] = val;
                 }
             }
+          }
+          return result;
         },
-        fetchLinks: function () {
+        fetchLinks: function() {
             var result = {};
             var tags = ['script', 'img', 'a', 'iframe'];
             for (var tag in tags) {
@@ -141,7 +153,7 @@
             }
             return result;
         },
-        fetchIfIframe: function () {
+        fetchIfIframe: function() {
             if (util.inIframe()) {
                 return util.fetchLinks();
             } else {
@@ -149,7 +161,7 @@
             }
         },
         // IE version detection
-        detectIEVersion: function (ua) {
+        detectIEVersion: function(ua) {
             var msie = ua.indexOf('msie ');
             if (msie > 0) {
                 // IE 10 or older => return version number
@@ -172,27 +184,6 @@
         // Returns UTC timestamp in milliseconds
         now: function () {
             return new Date().getTime();
-        },
-        // Returns an object from query string of the gerbil.js
-        getQueryParams: function (script_url) {
-            // Find all script tags for our collector if any
-            var scripts = document.getElementsByTagName("script");
-            // Look through them trying to find ourselves
-            for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.indexOf(script_url) > -1) {
-                    // Get an array of key=value strings of params
-                    var pa = scripts[i].src.split("?").pop().split("&");
-                    // Split each key=value into array, the construct js object
-                    var p = {};
-                    for (var j = 0; j < pa.length; j++) {
-                        var kv = pa[j].split("=");
-                        p[kv[0]] = kv[1];
-                    }
-                    return p;
-                }
-            }
-            // No scripts match
-            return {};
         },
         // Returns 1 if window is in an iframe and 0 if not
         inIframe: function () {
@@ -251,12 +242,11 @@
 
     console.log("gerbil v-" + SCRIPT_VERSION);
     console.log("current script src:" + CURRENT_SCRIPT_SRC);
-    console.log("current script:" + CURRENT_SCRIPT);
 
     console.log(util.fetchLinks());
 
     // Try extracting parameters from the URL
-    var params = util.getQueryParams(GERBIL_NAME);
+    var params = util.parseURLParameters(CURRENT_SCRIPT);
 
     var default_iid, default_sid;
 
@@ -284,11 +274,11 @@
     // var params_collector = params.collector && decodeURIComponent(params.collector);
 
     var LOGGER_URL = enviroment.collector || default_collector;
-    var urlSid = util.getURLSid(location);
+    var urlparameters = util.parseURLParameters(location);
 
     // TODO: try-catch connection error, and abort if host is not reachable
 
-    enviroment.sid = urlSid || enviroment.sid || params.n || params.sid || default_sid;
+    enviroment.sid = urlparameters.enbysid || enviroment.sid || params.n || params.sid || default_sid;
     enviroment.iid = enviroment.iid || params.n || params.iid || default_iid;
     enviroment.pid = enviroment.pid || params.esid || params.pid || 'NAN';
     enviroment.purl = enviroment.purl || params.s || params.purl || 'NAN';
