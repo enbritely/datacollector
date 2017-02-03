@@ -2,11 +2,13 @@
 /*jshint -W061 */
 
 (function (undefined) {
+
     var lastCalledTime;
     var counter = 0;
     var fpsArray = [];
     var fpsIframe = 0;
-    // fps lopp calculator
+
+    // FPS lopp calculator
     var fpsLoop = function () {
         if (!lastCalledTime) {
             lastCalledTime = new Date().getTime();
@@ -30,6 +32,7 @@
         }
         window.requestAnimationFrame(fpsLoop);
     };
+
     // Request framerate from window
     window.requestAnimationFrame = function () {
         return window.requestAnimationFrame ||
@@ -42,6 +45,7 @@
             };
     }();
     window.requestAnimationFrame(fpsLoop);
+
     // Base64 encoding
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -86,98 +90,6 @@
             return t;
         },
     };
-
-    // JSON encoding support for IE6 and IE7
-
-    "object" != typeof JSON && (JSON = {}),
-            function () {
-                "use strict";
-
-                function f(t) {
-                    return 10 > t ? "0" + t : t;
-                }
-
-                function quote(t) {
-                    return escapable.lastIndex = 0, escapable.test(t) ? '"' + t.replace(escapable, function (t) {
-                        var e = meta[t];
-                        return "string" == typeof e ? e : "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4);
-                    }) + '"' : '"' + t + '"';
-                }
-
-                function str(t, e) {
-                    var r, n, o, f, u, p = gap,
-                            a = e[t];
-                    switch (a && "object" == typeof a && "function" == typeof a.toJSON && (a = a.toJSON(t)), "function" == typeof rep && (a = rep.call(e, t, a)), typeof a) {
-                        case "string":
-                            return quote(a);
-                        case "number":
-                            return isFinite(a) ? a + "" : "null";
-                        case "boolean":
-                        case "null":
-                            return a + "";
-                        case "object":
-                            if (!a)
-                                return "null";
-                            if (gap += indent, u = [], "[object Array]" === Object.prototype.toString.apply(a)) {
-                                for (f = a.length, r = 0; f > r; r += 1)
-                                    u[r] = str(r, a) || "null";
-                                return o = 0 === u.length ? "[]" : gap ? "[\n" + gap + u.join(",\n" + gap) + "\n" + p + "]" : "[" + u.join(",") + "]", gap = p, o;
-                            }
-                            if (rep && "object" == typeof rep)
-                                for (f = rep.length, r = 0; f > r; r += 1)
-                                    "string" == typeof rep[r] && (n = rep[r], o = str(n, a), o && u.push(quote(n) + (gap ? ": " : ":") + o));
-                            else
-                                for (n in a)
-                                    Object.prototype.hasOwnProperty.call(a, n) && (o = str(n, a), o && u.push(quote(n) + (gap ? ": " : ":") + o));
-                            return o = 0 === u.length ? "{}" : gap ? "{\n" + gap + u.join(",\n" + gap) + "\n" + p + "}" : "{" + u.join(",") + "}", gap = p, o;
-                    }
-                }
-                "function" != typeof Date.prototype.toJSON && (Date.prototype.toJSON = function () {
-                    return isFinite(this.valueOf()) ? this.getUTCFullYear() + "-" + f(this.getUTCMonth() + 1) + "-" + f(this.getUTCDate()) + "T" + f(this.getUTCHours()) + ":" + f(this.getUTCMinutes()) + ":" + f(this.getUTCSeconds()) + "Z" : null;
-                }, String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function () {
-                    return this.valueOf();
-                });
-                var cx, escapable, gap, indent, meta, rep;
-                "function" != typeof JSON.stringify && (escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, meta = {
-                    "\b": "\\b",
-                    "    ": "\\t",
-                    "\n": "\\n",
-                    "\f": "\\f",
-                    "\r": "\\r",
-                    '"': '\\"',
-                    "\\": "\\\\"
-                }, JSON.stringify = function (t, e, r) {
-                    var n;
-                    if (gap = "", indent = "", "number" == typeof r)
-                        for (n = 0; r > n; n += 1)
-                            indent += " ";
-                    else
-                        "string" == typeof r && (indent = r);
-                    if (rep = e, e && "function" != typeof e && ("object" != typeof e || "number" != typeof e.length))
-                        throw Error("JSON.stringify");
-                    return str("", {
-                        "": t
-                    });
-                }), "function" != typeof JSON.parse && (cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, JSON.parse = function (text, reviver) {
-                    function walk(t, e) {
-                        var r, n, o = t[e];
-                        if (o && "object" == typeof o)
-                            for (r in o)
-                                Object.prototype.hasOwnProperty.call(o, r) && (n = walk(o, r), void 0 !== n ? o[r] = n : delete o[r]);
-                        return reviver.call(t, e, o);
-                    }
-                    var j;
-                    if (text += "", cx.lastIndex = 0, cx.test(text) && (text = text.replace(cx, function (t) {
-                        return "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4);
-                    })), /^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, "")))
-                        return j = eval("(" + text + ")"), "function" == typeof reviver ? walk({
-                            "": j
-                        }, "") : j;
-                    throw new SyntaxError("JSON.parse");
-                });
-            }();
-
-    /* jshint ignore:end */
 
     var util = {
         getCurrentScript: function(script_name) {
@@ -316,33 +228,6 @@
                         )
             };
         },
-        // Cookie handling functionality
-        cookie: {
-            prefix: '__nbrtl-',
-            set: function (name, value, days) {
-                var expires;
-                if (days) {
-                    var date = new Date();
-                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                    expires = "; expires=" + date.toGMTString();
-                } else
-                    expires = "";
-                document.cookie = this.prefix + name + "=" + value + expires + "; path=/";
-                return value;
-            },
-            get: function (name) {
-                var nameEQ = this.prefix + name + "=";
-                var ca = document.cookie.split(';');
-                for (var i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) == ' ')
-                        c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) === 0)
-                        return c.substring(nameEQ.length, c.length);
-                }
-                return null;
-            }
-        },
         // Returns a random string of length len
         randomString: function (len) {
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -373,14 +258,12 @@
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
 
-    var usecookie = params.usecookie || false;
     var default_iid, default_sid;
 
-    console.log(usecookie);
     console.log(params);
 
-    default_sid = util.cookie.get('sid') || util.cookie.set('sid', util.randomString(16), 1);
-    default_iid = util.randomString(16);
+    default_sid = util.randomString(16);
+    default_iid = default_sid;
 
     console.log("Default sid: ", default_sid);
     console.log("Default iid: ", default_iid);
