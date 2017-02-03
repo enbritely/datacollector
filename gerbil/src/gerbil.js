@@ -1150,8 +1150,11 @@
                                 state.part.vertical = "bottom";
                                 break;
                             case "full":
+                                /* falls through */
                             case "none":
+                                /* falls through */
                             case "middle":
+                                /* falls through */
                             default:
                                 state.part.vertical = v.part;
                                 break;
@@ -1164,8 +1167,11 @@
                                 state.part.horizontal = "right";
                                 break;
                             case "full":
+                                /* falls through */
                             case "none":
+                                /* falls through */
                             case "middle":
+                                /* falls through */
                             default:
                                 state.part.horizontal = h.part;
                                 break;
