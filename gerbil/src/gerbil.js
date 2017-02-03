@@ -2,20 +2,21 @@
 /*jshint -W061 */
 (function(undefined) {
     "use strict";
-    var getScripts = function(script_name) {
-        var scripts = document.getElementsByTagName("script");
-        var script_srcs = [];
+    var getCurrentScript = function(script_name) {
+        var scripts = document.getElementsByTagName("SCRIPT");
         for (var i = 0; i < scripts.length; i++) {
             if (scripts[i].src.indexOf(script_name) > -1) {
-                script_srcs.push(scripts[i].src);
+                if (scripts[i].id === ""){
+                    scripts[i].id = 'gerbil-' + i;
+                    return scripts[i].src;
+                }
             }
         }
-        return script_srcs;
     };
     // Returns an object from query string of the gerbil.js
     var getScriptParameters = function(script_url) {
         // Find all script tags for our collector if any
-        var scripts = document.getElementsByTagName("script");
+        var scripts = document.getElementsByTagName("SCRIPT");
         // Look through them trying to find ourselves
         for (var i = 0; i < scripts.length; i++) {
             if (scripts[i].src.indexOf(script_url) > -1) {
@@ -101,8 +102,14 @@
             // Makes a CORS AJAX request to logging server with an object
             req: function(obj, env) {
 
-                if (env.seq === env.MAXREQUESTS) {
-                    return false;
+                var async = true;
+                if (env.seq === env.maxrequest + 1) {
+                    if (obj.type === 'beforeunload' || obj.type === 'unload') {
+                        async = false;
+                    }
+                    else {
+                        return false;
+                    }
                 }
 
                 var ts = util.now();
@@ -114,7 +121,7 @@
                 obj.iid = env.iid;
                 obj.seq = env.seq;
 
-                var url = env.collector + 'a.gif?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
+                var url = env.collector + 'a.gif?wsid=' + obj.wsid + '&event=' + obj.type + '&data=' + Base64.encode(JSON.stringify(obj))+'&ts=' + ts;
 
                 var ie_version = util.detectIEVersion(navigator.userAgent.toLowerCase());
                 // http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
@@ -143,12 +150,13 @@
                 }
 
                 // async request
-                r.open('GET', url, true);
+                r.open('GET', url, async);
 
                 r.send(null);
                 r = null;
 
                 console.log(obj.type);
+                console.log(obj);
 
                 env.seq++;
 
@@ -341,7 +349,7 @@
                 sl: function(){ return body.scrollLeft || 0; },
                 scrolled: scrolled,
             };
-        })();
+        })(undefined);
 
         var Performance = (function() {
 
@@ -463,11 +471,14 @@
         // Init env
         var env = {};
 
+        // Extract parameters from script
+        var params = parsed_params;
+
         // Initialize constants
         env.scriptVersion = "@@PACKAGEVERSION";
         env.pageload_timestamp = util.now();
-        env.segmentWidth = 10;
-        env.MAXREQUESTS = 128;
+        env.segmw = +parsed_params.segmw || 100;
+        env.maxrequest = +parsed_params.maxr || 128;
         env.seq = 1;
 
         // TODO generate random hash for name
@@ -475,8 +486,8 @@
 
         console.log("GERBIL v-"+env.scriptVersion);
 
-        // Extract parameters from script
-        var params = parsed_params;
+        // Add gerbil URL
+        env.gerbil_url = params.gerbil_url;
 
         // Init wsid, abort if not present
         env.wsid = env.wsid || params.wsid;
@@ -541,17 +552,18 @@
             plat:           env.plat, // platform of the browser (str)
             iev:            env.iev, // internet explorer version, 0="not ie" (int)
             inif:           env.inIFrame,
-            cid:            env.cid, // client id (str)
-            curl:           env.curl, // client url (str)
-            zid:            env.zid, // zone id (str)
-            pid:            env.pid, // partner id (str)
-            purl:           env.purl, // partner url (str)
             aid:            env.aid, // advertiser id (str)
             adid:           env.adid, // ad id (str)
+            cid:            env.cid, // client id (str)
+            curl:           env.curl, // client url (str)
+            pid:            env.pid, // partner id (str)
+            purl:           env.purl, // partner url (str)
+            zid:            env.zid, // zone id (str)
             banw:           env.banw, // banner width (int)
             banh:           env.banh, // banner height (int)
             lang:           env.lang,
             tzo:            env.tzoHours,
+            gurl:           env.gerbil_url,
             dw:             DocumentDimensions.dw(),
             dh:             DocumentDimensions.dh(),
             eh:             DocumentDimensions.eh(),
@@ -566,8 +578,8 @@
             sw:             DocumentDimensions.sw(),
             st:             ScrollState.st(),
             sl:             ScrollState.sl(),
-            mr:             env.MAXREQUESTS,
-            segw:           env.segmentWidth,
+            mr:             env.maxrequest,
+            segw:           env.segmw,
             type:           'ready'
         };
 
@@ -593,7 +605,7 @@
             pageY = Math.round(pageY);
             switch (evt.type){
                 case 'mousemove':
-                    mousemoveBuffer.push(util.segment(pageX, pageY, env.segmentWidth));
+                    mousemoveBuffer.push(util.segment(pageX, pageY, env.segmw));
                     break;
                 default:
                     util.req({
@@ -693,7 +705,6 @@
 
         var hb = new Heartbeat(state);
         hb.tick();
-        Ping.tick();
 
         // Send pageview message after 5 ms (IE8 fucks up smthing, this is a hack)
         setTimeout(function() {
@@ -704,44 +715,14 @@
             util.req(Performance.get(), env);
         }, 1000);
 
+        Ping.tick();
+
     };
 
-    if (true !== window.__enbrtly_loaded) {
-        window.__enbrtly_loaded = true;
-        window.__enbrtly_collectors = [];
-        var script_urls = getScripts('gerbil');
-        for (var k in script_urls) {
-            var url = script_urls[k];
-            console.log(url);
-            var parsed_params = getScriptParameters(url);
-            parsed_params.identifyByClass = false;
-            if (parsed_params.adboxid === undefined) {
-                // try adboxclass
-                if (parsed_params.adboxclass === undefined) {
-                    // inpage integration
-                    console.log("No adbox defined");
-                    window.__enbrtly_collectors.push(new Collector(parsed_params));
-                    break;
-                }
-                else {
-                    var klass = parsed_params.adboxclass;
-                    var els = document.getElementsByClassName(klass);
-                    console.log(els.length);
-                    for (var j=0; j<els.length; j++) {
-                        els[j].className += ' '+klass+'-'+j;
-                        console.log(j, els[j].className);
-                        parsed_params.adboxid = klass+'-'+j;
-                        parsed_params.identifyByClass = true;
-                        window.__enbrtly_collectors.push(new Collector(parsed_params));
-                    }
-                    break;
-                }
-            }
-            else {
-                // use the adboxid attribute
-                window.__enbrtly_collectors.push(new Collector(parsed_params));
-            }
-        }
-    }
+    window.__enbrtly_collectors = window.__enbrtly_collectors || [];
+    var gerbil_url = getCurrentScript('gerbil');
+    var parsed_params = getScriptParameters(gerbil_url);
+    parsed_params.gerbil_url =  gerbil_url;
+    window.__enbrtly_collectors.push(new Collector(parsed_params));
 
 }());

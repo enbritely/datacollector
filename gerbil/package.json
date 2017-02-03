@@ -3,7 +3,7 @@
   "asset_name": "en",
   "description": "Enbritely adnetwork data collector package with IAB viewability",
   "version": "3.1.0",
-  "collectorEndpoint": "http%3A%2F%2F172.31.2.27%2F",
+  "collectorEndpoint": "http%3A%2F%2F172.31.11.247%2F",
   "title": "client",
   "test_home": "/usr/share/nginx/html",
   "devDependencies": {
