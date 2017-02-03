@@ -180,6 +180,17 @@
     /* jshint ignore:end */
 
     var util = {
+        getCurrentScript: function(script_name) {
+            var scripts = document.getElementsByTagName("SCRIPT");
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].src.indexOf(script_name) > -1) {
+                    if (scripts[i].id === ""){
+                        scripts[i].id = 'gerbil-' + i;
+                        return scripts[i];
+                    }
+                }
+            }
+        },
         getURLSid: function () {
             var paramName = "enby_sid";
             var query = document.location.search.split("?");
@@ -350,14 +361,19 @@
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
 
+    var CURRENT_SCRIPT = util.getCurrentScript(GERBIL_NAME);
+    var CURRENT_SCRIPT_SRC = CURRENT_SCRIPT.src;
+
     console.log("gerbil v-" + SCRIPT_VERSION);
+    console.log("current script src:" + CURRENT_SCRIPT_SRC);
+    console.log("current script:" + CURRENT_SCRIPT);
 
     console.log(util.fetchLinks());
 
     // Try extracting parameters from the URL
     var params = util.getQueryParams(GERBIL_NAME);
 
-    var usecookie = false || params.usecookie;
+    var usecookie = params.usecookie || false;
     var default_iid, default_sid;
 
     console.log(usecookie);
@@ -403,6 +419,9 @@
     enviroment.banh = enviroment.banh || params.banh || dims.height;
     enviroment.banw = enviroment.banw || params.banw || dims.width;
 
+    enviroment.seq = 1;
+    enviroment.tzoHours = (new Date()).getTimezoneOffset() / 60;
+
     var body = document.getElementsByTagName('body')[0];
 
     var docdim = util.documentDimensions();
@@ -427,6 +446,7 @@
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
         lang: navigator.language,
+        tzo: enviroment.tzoHours,
         dw: docdim.width,
         dh: docdim.height,
         eh: document.documentElement.clientHeight, // Read-only property: the root element's height (int)
@@ -440,6 +460,7 @@
         sh: screen.height, // Height of screen in pixels (int)
         sw: screen.width, // Width of screen in pixels (int)
         segw: SEGMENTW,
+        gsrc: CURRENT_SCRIPT_SRC,
         type: 'ready'
     };
 
@@ -460,6 +481,7 @@
         obj.wsid = enviroment.wsid; // webshop id (str)
         obj.sid = enviroment.sid; // session id (str)
         obj.iid = enviroment.iid; // impression id (str)
+        obj.seq = enviroment.seq;
 
         var url = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj)) + '&ts=' + ts;
 
@@ -498,16 +520,11 @@
         r.open('GET', url, true);
         r.send();
         r = null;
+
+        enviroment.seq++;
+
         return false;
     };
-
-    // Attach custom_event function to _enbrtly_ window object to call externally and send custom objects
-    if (window._enbrtly_) {
-        window._enbrtly_.custom_event = function (obj) {
-            obj.type = 'custom';
-            req(obj);
-        };
-    }
 
     // Mouse event logging
     var co = []; // Segment coordinate Array
@@ -886,15 +903,16 @@
             };
             // Locates the ad element in the DOM
             this.locateElement = function () {
-                var scripts = document.getElementsByTagName('script');
-                var me = scripts[ scripts.length - 1 ];
+                // var scripts = document.getElementsByTagName('script');
+                // var me = scripts[ scripts.length - 1 ];
+                var me = CURRENT_SCRIPT;
                 var childern = me.parentElement.children;
                 var prevDiv;
                 for (var i = 0; i < childern.length; i++) {
                     var element = childern[i];
                     if (element.tagName === "DIV") {
                         prevDiv = element;
-                    } else if (element.tagName === "SCRIPT") {
+                    } else if ((element.tagName === "SCRIPT") && element.src === CURRENT_SCRIPT.src) {
                         return prevDiv;
                     }
                 }
