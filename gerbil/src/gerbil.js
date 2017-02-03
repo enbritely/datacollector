@@ -93,22 +93,22 @@
 
     // Utility functions
 
-    var util = {
-        getCurrentScript: function(script_name) {
-            var scripts = document.getElementsByTagName("SCRIPT");
-            for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.indexOf(script_name) > -1) {
-                    if (scripts[i].id === ""){
-                        scripts[i].id = 'gerbil-' + i;
-                        return scripts[i];
-                    }
+    var getCurrentScript = function(script_name) {
+        var scripts = document.getElementsByTagName("SCRIPT");
+        for (var i = 0; i < scripts.length; i++) {
+            if (scripts[i].src.indexOf(script_name) > -1) {
+                if (scripts[i].id === ""){
+                    scripts[i].id = 'gerbil-' + i;
+                    return scripts[i];
                 }
             }
-        },
-        parseURLParameters: function(URL) {
-          var result = {};
-          var query = URL.split("?").pop().split("&");
-          for (var i=0; i<query.length; i++){
+        }
+    };
+
+    var parseURLParameters = function(url) {
+        var result = {};
+        var query = url.split("?").pop().split("&");
+        for (var i=0; i<query.length; i++){
             var part = query[i];
             part = part.split("+").join(" "); // replace every + with space, regexp-free version
             var eq = part.indexOf("=");
@@ -132,9 +132,11 @@
                     result[key][index] = val;
                 }
             }
-          }
-          return result;
-        },
+        }
+        return result;
+    };
+
+    var util = {
         fetchLinks: function() {
             var result = {};
             var tags = ['script', 'img', 'a', 'iframe'];
@@ -236,27 +238,14 @@
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
     var PING_INDEX = 0;
-
-    var CURRENT_SCRIPT = util.getCurrentScript(GERBIL_NAME);
+    var CURRENT_SCRIPT = getCurrentScript(GERBIL_NAME);
     var CURRENT_SCRIPT_SRC = CURRENT_SCRIPT.src;
 
-    console.log("gerbil v-" + SCRIPT_VERSION);
-    console.log("current script src:" + CURRENT_SCRIPT_SRC);
-
-    console.log(util.fetchLinks());
-
     // Try extracting parameters from the URL
-    var params = util.parseURLParameters(CURRENT_SCRIPT);
+    var params = parseURLParameters(CURRENT_SCRIPT_SRC);
 
-    var default_iid, default_sid;
-
-    console.log(params);
-
-    default_sid = util.randomString(16);
-    default_iid = default_sid;
-
-    console.log("Default sid: ", default_sid);
-    console.log("Default iid: ", default_iid);
+    var default_sid = util.randomString(16);
+    var default_iid = default_sid;
 
     // Initialize enviroment
     // TODO: environment building
@@ -268,13 +257,22 @@
     }
 
     var default_collector = "https://dc-" + enviroment.wsid + ".enbrite.ly";
-    console.log("Default collector:", default_collector);
 
     // TODO: add params collector support in request URL
     // var params_collector = params.collector && decodeURIComponent(params.collector);
 
     var LOGGER_URL = enviroment.collector || default_collector;
-    var urlparameters = util.parseURLParameters(location);
+    var urlparameters = parseURLParameters(document.URL);
+
+    console.log("GERBIL v-" + SCRIPT_VERSION);
+    console.log("Current script src:" + CURRENT_SCRIPT_SRC);
+    console.log("GERBIL parameters");
+    console.log(params);
+    console.log("URL parameters");
+    console.log(urlparameters);
+    console.log("Default sid: ", default_sid);
+    console.log("Default iid: ", default_iid);
+    console.log("Default collector:", default_collector);
 
     // TODO: try-catch connection error, and abort if host is not reachable
 
