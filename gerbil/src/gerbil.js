@@ -439,6 +439,7 @@
         avh: screen.availHeight, // Available screen height in pixels (int)
         sh: screen.height, // Height of screen in pixels (int)
         sw: screen.width, // Width of screen in pixels (int)
+        segw: SEGMENTW,
         type: 'ready'
     };
 
