@@ -5,7 +5,7 @@
   "version": "2.3.0",
   "title": "client",
   "test_home": "/usr/share/nginx/html",
-  "helper_iframe_main_url": "http://172.31.1.208:8080/iframe/pixel.min.html",
+  "helper_iframe_main_url": "https://df3a34acb7eb1321d99f-2366b89f86f9049a8d564854bcebe54e.ssl.cf5.rackcdn.com/dist/bin/pixel.min.html",
   "helper_iframe_test_url": "http://172.31.1.208:8080/iframe/pixel.min.html",
   "ad_iframe_url": "http://172.31.1.208:8080/iframe/iframe.html",
   "iframe_collector": "http://172.31.1.208:8080/gerbil.js?wsid=test",
