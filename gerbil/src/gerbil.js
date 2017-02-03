@@ -1293,7 +1293,7 @@
                 that.enEventTimer = setTimeout(function () {
                     that.isViewable(event.type);
                 }, that.configuration.eventTimer);
-            }
+            };
             // Event Out Manager - manages events that indicates that the ad cloud be not visible at all
             this.eventOutManager = function (event) {
                 clearInterval(that.enEventTimer);
