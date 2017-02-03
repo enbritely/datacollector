@@ -3,7 +3,7 @@
     var counter = 0;
     var fpsArray = [];
     var fpsIframe = 0;
-// fps lopp calculator
+    // fps lopp calculator
     var fpsLoop = function () {
         if (!lastCalledTime) {
             lastCalledTime = new Date().getTime();
@@ -14,10 +14,10 @@
         fpsIframe = Math.ceil((1 / delta));
         if (counter >= 60) {
             var sum = fpsArray.reduce(function (a, b) {
-                return a + b
+                return a + b;
             });
-//        var average = Math.ceil(sum / fpsArray.length);
-            //Prepare data to send
+            // var average = Math.ceil(sum / fpsArray.length);
+            // Prepare data to send
             counter = 0;
         } else {
             if (fpsIframe !== Infinity) {
@@ -26,17 +26,17 @@
             counter++;
         }
         window.requestAnimationFrame(fpsLoop);
-    }
-// Request framerate from window
+    };
+    // Request framerate from window
     window.requestAnimationFrame = function () {
         return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                window.oRequestAnimationFrame ||
-                function (f) {
-                    window.setTimeout(f, 1e3 / 60);
-                }
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            function (f) {
+                window.setTimeout(f, 1e3 / 60);
+            };
     }();
     window.requestAnimationFrame(fpsLoop);
     // Base64 encoding
@@ -138,14 +138,14 @@
                 "use strict";
 
                 function f(t) {
-                    return 10 > t ? "0" + t : t
+                    return 10 > t ? "0" + t : t;
                 }
 
                 function quote(t) {
                     return escapable.lastIndex = 0, escapable.test(t) ? '"' + t.replace(escapable, function (t) {
                         var e = meta[t];
-                        return "string" == typeof e ? e : "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4)
-                    }) + '"' : '"' + t + '"'
+                        return "string" == typeof e ? e : "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4);
+                    }) + '"' : '"' + t + '"';
                 }
 
                 function str(t, e) {
@@ -165,7 +165,7 @@
                             if (gap += indent, u = [], "[object Array]" === Object.prototype.toString.apply(a)) {
                                 for (f = a.length, r = 0; f > r; r += 1)
                                     u[r] = str(r, a) || "null";
-                                return o = 0 === u.length ? "[]" : gap ? "[\n" + gap + u.join(",\n" + gap) + "\n" + p + "]" : "[" + u.join(",") + "]", gap = p, o
+                                return o = 0 === u.length ? "[]" : gap ? "[\n" + gap + u.join(",\n" + gap) + "\n" + p + "]" : "[" + u.join(",") + "]", gap = p, o;
                             }
                             if (rep && "object" == typeof rep)
                                 for (f = rep.length, r = 0; f > r; r += 1)
@@ -173,13 +173,13 @@
                             else
                                 for (n in a)
                                     Object.prototype.hasOwnProperty.call(a, n) && (o = str(n, a), o && u.push(quote(n) + (gap ? ": " : ":") + o));
-                            return o = 0 === u.length ? "{}" : gap ? "{\n" + gap + u.join(",\n" + gap) + "\n" + p + "}" : "{" + u.join(",") + "}", gap = p, o
+                            return o = 0 === u.length ? "{}" : gap ? "{\n" + gap + u.join(",\n" + gap) + "\n" + p + "}" : "{" + u.join(",") + "}", gap = p, o;
                     }
                 }
                 "function" != typeof Date.prototype.toJSON && (Date.prototype.toJSON = function () {
-                    return isFinite(this.valueOf()) ? this.getUTCFullYear() + "-" + f(this.getUTCMonth() + 1) + "-" + f(this.getUTCDate()) + "T" + f(this.getUTCHours()) + ":" + f(this.getUTCMinutes()) + ":" + f(this.getUTCSeconds()) + "Z" : null
+                    return isFinite(this.valueOf()) ? this.getUTCFullYear() + "-" + f(this.getUTCMonth() + 1) + "-" + f(this.getUTCDate()) + "T" + f(this.getUTCHours()) + ":" + f(this.getUTCMinutes()) + ":" + f(this.getUTCSeconds()) + "Z" : null;
                 }, String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function () {
-                    return this.valueOf()
+                    return this.valueOf();
                 });
                 var cx, escapable, gap, indent, meta, rep;
                 "function" != typeof JSON.stringify && (escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, meta = {
@@ -201,24 +201,24 @@
                         throw Error("JSON.stringify");
                     return str("", {
                         "": t
-                    })
+                    });
                 }), "function" != typeof JSON.parse && (cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, JSON.parse = function (text, reviver) {
                     function walk(t, e) {
                         var r, n, o = t[e];
                         if (o && "object" == typeof o)
                             for (r in o)
                                 Object.prototype.hasOwnProperty.call(o, r) && (n = walk(o, r), void 0 !== n ? o[r] = n : delete o[r]);
-                        return reviver.call(t, e, o)
+                        return reviver.call(t, e, o);
                     }
                     var j;
                     if (text += "", cx.lastIndex = 0, cx.test(text) && (text = text.replace(cx, function (t) {
-                        return "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4)
+                        return "\\u" + ("0000" + t.charCodeAt(0).toString(16)).slice(-4);
                     })), /^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, "")))
                         return j = eval("(" + text + ")"), "function" == typeof reviver ? walk({
                             "": j
                         }, "") : j;
-                    throw new SyntaxError("JSON.parse")
-                })
+                    throw new SyntaxError("JSON.parse");
+                });
             }();
 
     /* jshint ignore:end */
@@ -231,7 +231,7 @@
                 return undefined;
             }
             var paramPart = query[1];
-            if (paramPart.indexOf("?") == 0) {
+            if (paramPart.indexOf("?") === 0) {
                 paramPart = paramPart.substr(1);
             }
             var params = paramPart.split("&");
@@ -240,7 +240,7 @@
                 if (kv.length < 2 || kv[0].toLowerCase() !== paramName) {
                     continue;
                 } else {
-                    return kv[1]
+                    return kv[1];
                 }
             }
         },
@@ -254,7 +254,7 @@
                 for (var e in tag_elements) {
                     var cur = tag_elements[e];
                     var v = cur.src || cur.href;
-                    if (v != null) {
+                    if (v !== null) {
                         l.push(v);
                     }
                 }
@@ -353,12 +353,13 @@
         cookie: {
             prefix: '__nbrtl-',
             set: function (name, value, days) {
+                var expires;
                 if (days) {
                     var date = new Date();
                     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                    var expires = "; expires=" + date.toGMTString();
+                    expires = "; expires=" + date.toGMTString();
                 } else
-                    var expires = "";
+                    expires = "";
                 document.cookie = this.prefix + name + "=" + value + expires + "; path=/";
                 return value;
             },
@@ -369,7 +370,7 @@
                     var c = ca[i];
                     while (c.charAt(0) == ' ')
                         c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0)
+                    if (c.indexOf(nameEQ) === 0)
                         return c.substring(nameEQ.length, c.length);
                 }
                 return null;
@@ -536,7 +537,7 @@
             // if it is not ie, it just works
             r = new XMLHttpRequest();
         }
-        
+
         r.open('GET', url, true);
         r.send();
         r = null;
@@ -762,7 +763,7 @@
                 reportStep: 5000, // the timer for the after X reports
                 iframeSrcUrl: "pixel.min.html",
                 iframesCount: 9,
-            }
+            };
             // Iframe Pixel States
             this.pixels = {
                 tl: {
@@ -828,7 +829,7 @@
                     lastReportFPS: 0,
                     averageFPS: 0,
                 },
-            }
+            };
             // END of Configuration
             // HELPERS
             // iFrame Pixel Creator
@@ -842,7 +843,7 @@
                 iframe.setAttribute("allowtransparency", "true");
                 document.body.appendChild(iframe);
                 return iframe;
-            }
+            };
             this.receiveIframeMessage = function (event) {
                 if ((that.pixels[event.data.hash].lastReportTs < event.data.ts - 1000) || (that.pixels[event.data.hash].lastReportFPS < event.data.fps)) {
                     that.trigerEvent("iframepixelshow");
@@ -850,7 +851,7 @@
                 that.pixels[event.data.hash].lastReportTs = event.data.ts;
                 that.pixels[event.data.hash].lastReportFPS = event.data.fps;
                 that.pixels[event.data.hash].averageFPS = event.data.average;
-            }
+            };
             // Configuration setter/getter
             this.config = function (configuration) {
                 if ((typeof configuration === "object") && (configuration !== null)) {
@@ -859,7 +860,7 @@
                     return this.configuration;
                 }
 
-            }
+            };
             // Check if an element is inside of an element or it's equal (position and size)
             this.elementInOrEqual = function (curElement, comparedElement) {
                 var curState = that.getVisible(curElement);
@@ -870,7 +871,7 @@
                     return true;
                 }
                 return false;
-            }
+            };
             // Checks is an element is child to another
             this.isDescendant = function (parent, child) {
                 var node = child.parentNode;
@@ -881,12 +882,12 @@
                     node = node.parentNode;
                 }
                 return false;
-            }
+            };
             // Trigers a custom event
             this.trigerEvent = function (e) {
                 var event = new CustomEvent(e, {"detail": e});
                 document.dispatchEvent(event);
-            }
+            };
             // Checks if is in iframe or not
             this.inIframe = function () {
                 try {
@@ -894,7 +895,7 @@
                 } catch (e) {
                     return true;
                 }
-            }
+            };
             // Checks if is dom element and if it's not an master element
             this.isElement = function (obj) {
                 var ignore = ["HTML", "BODY"];
@@ -906,9 +907,9 @@
                 } catch (e) {
                     return false;
                 }
-            }
+            };
             // To use this inside internal functions
-            var that = this;
+            // var that = this;
             // Gets unique path of an element
             this.getUniquePath = function (node) {
                 var path = node.tagName.toLowerCase();
@@ -925,7 +926,7 @@
                     }
                 }
                 return path;
-            }
+            };
             // Locates the ad element in the DOM
             this.locateElement = function () {
                 var scripts = document.getElementsByTagName('script');
@@ -940,7 +941,7 @@
                         return prevDiv;
                     }
                 }
-            }
+            };
             // States and constants that run the entire business
             // The reports counter, which is reset after every event
             // It sets the reporting timer
@@ -955,12 +956,12 @@
                 }
                 this.reportsCounter++;
                 return timer;
-            }
+            };
             // Reset of the timer where it's needed
             this.resetReportTimer = function () {
                 this.lastReportTime = 0;
                 this.reportsCounter = 0;
-            }
+            };
             // The element holder
             // Check if it's added as element id, DOM object. Otherwise trys to find it.
             if ((typeof selector === "object") && (selector !== null)) {
@@ -1077,7 +1078,7 @@
                     that.state.part.overlapped = 0;
                     that.state.part.vertical = "full";
                     that.state.part.horizontal = "full";
-                } else if (this.state.visible.total != 0) {
+                } else if (this.state.visible.total !== 0) {
                     that.state.view = false;
                     that.state.full = false;
                     that.state.visible.area = 0;
@@ -1091,14 +1092,14 @@
                     that.state.part.horizontal = "none";
                 }
                 this.iframeTimer = setTimeout(function () {
-                    that.iframeViewable()
+                    that.iframeViewable();
                 }, that.configuration.pixelTimer);
-            }
+            };
 // Holds the old state for reference
             this.old_state = this.state_original;
             // Holds the current state
             this.state = this.state_original;
-            // Gets the one dimension of the object's geometrical visibility 
+            // Gets the one dimension of the object's geometrical visibility
             this.getVisiblePart = function (elemStart, elemEnd, elemTotal, compareTo) {
                 var visible = {
                     lenght: elemTotal,
@@ -1120,12 +1121,12 @@
                     visible.percent = Math.round(visible.lenght * 100 / elemTotal);
                     if (visible.percent < 0) {
                         visible.percent = 0;
-                        visible.part = "none"
+                        visible.part = "none";
                     }
                 }
                 return visible;
-            }
-// Gets the 2d geometrical visibility of the object
+            };
+            // Gets the 2d geometrical visibility of the object
             this.getVisible = function (element) {
                 var state = {
                     size: {
@@ -1151,7 +1152,7 @@
                         vertical: "none",
                         horizontal: "none",
                     },
-                }
+                };
                 state.size.width = element.getBoundingClientRect().width;
                 state.size.height = element.getBoundingClientRect().height;
                 state.size.area = state.size.width * state.size.height;
@@ -1217,8 +1218,8 @@
                     state.visible.area = state.visible.width * state.visible.height;
                 }
                 return state;
-            }
-// Checks the overall visibility (iframe, geometrical, overlaying) of an object
+            };
+            // Checks the overall visibility (iframe, geometrical, overlaying) of an object
             this.isViewable = function (event) {
                 that.old_state = that.state;
                 if (that.out_events.indexOf(event) >= 0) {
@@ -1282,21 +1283,21 @@
                         }
                     }
                     for (var index in overlappingElements) {
-// Add logic to handle multiple overlapping elements.
+                        // Add logic to handle multiple overlapping elements.
                         var overlappingElementState = that.getVisible(overlappingElements[index]);
                         that.state.visible.total = (that.state.visible.area - overlappingElementState.visible.area) * 100 / (that.state.size.area);
                     }
                 }
-            }
-// Returns how many seconds to add to the visibility state
+            };
+            // Returns how many seconds to add to the visibility state
             this.secondsToAdd = function () {
                 if (that.lastReportTime === 0) {
                     return 1;
                 } else {
                     return Math.round((new Date().getTime() - that.lastReportTime) / 1000);
                 }
-            }
-// Calculates & reports the ad state
+            };
+            // Calculates & reports the ad state
             this.report = function () {
                 if (this.state.visible.total > 0) {
                     var secondsToAdd = that.secondsToAdd();
@@ -1317,11 +1318,11 @@
                 this.enReportTimer = setTimeout(function () {
                     that.report();
                 }, this.reportTimer());
-            }
-// Timers activation
-// The initial activation of the event timer
+            };
+            // Timers activation
+            // The initial activation of the event timer
             this.enEventTimer = setTimeout(function () {
-                that.isViewable("load")
+                that.isViewable("load");
             }, that.configuration.eventTimer);
             // The initial activation of the report timer
             this.enReportTimer = setTimeout(function () {
@@ -1334,19 +1335,19 @@
                 clearInterval(that.enTimer);
                 that.resetReportTimer();
                 that.enEventTimer = setTimeout(function () {
-                    that.isViewable(event.type)
+                    that.isViewable(event.type);
                 }, that.configuration.eventTimer);
             }
-// Event Out Manager - manages events that indicates that the ad cloud be not visible at all
+            // Event Out Manager - manages events that indicates that the ad cloud be not visible at all
             this.eventOutManager = function (event) {
                 clearInterval(that.enEventTimer);
                 that.isViewable(event.type);
-            }
-// END of Event Managers
-// Event listeners
-// After every event, resets the timers and executes the ad visibility detection
+            };
+            // END of Event Managers
+            // Event listeners
+            // After every event, resets the timers and executes the ad visibility detection
             if (window.attachEvent) {
-// Go events
+                // Go events
                 window.attachEvent('onresize', function (e) {
                     that.eventGoManager(e);
                 });
@@ -1407,7 +1408,7 @@
                 console.debug(json_data);
             }
         }
-    }
+    };
 
     var banner = new EnViewability(null, req);
 
