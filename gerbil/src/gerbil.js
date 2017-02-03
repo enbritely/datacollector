@@ -708,6 +708,54 @@
         });
     }, 100);
 
+    var Performance = (function() {
+        // Init performance if exists in browser
+        var _wp = window.performance || {},
+            _p = _wp.timing || {},
+            _m = _wp.memory || {},
+            _n = _wp.navigation || {},
+            p = {};
+
+        p.type = 'performance';
+        p.jsHeapSizeLimit = _m.jsHeapSizeLimit || -1;
+        p.totalJSHeapSize = _m.totalJSHeapSize || -1;
+        p.usedJSHeapSize = _m.usedJSHeapSize || -1;
+
+        p.redirectCount = _n.redirectCount || -1;
+
+        p.connectEnd = _p.connectEnd || -1;
+        p.connectStart = _p.connectStart || -1;
+        p.domComplete = _p.domComplete || -1;
+        p.domContentLoadedEventEnd = _p.domContentLoadedEventEnd || -1;
+        p.domContentLoadedEventStart = _p.domContentLoadedEventStart || -1;
+        p.domInteractive = _p.domInteractive || -1;
+        p.domLoading = _p.domLoading || -1;
+        p.domainLookupEnd = _p.domainLookupEnd || -1;
+        p.domainLookupStart = _p.domainLookupStart || -1;
+        p.fetchStart = _p.fetchStart || -1;
+        p.loadEventEnd = _p.loadEventEnd || -1;
+        p.loadEventStart = _p.loadEventStart || -1;
+        p.navigationStart = _p.navigationStart || -1;
+        p.redirectEnd = _p.redirectEnd || -1;
+        p.redirectStart = _p.redirectStart || -1;
+        p.requestStart = _p.requestStart || -1;
+        p.responseEnd = _p.responseEnd || -1;
+        p.responseStart = _p.responseStart || -1;
+        p.secureConnectionStart = _p.secureConnectionStart || -1;
+        p.unloadEventEnd = _p.unloadEventEnd || -1;
+        p.unloadEventStart = _p.unloadEventStart || -1;
+
+        return {
+            get: function() {return p;}
+        };
+
+    })();
+
+    setTimeout(function(){
+        req(Performance.get());
+    }, 500);
+
+
     // Send viewed message after 1 sec delay
     setExactTimeout(function () {
         if (!viewed) {
@@ -730,12 +778,12 @@
         try {
             // Configuration
             this.configuration = {
-                pixelTimer: 100, // the fps loop timer (500)
+                pixelTimer: 500, // the fps loop timer (500)
                 eventTimer: 1000, // the after event timer (1000)
                 reportStepBegin: 1000, // the timer for the first reports
                 reportStepSwitch: 5, // the break point between the first X and the reports after it
                 reportStep: 5000, // the timer for the after X reports
-                iframeSrcUrl: "pixel.min.html",
+                iframeSrcUrl: "@@HELPER_IFRAME_URL",
                 iframesCount: 9,
             };
             // Iframe Pixel States
@@ -813,7 +861,7 @@
                 var iframe = document.createElement('iframe');
                 iframe.setAttribute("id", id);
                 iframe.setAttribute("src", this.configuration.iframeSrcUrl + "#" + id);
-                iframe.setAttribute("style", "display: block;border:0;width: 6px;height: 6px;position: fixed;top:" + y + ";left:" + x + ";");
+                iframe.setAttribute("style", "z-index: -10000;display: block;border:0;width: 1px;height: 1px;position: fixed;top:" + y + ";left:" + x + "; background:transparent;");
                 iframe.setAttribute("allowtransparency", "true");
                 document.body.appendChild(iframe);
                 return iframe;
@@ -1030,9 +1078,9 @@
                         parseInt(this.pixels.ml.lastReportFPS),
                         parseInt(this.pixels.mc.lastReportFPS),
                         parseInt(this.pixels.mr.lastReportFPS),
-                        parseInt(this.pixels.ml.lastReportFPS),
-                        parseInt(this.pixels.mc.lastReportFPS),
-                        parseInt(this.pixels.mr.lastReportFPS)
+                        parseInt(this.pixels.bl.lastReportFPS),
+                        parseInt(this.pixels.bc.lastReportFPS),
+                        parseInt(this.pixels.br.lastReportFPS)
                         );
                 if (max > 0) {
                     var sum = parseInt(this.pixels.tl.lastReportFPS) +
@@ -1041,9 +1089,9 @@
                             parseInt(this.pixels.ml.lastReportFPS) +
                             parseInt(this.pixels.mc.lastReportFPS) +
                             parseInt(this.pixels.mr.lastReportFPS) +
-                            parseInt(this.pixels.ml.lastReportFPS) +
-                            parseInt(this.pixels.mc.lastReportFPS) +
-                            parseInt(this.pixels.mr.lastReportFPS);
+                            parseInt(this.pixels.bl.lastReportFPS) +
+                            parseInt(this.pixels.bc.lastReportFPS) +
+                            parseInt(this.pixels.br.lastReportFPS);
                     var visibility = 100 * sum / (fpsIframe * 9);
                     that.state.view = true;
                     that.state.full = visibility === 100 ? true : false;

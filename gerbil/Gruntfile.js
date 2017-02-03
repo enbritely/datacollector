@@ -93,6 +93,10 @@ module.exports = function(grunt) {
                 {
                   match: 'PACKAGEVERSION',
                   replacement: '<%= pkg.version %>'
+                },
+                {
+                  match: 'HELPER_IFRAME_URL',
+                  replacement: '<%= pkg.helper_iframe_main_url %>'
                 }
               ]
             },
@@ -107,10 +111,23 @@ module.exports = function(grunt) {
                   match: 'PACKAGEVERSION',
                   replacement: '<%= pkg.version %>'
                 },
+                {
+                  match: 'HELPER_IFRAME_URL',
+                  replacement: '<%= pkg.helper_iframe_test_url %>'
+                },
+                {
+                  match: 'AD_IFRAME_URL',
+                  replacement: '<%= pkg.ad_iframe_url %>'
+                },
+                {
+                  match: 'IFRAME_COLLECTOR',
+                  replacement: '<%= pkg.iframe_collector %>'
+                }
               ]
             },
             files: [
-              {expand: true, flatten: true, src: ['src/*.js'], dest: '<%= pkg.test_home %>'}
+              {expand: true, flatten: true, src: ['src/*.js', 'test/*.html'], dest: '<%= pkg.test_home %>'},
+              {expand: true, flatten: true, src: ['test/iframe/*.html'], dest: '<%= pkg.test_home %>' + '/iframe'},
             ]
           }
         },

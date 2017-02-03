@@ -1,0 +1,6 @@
+<!DOCTYPE html><html><style type="text/css">BODY{background:none transparent}</style><body><script>var hash=window.location.hash.substr(1);var lastCalledTime;var counter=0;var fpsArray=[];var prevFps=0;function fpsLoop(){var fps;if(!lastCalledTime){lastCalledTime=new Date().getTime();fps=0}
+var delta=(new Date().getTime()-lastCalledTime)/1000;lastCalledTime=new Date().getTime();fps=Math.ceil((1/delta));if(counter>=60){var sum=fpsArray.reduce(function(a,b){return a+b});var average=Math.ceil(sum/fpsArray.length);var data={hash:hash,ts:lastCalledTime,fps:fps,average:average,}
+parent.postMessage(data,"*");counter=0}else{if(fps!==Infinity){fpsArray.push(fps)}
+counter++}
+window.requestAnimationFrame(fpsLoop)}
+window.requestAnimationFrame=function(){return window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.msRequestAnimationFrame||window.oRequestAnimationFrame||function(f){window.setTimeout(f,1e3/60)}}();window.requestAnimationFrame(fpsLoop);</script></body></html>
