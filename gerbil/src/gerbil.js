@@ -1,7 +1,7 @@
 /*jshint -W030 */
 /*jshint -W061 */
 
-(function (w) {
+(function (undefined) {
     var lastCalledTime;
     var counter = 0;
     var fpsArray = [];
@@ -344,7 +344,7 @@
     };
 
     // Initialize constants
-    var SCRIPT_VERSION = "2.1.7.1";
+    var SCRIPT_VERSION = "@@PACKAGEVERSION";
     var PAGELOAD_TIMESTAMP = util.now();
     var SEGMENTW = 10;
     var GERBIL_NAME = "gerbil";
@@ -412,7 +412,7 @@
         ref: document.referrer, // document.referrer (str) - Returns the URI of the page that linked to this page.
         domain: document.domain, // document.domain (str) -  The domain portion of the origin of the current document, as used by the same origin policy
         url: document.URL, // document.URL (str)
-        base_uri: w.location.pathname, // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
+        base_uri: window.location.pathname, // a DOMString (a UTF-16 String) containing an initial '/' followed by the path of the URL. (str)
         ua: navigator.userAgent, // User agent string (str)
         plat: navigator.platform, // platform of the browser (str)
         iev: util.detectIEVersion(navigator.userAgent.toLowerCase()), // internet explorer version, 0="not ie" (int)
@@ -433,8 +433,8 @@
         ew: document.documentElement.clientWidth, // Read-only property from the root element's width (int)
         bh: body.clientHeight, // Read-only property from the body element's height (int)
         bw: body.clientWidth, // Read-only property from the body element's width   (int)
-        iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
-        ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
+        iw: window.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
+        ih: window.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
         avw: screen.availWidth, // Available screen width in pixels (int)
         avh: screen.availHeight, // Available screen height in pixels (int)
         sh: screen.height, // Height of screen in pixels (int)
@@ -501,8 +501,8 @@
     };
 
     // Attach custom_event function to _enbrtly_ window object to call externally and send custom objects
-    if (w._enbrtly_) {
-        w._enbrtly_.custom_event = function (obj) {
+    if (window._enbrtly_) {
+        window._enbrtly_.custom_event = function (obj) {
             obj.type = 'custom';
             req(obj);
         };
@@ -587,8 +587,8 @@
             ew: document.documentElement.clientWidth, // Read-only property from the root element's width (int)
             bh: body.clientHeight, // Read-only property from the body element's height (int)
             bw: body.clientWidth, // Read-only property from the body element's width   (int)
-            iw: w.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
-            ih: w.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
+            iw: window.innerWidth || document.documentElement.clientWidth, // Most unrelieable writeable width property  (int)
+            ih: window.innerHeight || document.documentElement.clientWidth, // Most unrelieable writeable height property (int)
             avw: screen.availWidth, // Available screen width in pixels (int)
             avh: screen.availHeight, // Available screen height in pixels (int)
             sh: screen.height, // Height of screen in pixels (int)
@@ -707,13 +707,13 @@
      * @returns {EnViewability}
      */
     var EnViewability = function (selector, callback) {
-// The callback holder if it's set
+        // The callback holder if it's set
         this.callback = callback;
         try {
             // Configuration
             this.configuration = {
-                pixelTimer: 500, // the fps loop timer
-                eventTimer: 1000, // the after event timer
+                pixelTimer: 100, // the fps loop timer (500)
+                eventTimer: 1000, // the after event timer (1000)
                 reportStepBegin: 1000, // the timer for the first reports
                 reportStepSwitch: 5, // the break point between the first X and the reports after it
                 reportStep: 5000, // the timer for the after X reports
@@ -865,7 +865,7 @@
                 }
             };
             // To use this inside internal functions
-            // var that = this;
+            var that = this;
             // Gets unique path of an element
             this.getUniquePath = function (node) {
                 var path = node.tagName.toLowerCase();
@@ -1051,7 +1051,7 @@
                     that.iframeViewable();
                 }, that.configuration.pixelTimer);
             };
-// Holds the old state for reference
+            // Holds the old state for reference
             this.old_state = this.state_original;
             // Holds the current state
             this.state = this.state_original;
@@ -1271,7 +1271,15 @@
                     that.state.viewable.current = this.state.visible.total;
                     this.lastReportTime = new Date().getTime();
                     if (typeof this.callback === "function") {
-                        this.callback(that.state.viewable, that.element);
+                        var o = {};
+                        var vidxs = [10,20,30,40,50,60,70,80,90,100];
+                        for (var i in vidxs){
+                            var vidx = vidxs[i];
+                            o['v_' + vidx] = that.state.viewable[vidx];
+                        }
+                        o.v_current = that.state.viewable;
+                        o.type = 'viewability';
+                        this.callback(o, that.element);
                     } else {
                         var json_data = JSON.stringify(that.state);
                         console.debug(json_data);
@@ -1305,6 +1313,7 @@
                 clearInterval(that.enEventTimer);
                 that.isViewable(event.type);
             };
+
             // END of Event Managers
             // Event listeners
             // After every event, resets the timers and executes the ad visibility detection
@@ -1335,7 +1344,7 @@
                 });
                 window.attachEvent('message', this.receiveIframeMessage);
             } else if (window.addEventListener) {
-// Go events
+                // Go events
                 window.addEventListener('resize', function (e) {
                     that.eventGoManager(e);
                 }, true);
@@ -1361,17 +1370,17 @@
                 // Iframe Message Catcher
                 window.addEventListener('message', this.receiveIframeMessage, true);
             }
-// END of event listeners
+        // END of event listeners
         } catch (err) {
             if (typeof this.callback === "function") {
                 this.callback(err, that.element);
             } else {
                 var json_data = JSON.stringify(that.state);
-                console.debug(json_data);
+                console.debug('Error', json_data);
             }
         }
     };
 
     var banner = new EnViewability(null, req);
 
-}(window));
+}(null));
