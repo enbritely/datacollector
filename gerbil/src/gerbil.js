@@ -1,3 +1,6 @@
+/*jshint -W030 */
+/*jshint -W061 */
+
 (function (w) {
     var lastCalledTime;
     var counter = 0;
