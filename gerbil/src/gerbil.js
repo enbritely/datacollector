@@ -1315,7 +1315,7 @@
                             var vidx = vidxs[i];
                             o['v_' + vidx] = that.state.viewable[vidx];
                         }
-                        o.v_current = that.state.viewable;
+                        o.v_current = that.state.viewable.current;
                         o.type = 'viewability';
                         this.callback(o, that.element);
                     } else {
