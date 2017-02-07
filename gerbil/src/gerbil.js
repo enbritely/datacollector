@@ -1438,7 +1438,11 @@
         // END of event listeners
         } catch (err) {
             if (typeof this.callback === "function") {
-                this.callback(err, that.element);
+                var o = {};
+                o.name = err.name;
+                o.message = err.message;
+                o.type = 'error_msg';
+                this.callback(o, that.element);
             } else {
                 var json_data = JSON.stringify(that.state);
                 console.debug('Error', json_data);
