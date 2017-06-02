@@ -519,7 +519,7 @@
         obj.iid = enviroment.iid; // impression id (str)
         obj.seq = enviroment.seq;
 
-        var url = LOGGER_URL + '?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj)) + '&ts=' + ts;
+        var url = LOGGER_URL + '/a.gif?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj)) + '&ts=' + ts;
 
         if (obj.type != 'ping') {
             PING_INDEX = 0;
@@ -814,11 +814,11 @@
         try {
             // Configuration
             this.configuration = {
-                pixelTimer: 500, // the fps loop timer (500)
+                pixelTimer: 250, // the fps loop timer (500)
                 eventTimer: 1000, // the after event timer (1000)
-                reportStepBegin: 1000, // the timer for the first reports
+                reportStepBegin: 1000, // the timer for the first report
                 reportStepSwitch: 5, // the break point between the first X and the reports after it
-                reportStep: 5000, // the timer for the after X reports
+                reportStep: 10000, // the timer for the after X reports
                 iframeSrcUrl: "@@HELPER_IFRAME_URL",
                 iframesCount: 9,
             };
@@ -903,12 +903,14 @@
                 return iframe;
             };
             this.receiveIframeMessage = function (event) {
-                if ((that.pixels[event.data.hash].lastReportTs < event.data.ts - 1000) || (that.pixels[event.data.hash].lastReportFPS < event.data.fps)) {
-                    that.trigerEvent("iframepixelshow");
+                if (typeof(that.pixels[event.data.hash]) !== "undefined") {
+                    if ((that.pixels[event.data.hash].lastReportTs < event.data.ts - 1000) || (that.pixels[event.data.hash].lastReportFPS < event.data.fps)) {
+                        that.trigerEvent("iframepixelshow");
+                    }
+                    that.pixels[event.data.hash].lastReportTs = event.data.ts;
+                    that.pixels[event.data.hash].lastReportFPS = event.data.fps;
+                    that.pixels[event.data.hash].averageFPS = event.data.average;
                 }
-                that.pixels[event.data.hash].lastReportTs = event.data.ts;
-                that.pixels[event.data.hash].lastReportFPS = event.data.fps;
-                that.pixels[event.data.hash].averageFPS = event.data.average;
             };
             // Configuration setter/getter
             this.config = function (configuration) {
