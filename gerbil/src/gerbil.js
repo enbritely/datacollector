@@ -988,22 +988,47 @@
                 }
                 return path;
             };
-            // Locates the ad element in the DOM
+
+            // Locates the ad element in the dom
+
             this.locateElement = function () {
-                // var scripts = document.getElementsByTagName('script');
-                // var me = scripts[ scripts.length - 1 ];
-                var me = CURRENT_SCRIPT;
-                var childern = me.parentElement.children;
-                var prevDiv;
-                for (var i = 0; i < childern.length; i++) {
-                    var element = childern[i];
-                    if (element.tagName === "DIV") {
-                        prevDiv = element;
-                    } else if ((element.tagName === "SCRIPT") && element.src === CURRENT_SCRIPT.src) {
-                        return prevDiv;
-                    }
+
+              // Detect adform and return with ad element on match
+
+              var parentChildrens = CURRENT_SCRIPT.parentElement.children,
+                  parentChildren,
+                  previousDiv;
+
+              for (
+                var i = 0,
+                    j = parentChildrens.length;
+                i < j;
+                ++i
+              ) {
+
+                parentChildren = parentChildrens[i];
+
+                if (
+                  parentChildren.tagName === 'DIV' &&
+                  /adform.*adbox/mi.test(parentChildren.id)
+                ) {
+                  previousDiv = parentChildren;
+                } else if (
+                  parentChildren.tagName === 'SCRIPT' &&
+                  parentChildren.src === CURRENT_SCRIPT.src &&
+                  typeof(previousDiv) === 'object'
+                ) {
+                  return(previousDiv);
                 }
+
+              }
+
+              // Return with an empty object
+
+              return({});
+
             };
+
             // States and constants that run the entire business
             // The reports counter, which is reset after every event
             // It sets the reporting timer
@@ -1491,8 +1516,10 @@
         }
     };
 
+    // Wait up to 60 seconds for compete readystate
+
     var banner,
-        checkLoadedMaxIterations = 200,
+        checkLoadedMaxIterations = 1200,
         checkLoadedDelay = 50;
 
     var checkLoaded = setInterval(function () {
