@@ -1026,6 +1026,7 @@
               // Detect adsense and return with body element on match
 
               if (
+                window.self !== window.top &&
                 (
                   (
                     typeof(window.location.origin) !== 'undefined' &&
