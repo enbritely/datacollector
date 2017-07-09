@@ -520,6 +520,23 @@
         obj.iid = enviroment.iid; // impression id (str)
         obj.seq = enviroment.seq;
 
+        // Decode url encoded values in the object
+
+        for (
+          var prop in obj
+        ) {
+          if (
+            obj.hasOwnProperty(prop) &&
+            typeof(obj[prop]) === 'string'
+          ) {
+            do {
+              obj[prop] = decodeURIComponent(obj[prop]);
+            } while (
+              obj[prop] != decodeURIComponent(obj[prop])
+            );
+          }
+        }
+
         var url = LOGGER_URL + '/a.gif?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj)) + '&ts=' + ts;
 
         if (obj.type != 'ping') {
