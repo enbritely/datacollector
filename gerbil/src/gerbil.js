@@ -1049,7 +1049,7 @@
                     typeof(window.location.origin) !== 'undefined' &&
                     /(google\.com|doubleclick\.net|invitemedia\.com|admeld\.com|googlesyndication\.com|googleadservices\.com)$/mi.test(window.location.origin)
                   ) || (
-                    typeof(window.name) !== 'undefined'
+                    typeof(window.name) !== 'undefined' &&
                     /google\_ads\_i?frame/mi.test(window.name)
                   ) || (
                     typeof(window.frameElement) !== 'undefined' &&
