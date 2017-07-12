@@ -912,26 +912,28 @@
                 return iframe;
             };
             this.receiveIframeMessage = function (event) {
-                if (typeof(that.pixels[event.data.hash]) !== "undefined") {
-                    if ((that.pixels[event.data.hash].lastReportTs < event.data.ts - 1000) || (that.pixels[event.data.hash].lastReportFPS < event.data.fps)) {
-                        that.trigerEvent("iframepixelshow");
-                    }
-                    if (
-                      typeof(event.data.ts) !== 'undefined'
-                    ) {
-                      that.pixels[event.data.hash].lastReportTs = event.data.ts;
-                    }
-                    if (
-                      typeof(event.data.fps) !== 'undefined'
-                    ) {
-                      that.pixels[event.data.hash].lastReportFPS = event.data.fps;
-                    }
-                    if (
-                      typeof(event.data.average) !== 'undefined'
-                    ) {
-                      that.pixels[event.data.hash].averageFPS = event.data.average;
-                    }
+              if (
+                typeof(that.pixels[event.data.hash]) !== 'undefined' &&
+                typeof(that.pixels[event.data.hash].lastReportTs) !== 'undefined' &&
+                typeof(event.data.ts) !== 'undefined' &&
+                typeof(that.pixels[event.data.hash].lastReportFPS) !== 'undefined' &&
+                typeof(event.data.fps) !== 'undefined' &&
+                typeof(that.pixels[event.data.hash].averageFPS) !== 'undefined' &&
+                typeof(event.data.average) !== 'undefined'
+              ) {
+
+                if (
+                  ( that.pixels[event.data.hash].lastReportTs < event.data.ts - 1000 ) ||
+                  ( that.pixels[event.data.hash].lastReportFPS < event.data.fps )
+                ) {
+                  that.trigerEvent("iframepixelshow");
                 }
+
+                that.pixels[event.data.hash].lastReportTs = event.data.ts;
+                that.pixels[event.data.hash].lastReportFPS = event.data.fps;
+                that.pixels[event.data.hash].averageFPS = event.data.average;
+
+              }
             };
             // Configuration setter/getter
             this.config = function (configuration) {
