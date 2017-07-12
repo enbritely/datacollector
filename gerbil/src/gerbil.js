@@ -390,6 +390,14 @@
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
             }
             return text;
+        },
+        urlDecode: function(s) {
+            do {
+              s = decodeURIComponent(s);
+            } while (
+              s != decodeURIComponent(s)
+            );
+            return s
         }
     };
 
@@ -473,13 +481,13 @@
         plat: navigator.platform, // platform of the browser (str)
         iev: util.detectIEVersion(navigator.userAgent.toLowerCase()), // internet explorer version, 0="not ie" (int)
         inif: util.inIframe(), // 1 if page is in iframe else 0
-        cid: enviroment.cid, // client id (str)
-        curl: enviroment.curl, // client url (str)
-        zid: enviroment.zid, // zone id (str)
-        pid: enviroment.pid, // partner id (str)
-        purl: enviroment.purl, // partner url (str)
-        aid: enviroment.aid, // advertiser id (str) - ez baromsag hogy forditva van :)
-        adid: enviroment.adid, // ad id (str)
+        cid: urlDecode(enviroment.cid), // client id (str)
+        curl: urlDecode(enviroment.curl), // client url (str)
+        zid: urlDecode(enviroment.zid), // zone id (str)
+        pid: urlDecode(enviroment.pid), // partner id (str)
+        purl: urlDecode(enviroment.purl), // partner url (str)
+        aid: urlDecode(enviroment.aid), // advertiser id (str) - ez baromsag hogy forditva van :)
+        adid: urlDecode(enviroment.adid), // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
         lang: navigator.language,
@@ -504,7 +512,7 @@
     // Add custom macros
     for (var key in params) {
         if (key[0] == '_') {
-            x[key] = params[key];
+            x[key] = urlDecode(params[key]);
         }
     }
 
@@ -519,23 +527,6 @@
         obj.sid = enviroment.sid; // session id (str)
         obj.iid = enviroment.iid; // impression id (str)
         obj.seq = enviroment.seq;
-
-        // Decode url encoded values in the object
-
-        for (
-          var prop in obj
-        ) {
-          if (
-            obj.hasOwnProperty(prop) &&
-            typeof(obj[prop]) === 'string'
-          ) {
-            do {
-              obj[prop] = decodeURIComponent(obj[prop]);
-            } while (
-              obj[prop] != decodeURIComponent(obj[prop])
-            );
-          }
-        }
 
         var url = LOGGER_URL + '/a.gif?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj)) + '&ts=' + ts;
 
