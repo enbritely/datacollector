@@ -916,9 +916,21 @@
                     if ((that.pixels[event.data.hash].lastReportTs < event.data.ts - 1000) || (that.pixels[event.data.hash].lastReportFPS < event.data.fps)) {
                         that.trigerEvent("iframepixelshow");
                     }
-                    that.pixels[event.data.hash].lastReportTs = event.data.ts;
-                    that.pixels[event.data.hash].lastReportFPS = event.data.fps;
-                    that.pixels[event.data.hash].averageFPS = event.data.average;
+                    if (
+                      typeof(event.data.ts) !== 'undefined'
+                    ) {
+                      that.pixels[event.data.hash].lastReportTs = event.data.ts;
+                    }
+                    if (
+                      typeof(event.data.fps) !== 'undefined'
+                    ) {
+                      that.pixels[event.data.hash].lastReportFPS = event.data.fps;
+                    }
+                    if (
+                      typeof(event.data.average) !== 'undefined'
+                    ) {
+                      that.pixels[event.data.hash].averageFPS = event.data.average;
+                    }
                 }
             };
             // Configuration setter/getter
