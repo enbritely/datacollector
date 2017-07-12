@@ -481,13 +481,13 @@
         plat: navigator.platform, // platform of the browser (str)
         iev: util.detectIEVersion(navigator.userAgent.toLowerCase()), // internet explorer version, 0="not ie" (int)
         inif: util.inIframe(), // 1 if page is in iframe else 0
-        cid: urlDecode(enviroment.cid), // client id (str)
-        curl: urlDecode(enviroment.curl), // client url (str)
-        zid: urlDecode(enviroment.zid), // zone id (str)
-        pid: urlDecode(enviroment.pid), // partner id (str)
-        purl: urlDecode(enviroment.purl), // partner url (str)
-        aid: urlDecode(enviroment.aid), // advertiser id (str) - ez baromsag hogy forditva van :)
-        adid: urlDecode(enviroment.adid), // ad id (str)
+        cid: util.urlDecode(enviroment.cid), // client id (str)
+        curl: util.urlDecode(enviroment.curl), // client url (str)
+        zid: util.urlDecode(enviroment.zid), // zone id (str)
+        pid: util.urlDecode(enviroment.pid), // partner id (str)
+        purl: util.urlDecode(enviroment.purl), // partner url (str)
+        aid: util.urlDecode(enviroment.aid), // advertiser id (str) - ez baromsag hogy forditva van :)
+        adid: util.urlDecode(enviroment.adid), // ad id (str)
         banw: enviroment.banw, // banner width (int)
         banh: enviroment.banh, // banner height (int)
         lang: navigator.language,
@@ -512,7 +512,7 @@
     // Add custom macros
     for (var key in params) {
         if (key[0] == '_') {
-            x[key] = urlDecode(params[key]);
+            x[key] = util.urlDecode(params[key]);
         }
     }
 
