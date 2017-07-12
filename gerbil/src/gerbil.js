@@ -913,12 +913,12 @@
             };
             this.receiveIframeMessage = function (event) {
               if (
-                typeof(that.pixels[event.data.hash]) !== 'undefined' &&
-                typeof(that.pixels[event.data.hash].lastReportTs) !== 'undefined' &&
+                typeof(that.pixels[event.data.hash]) === 'object' &&
+                that.pixels[event.data.hash].hasOwnProperty('lastReportTs') &&
                 typeof(event.data.ts) !== 'undefined' &&
-                typeof(that.pixels[event.data.hash].lastReportFPS) !== 'undefined' &&
+                that.pixels[event.data.hash].hasOwnProperty('lastReportFPS') &&
                 typeof(event.data.fps) !== 'undefined' &&
-                typeof(that.pixels[event.data.hash].averageFPS) !== 'undefined' &&
+                that.pixels[event.data.hash].hasOwnProperty('averageFPS') &&
                 typeof(event.data.average) !== 'undefined'
               ) {
 
