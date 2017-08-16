@@ -1015,7 +1015,7 @@
 
             this.locateElement = function () {
 
-              // Detect adform and return with ad element on match
+              // Detect adform creative and return with ad element on match
 
               var parentChildrens = CURRENT_SCRIPT.parentElement.children,
                   parentChildren,
@@ -1045,7 +1045,20 @@
 
               }
 
-              // Detect adsense and return with body element on match
+              // Detect adform iframe and return with body element on match
+
+              if (
+                window.self !== window.top &&
+                (
+                  typeof(window.location.origin) !== 'undefined' &&
+                  /(adform\.net|adform\.com)$/mi.test(window.location.origin)
+                ) &&
+                document.getElementsByTagName('body').length > 0
+              ) {
+                return(document.getElementsByTagName('body')[0]);
+              }
+
+              // Detect adsense iframe and return with body element on match
 
               if (
                 window.self !== window.top &&
@@ -1067,7 +1080,7 @@
                 return(document.getElementsByTagName('body')[0]);
               }
 
-              // Detect flashtalking and return with body element on match
+              // Detect flashtalking iframe and return with body element on match
 
               if (
                 window.self !== window.top &&
