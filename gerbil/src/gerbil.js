@@ -1031,8 +1031,11 @@
                 parentChildren = parentChildrens[i];
 
                 if (
-                  parentChildren.tagName === 'DIV' &&
-                  /adform.*adbox/mi.test(parentChildren.id)
+                  parentChildren.tagName === 'DIV' && (
+                    /adform.*adbox/mi.test(parentChildren.id) ||
+                    /adform.*video/mi.test(parentChildren.id) ||
+                    /vast\-wrapper/mi.test(parentChildren.id)
+                  )
                 ) {
                   previousDiv = parentChildren;
                 } else if (
@@ -1050,8 +1053,18 @@
               if (
                 window.self !== window.top &&
                 (
-                  typeof(window.location.origin) !== 'undefined' &&
-                  /(adform\.net|adform\.com)$/mi.test(window.location.origin)
+                  (
+                    typeof(window.location.origin) !== 'undefined' &&
+                    /(adform\.net|adform\.com)$/mi.test(window.location.origin)
+                  ) || (
+                    typeof(window.frameElement) !== 'undefined' &&
+                    typeof(window.frameElement.id) !== 'undefined' &&
+                    /adf\_[0-9]+/mi.test(window.frameElement.id)
+                  ) || (
+                    typeof(document.documentElement) !== 'undefined' &&
+                    typeof(document.documentElement.id) !== 'undefined' &&
+                    /adform/mi.test(document.documentElement.id)
+                  )
                 ) &&
                 document.getElementsByTagName('body').length > 0
               ) {
