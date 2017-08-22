@@ -101,7 +101,7 @@ module.exports = function(grunt) {
               ]
             },
             files: [
-              {expand: true, flatten: true, src: ['src/*.js'], dest: 'dist'}
+              {expand: true, flatten: true, src: ['src/*.js', 'test/*.html', 'test/iframe/*.html'], dest: 'dist'}
             ]
           },
           test: {

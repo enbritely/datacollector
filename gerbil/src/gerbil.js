@@ -800,7 +800,6 @@
         req(Performance.get());
     }, 500);
 
-
     // Send viewed message after 1 sec delay
     setExactTimeout(function () {
         if (!viewed) {
@@ -1147,6 +1146,7 @@
             } else {
                 this.element = this.locateElement();
             }
+
             // Events that are used only to reset timers and counters
             this.out_events = ["beforeunload", "iframeblur", "blur", "focusout"];
             // The orifginal state of an element
