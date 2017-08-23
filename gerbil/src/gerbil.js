@@ -819,7 +819,7 @@
     var EnViewability = function (selector, callback) {
         // The callback holder if it's set
         this.callback = callback;
-        try {
+        // try {
             // Configuration
             this.configuration = {
                 pixelTimer: 250, // the fps loop timer (500)
@@ -1113,7 +1113,7 @@
 
               // Return with an empty object
 
-              return({});
+              return(document.getElementsByTagName('body')[0]);
 
             };
 
@@ -1591,18 +1591,18 @@
                 window.addEventListener('message', this.receiveIframeMessage, true);
             }
         // END of event listeners
-        } catch (err) {
-            if (typeof this.callback === "function") {
-                var o = {};
-                o.name = err.name;
-                o.message = err.message;
-                o.type = 'error_msg';
-                this.callback(o, that.element);
-            } else {
-                var json_data = JSON.stringify(that.state);
-                console.debug('Error', json_data);
-            }
-        }
+        // } catch (err) {
+        //     if (typeof this.callback === "function") {
+        //         var o = {};
+        //         o.name = err.name;
+        //         o.message = err.message;
+        //         o.type = 'error_msg';
+        //         this.callback(o, that.element);
+        //     } else {
+        //         var json_data = JSON.stringify(that.state);
+        //         console.debug('Error', json_data);
+        //     }
+        // }
     };
 
     // Wait up to 60 seconds for compete readystate
