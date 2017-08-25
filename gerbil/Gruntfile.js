@@ -101,7 +101,7 @@ module.exports = function(grunt) {
               ]
             },
             files: [
-              {expand: true, flatten: true, src: ['src/*.js', 'test/*.html', 'test/iframe/*.html'], dest: 'dist'}
+              {expand: true, flatten: true, src: ['src/*.js'], dest: 'dist'}
             ]
           },
           test: {
@@ -131,6 +131,39 @@ module.exports = function(grunt) {
             ]
           }
         },
+        s3: {
+          options: {
+            bucket: 'enbritely-artifacts',
+            headers: {
+              'CacheControl': 'max-age=3600'
+            },
+            cache: false
+          },
+          copy_to_s3: {
+            cwd: "dist/",
+            src: "*.js",
+            dest: "gerbil/releases/" + '<%= pkg.version %>' + '/'
+          },
+        },
+        route53: {
+          options: {
+            cache: false,
+            zones: {
+              'enbrite.ly.': [{
+                  aliasTarget: {
+                   DNSName: "dualstack.display-tracker-1359144845.us-east-1.elb.amazonaws.com.",
+                   EvaluateTargetHealth: true,
+                   HostedZoneId: "Z3QPO1HQ51UBLD"
+                  },
+                  name: 'dc-'+grunt.option('wsid')+'.enbrite.ly.',
+                  type: 'A'
+              }]
+            }
+          }
+        },
+        exec: {
+          deploy: 'aws s3 cp s3://enbritely-artifacts/gerbil/releases/' + grunt.option('gv') + '/gerbil-' + grunt.option('gv') + '.js s3://enbritely-assets/dist/' + grunt.option('wsid') + '/gerbil.js'
+        },
         watch: {
             files: ["src/*.js"],
             tasks: ['clean', 'jshint', 'replace:test']
@@ -140,6 +173,7 @@ module.exports = function(grunt) {
         scope: 'devDependencies'
     });
     require('time-grunt')(grunt);
+
     grunt.loadNpmTasks('grunt-jsbeautifier');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -150,6 +184,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-cloudfront');
+    grunt.loadNpmTasks('grunt-aws');
+
     grunt.registerTask('default', ['clean', 'jshint', 'replace', 'removelogging:dist', 'uglify', 'compress', 'rename']);
+    grunt.registerTask('dist', ['clean', 'jshint', 'replace', 'removelogging:dist', 'uglify', 'compress', 'rename', 's3:copy_to_s3']);
+    grunt.registerTask('deploy', ['exec:deploy']);
     grunt.registerTask('test', ['clean', 'copy', 'jshint', 'replace:test']);
 };
