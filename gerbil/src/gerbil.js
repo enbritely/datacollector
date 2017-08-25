@@ -47,7 +47,7 @@
     if (typeof Object.assign != 'function') {
       Object.assign = function(target, varArgs) { // .length of function is 2
         'use strict';
-        if (target == null) { // TypeError if undefined or null
+        if (target === null) { // TypeError if undefined or null
           throw new TypeError('Cannot convert undefined or null to object');
         }
 
@@ -56,7 +56,7 @@
         for (var index = 1; index < arguments.length; index++) {
           var nextSource = arguments[index];
 
-          if (nextSource != null) { // Skip over if undefined or null
+          if (nextSource !== null) { // Skip over if undefined or null
             for (var nextKey in nextSource) {
               // Avoid bugs when hasOwnProperty is shadowed
               if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
@@ -397,7 +397,7 @@
             } while (
               s != decodeURIComponent(s)
             );
-            return s
+            return s;
         }
     };
 
@@ -819,7 +819,7 @@
     var EnViewability = function (selector, callback) {
         // The callback holder if it's set
         this.callback = callback;
-        try {
+        // try {
             // Configuration
             this.configuration = {
                 pixelTimer: 250, // the fps loop timer (500)
@@ -1042,6 +1042,7 @@
                   parentChildren.src === CURRENT_SCRIPT.src &&
                   typeof(previousDiv) === 'object'
                 ) {
+                  console.log("LOCATED DIV", previousDiv);
                   return(previousDiv);
                 }
 
@@ -1111,9 +1112,14 @@
                 return(document.getElementsByTagName('body')[0]);
               }
 
-              // Return with an empty object
+              // Return with the body if in iframe
+              if (window.self !== window.top) {
+                return(document.getElementsByTagName('body')[0]);
+              }
+              else {
+                return(CURRENT_SCRIPT.parentElement);
+              }
 
-              return({});
 
             };
 
@@ -1591,18 +1597,18 @@
                 window.addEventListener('message', this.receiveIframeMessage, true);
             }
         // END of event listeners
-        } catch (err) {
-            if (typeof this.callback === "function") {
-                var o = {};
-                o.name = err.name;
-                o.message = err.message;
-                o.type = 'error_msg';
-                this.callback(o, that.element);
-            } else {
-                var json_data = JSON.stringify(that.state);
-                console.debug('Error', json_data);
-            }
-        }
+        // } catch (err) {
+        //     if (typeof this.callback === "function") {
+        //         var o = {};
+        //         o.name = err.name;
+        //         o.message = err.message;
+        //         o.type = 'error_msg';
+        //         this.callback(o, that.element);
+        //     } else {
+        //         var json_data = JSON.stringify(that.state);
+        //         console.debug('Error', json_data);
+        //     }
+        // }
     };
 
     // Wait up to 60 seconds for compete readystate
@@ -1621,7 +1627,7 @@
       ) {
         banner = new EnViewability(null, req);
         clearInterval(checkLoaded);
-      };
+      }
     }, checkLoadedDelay);
 
 }(null));
