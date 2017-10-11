@@ -2,7 +2,7 @@
   "name": "enbrtly-adnw-dc",
   "asset_name": "en",
   "description": "Enbritely adnetwork data collector",
-  "version": "2.4.4",
+  "version": "page-2.4.4",
   "title": "client",
   "test_home": "/usr/share/nginx/html",
   "helper_iframe_main_url": "https://cdn.enbrite.ly/bin/pixel.min.html",
