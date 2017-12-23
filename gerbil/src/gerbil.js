@@ -464,6 +464,9 @@
     enviroment.zid = enviroment.zid || params.epid || params.zid || 'NAN';
     enviroment.cid = enviroment.cid || params.ebuy || params.cid || 'NAN';
     enviroment.curl = enviroment.curl || params.eenv || params.curl || 'NAN';
+    enviroment.adboxid = enviroment.adboxid || params.adboxid;
+    enviroment.adbox = document.getElementById(params.adboxid) || null;
+    console.log(enviroment.adbox);
 
     var dims = util.documentDimensions();
     enviroment.banh = enviroment.banh || params.banh || dims.height;
@@ -1634,7 +1637,7 @@
       } else if (
         /loaded|complete/i.test(document.readyState)
       ) {
-        banner = new EnViewability(null, req);
+        banner = new EnViewability(enviroment.adbox, req);
         clearInterval(checkLoaded);
       }
     }, checkLoadedDelay);
