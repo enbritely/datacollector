@@ -464,6 +464,9 @@
     enviroment.zid = enviroment.zid || params.epid || params.zid || 'NAN';
     enviroment.cid = enviroment.cid || params.ebuy || params.cid || 'NAN';
     enviroment.curl = enviroment.curl || params.eenv || params.curl || 'NAN';
+    enviroment.adboxid = enviroment.adboxid || params.adboxid;
+    enviroment.adbox = document.getElementById(params.adboxid) || null;
+    console.log(enviroment.adbox);
 
     var dims = util.documentDimensions();
     enviroment.banh = enviroment.banh || params.banh || dims.height;
@@ -533,7 +536,7 @@
         obj.iid = enviroment.iid; // impression id (str)
         obj.seq = enviroment.seq;
 
-        var url = LOGGER_URL + '/a.gif?wsid=' + obj.wsid + '&data=' + Base64.encode(JSON.stringify(obj)) + '&ts=' + ts;
+        var url = LOGGER_URL + '/a.gif?wsid=' + obj.wsid + '&type=' + obj.type + '&data=' + Base64.encode(JSON.stringify(obj)) + '&ts=' + ts;
 
         if (obj.type != 'ping') {
             PING_INDEX = 0;
@@ -639,9 +642,12 @@
 
     var handleScrollEvent = function (evt) {
         evt = evt || window.event; // global window.event for ie 6,7,8
+        var doc = document.documentElement;
+        var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+        var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
         req({
-            st: document.body.scrollTop,
-            sl: document.body.scrollLeft,
+            st: top,
+            sl: left,
             type: evt.type
         });
     };
@@ -692,7 +698,7 @@
 
     // Add event listeners
     ael(document, 'mousemove', handleMouseEvents);
-    ael(document, 'mouseover', handleMouseEvents);
+    // ael(document, 'mouseover', handleMouseEvents);
     ael(document, 'mousedown', handleMouseEvents);
     ael(document, 'mouseup', handleMouseEvents);
     ael(document, 'click', handleMouseEvents);
@@ -758,48 +764,49 @@
         });
     }, 100);
 
-    var Performance = (function() {
+    var Performance = function() {
         // Init performance if exists in browser
-        var _wp = window.performance || {},
-            _p = _wp.timing || {},
-            _m = _wp.memory || {},
-            _n = _wp.navigation || {},
-            p = {};
-
-        p.type = 'performance';
-        p.jsHeapSizeLimit = _m.jsHeapSizeLimit || -1;
-        p.totalJSHeapSize = _m.totalJSHeapSize || -1;
-        p.usedJSHeapSize = _m.usedJSHeapSize || -1;
-
-        p.redirectCount = _n.redirectCount || -1;
-
-        p.connectEnd = _p.connectEnd || -1;
-        p.connectStart = _p.connectStart || -1;
-        p.domComplete = _p.domComplete || -1;
-        p.domContentLoadedEventEnd = _p.domContentLoadedEventEnd || -1;
-        p.domContentLoadedEventStart = _p.domContentLoadedEventStart || -1;
-        p.domInteractive = _p.domInteractive || -1;
-        p.domLoading = _p.domLoading || -1;
-        p.domainLookupEnd = _p.domainLookupEnd || -1;
-        p.domainLookupStart = _p.domainLookupStart || -1;
-        p.fetchStart = _p.fetchStart || -1;
-        p.loadEventEnd = _p.loadEventEnd || -1;
-        p.loadEventStart = _p.loadEventStart || -1;
-        p.navigationStart = _p.navigationStart || -1;
-        p.redirectEnd = _p.redirectEnd || -1;
-        p.redirectStart = _p.redirectStart || -1;
-        p.requestStart = _p.requestStart || -1;
-        p.responseEnd = _p.responseEnd || -1;
-        p.responseStart = _p.responseStart || -1;
-        p.secureConnectionStart = _p.secureConnectionStart || -1;
-        p.unloadEventEnd = _p.unloadEventEnd || -1;
-        p.unloadEventStart = _p.unloadEventStart || -1;
-
         return {
-            get: function() {return p;}
+            get: function() {
+                var _wp = window.performance || {},
+                    _p = _wp.timing || {},
+                    _m = _wp.memory || {},
+                    _n = _wp.navigation || {},
+                    p = {};
+
+                p.type = 'performance';
+                p.jsHeapSizeLimit = _m.jsHeapSizeLimit || -1;
+                p.totalJSHeapSize = _m.totalJSHeapSize || -1;
+                p.usedJSHeapSize = _m.usedJSHeapSize || -1;
+
+                p.redirectCount = _n.redirectCount || -1;
+
+                p.connectEnd = _p.connectEnd || -1;
+                p.connectStart = _p.connectStart || -1;
+                p.domComplete = _p.domComplete || -1;
+                p.domContentLoadedEventEnd = _p.domContentLoadedEventEnd || -1;
+                p.domContentLoadedEventStart = _p.domContentLoadedEventStart || -1;
+                p.domInteractive = _p.domInteractive || -1;
+                p.domLoading = _p.domLoading || -1;
+                p.domainLookupEnd = _p.domainLookupEnd || -1;
+                p.domainLookupStart = _p.domainLookupStart || -1;
+                p.fetchStart = _p.fetchStart || -1;
+                p.loadEventEnd = _p.loadEventEnd || -1;
+                p.loadEventStart = _p.loadEventStart || -1;
+                p.navigationStart = _p.navigationStart || -1;
+                p.redirectEnd = _p.redirectEnd || -1;
+                p.redirectStart = _p.redirectStart || -1;
+                p.requestStart = _p.requestStart || -1;
+                p.responseEnd = _p.responseEnd || -1;
+                p.responseStart = _p.responseStart || -1;
+                p.secureConnectionStart = _p.secureConnectionStart || -1;
+                p.unloadEventEnd = _p.unloadEventEnd || -1;
+                p.unloadEventStart = _p.unloadEventStart || -1;
+                return p;
+            }
         };
 
-    })();
+    }();
 
     setTimeout(function(){
         req(Performance.get());
@@ -1630,7 +1637,7 @@
       } else if (
         /loaded|complete/i.test(document.readyState)
       ) {
-        banner = new EnViewability(null, req);
+        banner = new EnViewability(enviroment.adbox, req);
         clearInterval(checkLoaded);
       }
     }, checkLoadedDelay);
