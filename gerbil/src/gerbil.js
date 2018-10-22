@@ -1,7 +1,7 @@
 /*jshint -W030 */
 /*jshint -W061 */
 
-(function (undefined) {
+var eg = (function (undefined) {
     var lastCalledTime;
     var counter = 0;
     var fpsArray = [];
@@ -577,6 +577,16 @@
         enviroment.seq++;
 
         return false;
+    };
+
+    this.customEvent = function(category, action, label, value) {
+            req({
+                category: category,
+                action: action,
+                label: label,
+                value: value,
+                type: 'customEvent'
+            });
     };
 
     // Mouse event logging
@@ -1641,5 +1651,6 @@
         clearInterval(checkLoaded);
       }
     }, checkLoadedDelay);
+    return this;
 
 }(null));
