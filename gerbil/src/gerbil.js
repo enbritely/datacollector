@@ -579,6 +579,13 @@ var eg = (function (undefined) {
         return false;
     };
 
+    this.structuredEvent = function(struct) {
+        if(!struct.type) {
+            struct.type = 'structuredEvent';
+        }
+        req(struct);
+    };
+
     this.customEvent = function(category, action, label, value) {
             req({
                 category: category,
