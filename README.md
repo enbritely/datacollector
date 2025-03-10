@@ -1,5 +1,5 @@
 # Datacollector
-Client side data collecting script.
+Client side data collecting script developed under the EU grant GINOP-2.1.7-15-2016-01373.
 
 ## Install
 Build it with `grunt`.
